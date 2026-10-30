@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd campus-ai-frontend && npm install && npm run build",
+  "outputDirectory": "campus-ai-frontend/dist",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}
