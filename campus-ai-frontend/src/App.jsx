@@ -6,18 +6,34 @@ import {
   DEGREE_PROGRAMS,
   CAREER_PATHS,
   SUBJECTS,
-  DISCIPLINE_CATEGORIES,
 } from "./data/curriculum";
 
 function App() {
   // Navigation State
   const [active, setActive] = useState("Overview");
   const [selectedSubjectId, setSelectedSubjectId] = useState(null);
-  const [selectedDiscipline, setSelectedDiscipline] = useState("All Disciplines");
-  const [subjectCategoryFilter, setSubjectCategoryFilter] = useState("My Degree");
   const [selectedStageFilter, setSelectedStageFilter] = useState("All Stages");
   const [subjectSearch, setSubjectSearch] = useState("");
-  const [quizDegreeFilter, setQuizDegreeFilter] = useState("All");
+  const [quizStageFilter, setQuizStageFilter] = useState("All Stages");
+  const [showAllCareerTracks, setShowAllCareerTracks] = useState(false);
+
+  // Active Selected Degree ID (Defaults to B.Tech)
+  const [selectedDegreeId, setSelectedDegreeId] = useState(() => {
+    try {
+      const savedDegree = localStorage.getItem("campus-ai-selected-degree");
+      if (savedDegree) return savedDegree;
+      const saved = localStorage.getItem("campus-ai-student");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.degreeId) return parsed.degreeId;
+        const match = DEGREE_PROGRAMS.find((dp) => dp.title === parsed.degree);
+        if (match) return match.id;
+      }
+    } catch {
+      // fallback
+    }
+    return "btech-cs";
+  });
 
   // Student Profile State (Persisted in localStorage)
   const [student, setStudent] = useState(() => {
@@ -28,15 +44,16 @@ function App() {
       // fallback
     }
     return {
-      name: "Dr. Jordan Chen",
-      email: "jordan.chen@campus.edu",
-      careerPath: "mbbs-medicine",
-      degree: "MBBS (Bachelor of Medicine, Bachelor of Surgery)",
+      name: "Shardul Bhale",
+      email: "shardul@campus.edu",
+      careerPath: "ai-engineer",
+      degree: "BTech / BS (Computer Science & AI)",
+      degreeId: "btech-cs",
       gradYear: "2027",
-      completedModules: ["anat-1"],
+      completedModules: ["py-1"],
       quizScore: 280,
       streakDays: 6,
-      avatar: "🩺",
+      avatar: "👨‍💻",
     };
   });
 
@@ -48,50 +65,71 @@ function App() {
     localStorage.setItem("campus-ai-student", JSON.stringify(updated));
   }
 
-  // Active Career Path Object
-  const currentCareer = useMemo(() => {
-    return (
-      CAREER_PATHS.find((cp) => cp.id === student.careerPath) ||
-      CAREER_PATHS[0]
-    );
-  }, [student.careerPath]);
-
-  // Active Degree Program Object
+  // Active Degree Program Object (100% matched to selected degree)
   const currentDegreeProgram = useMemo(() => {
     return (
-      DEGREE_PROGRAMS.find((dp) => dp.title === student.degree) ||
-      DEGREE_PROGRAMS.find((dp) => dp.id === currentCareer.degreeId) ||
+      DEGREE_PROGRAMS.find((dp) => dp.id === selectedDegreeId) ||
+      DEGREE_PROGRAMS.find((dp) => dp.id === "btech-cs") ||
       DEGREE_PROGRAMS[0]
     );
-  }, [student.degree, currentCareer]);
+  }, [selectedDegreeId]);
 
-  // Active Program for Study Hub
-  const activeStudyDegree = useMemo(() => {
-    if (subjectCategoryFilter === "My Degree") {
-      return currentDegreeProgram;
-    }
+  // Active Career Path Object (constrained to active degree)
+  const currentCareer = useMemo(() => {
     return (
-      DEGREE_PROGRAMS.find((dp) => dp.shortName === subjectCategoryFilter) || null
+      CAREER_PATHS.find(
+        (cp) => cp.id === student.careerPath && cp.degreeId === currentDegreeProgram.id
+      ) ||
+      CAREER_PATHS.find((cp) => cp.degreeId === currentDegreeProgram.id) ||
+      CAREER_PATHS[0]
     );
-  }, [subjectCategoryFilter, currentDegreeProgram]);
+  }, [student.careerPath, currentDegreeProgram]);
 
-  function handleEnrollInDegree(degreeId) {
+  // Subjects belonging EXCLUSIVELY to the selected Degree
+  const degreeSubjects = useMemo(() => {
+    return SUBJECTS.filter((s) => s.degreeId === currentDegreeProgram.id);
+  }, [currentDegreeProgram.id]);
+
+  // All Module IDs in this Degree
+  const degreeModuleIds = useMemo(() => {
+    return degreeSubjects.flatMap((s) => s.modules.map((m) => m.id));
+  }, [degreeSubjects]);
+
+  // Completed Modules Count in this Degree
+  const degreeCompletedCount = useMemo(() => {
+    return degreeModuleIds.filter((id) =>
+      student.completedModules.includes(id)
+    ).length;
+  }, [degreeModuleIds, student.completedModules]);
+
+  // Overall Degree Progress Percentage
+  const degreeProgress = useMemo(() => {
+    if (degreeModuleIds.length === 0) return 0;
+    return Math.round((degreeCompletedCount / degreeModuleIds.length) * 100);
+  }, [degreeCompletedCount, degreeModuleIds]);
+
+  // Switch Course/Degree Handler — Updates entire app instantly
+  function handleSelectDegree(degreeId) {
+    setSelectedDegreeId(degreeId);
+    localStorage.setItem("campus-ai-selected-degree", degreeId);
     const prog = DEGREE_PROGRAMS.find((p) => p.id === degreeId);
     if (!prog) return;
     const defaultCareer =
-      CAREER_PATHS.find((cp) => cp.id === prog.defaultCareer) || CAREER_PATHS[0];
+      CAREER_PATHS.find((cp) => cp.id === prog.defaultCareer) ||
+      CAREER_PATHS.find((cp) => cp.degreeId === degreeId) ||
+      CAREER_PATHS[0];
     const updated = {
       ...student,
+      degreeId: prog.id,
       degree: prog.title,
       careerPath: defaultCareer.id,
       avatar: prog.icon,
     };
     saveStudent(updated);
-  }
-
-  function handleCategoryFilterChange(cat) {
-    setSubjectCategoryFilter(cat);
+    setSelectedSubjectId(null);
     setSelectedStageFilter("All Stages");
+    setQuizStageFilter("All Stages");
+    setSubjectSearch("");
   }
 
   function selectCareerTrack(track) {
@@ -99,40 +137,24 @@ function App() {
     const updated = {
       ...student,
       careerPath: track.id,
+      degreeId: matchingProg ? matchingProg.id : student.degreeId,
       degree: matchingProg ? matchingProg.title : student.degree,
       avatar: track.icon,
     };
     saveStudent(updated);
   }
 
-  // Filtered Subjects for Study Hub
+  // Filtered Subjects for Study Hub — STRICTLY isolated to the active Degree
   const filteredSubjects = useMemo(() => {
-    return SUBJECTS.filter((s) => {
-      // 1. Degree / Category Filter
-      if (subjectCategoryFilter === "My Degree") {
-        if (
-          s.degreeId !== currentDegreeProgram.id &&
-          s.category !== currentDegreeProgram.shortName
-        ) {
-          return false;
-        }
-      } else if (
-        subjectCategoryFilter !== "All Degrees" &&
-        subjectCategoryFilter !== "All"
-      ) {
-        if (s.category !== subjectCategoryFilter) {
-          return false;
-        }
-      }
-
-      // 2. Stage Filter
+    return degreeSubjects.filter((s) => {
+      // 1. Stage Filter
       if (selectedStageFilter && selectedStageFilter !== "All Stages") {
         if (s.stage !== selectedStageFilter) {
           return false;
         }
       }
 
-      // 3. Search Query
+      // 2. Search Query
       if (subjectSearch.trim()) {
         const q = subjectSearch.toLowerCase().trim();
         const matchesTitle = s.title.toLowerCase().includes(q);
@@ -143,7 +165,7 @@ function App() {
           (m) =>
             m.title.toLowerCase().includes(q) ||
             m.summary.toLowerCase().includes(q) ||
-            m.keyConcepts.some((kc) => kc.toLowerCase().includes(q))
+            (m.keyConcepts && m.keyConcepts.some((kc) => kc.toLowerCase().includes(q)))
         );
         if (
           !matchesTitle &&
@@ -158,49 +180,25 @@ function App() {
 
       return true;
     });
-  }, [
-    subjectCategoryFilter,
-    currentDegreeProgram,
-    selectedStageFilter,
-    subjectSearch,
-  ]);
+  }, [degreeSubjects, selectedStageFilter, subjectSearch]);
 
-  // Filtered Quiz Questions for Quiz Lab
+  // Filtered Quiz Questions for Quiz Lab — STRICTLY isolated to active Degree
   const filteredQuizQuestions = useMemo(() => {
-    return SUBJECTS.filter((s) => {
-      if (quizDegreeFilter === "All") return true;
-      if (quizDegreeFilter === "My Degree") {
-        return (
-          s.degreeId === currentDegreeProgram.id ||
-          s.category === currentDegreeProgram.shortName
-        );
-      }
-      return s.category === quizDegreeFilter;
-    }).flatMap((s) =>
+    let list = degreeSubjects;
+    if (quizStageFilter && quizStageFilter !== "All Stages") {
+      list = degreeSubjects.filter((s) => s.stage === quizStageFilter);
+    }
+    return list.flatMap((s) =>
       s.quiz.map((q, idx) => ({
         ...q,
         subjectTitle: s.title,
         subjectCategory: s.category,
+        subjectStage: s.stage,
         sId: s.id,
         qIdx: idx,
       }))
     );
-  }, [quizDegreeFilter, currentDegreeProgram]);
-
-  // Compute Career Path Progress
-  const trackProgress = useMemo(() => {
-    const relevantSubjects = SUBJECTS.filter((s) =>
-      currentCareer.subjectIds.includes(s.id)
-    );
-    const allModuleIds = relevantSubjects.flatMap((s) =>
-      s.modules.map((m) => m.id)
-    );
-    if (allModuleIds.length === 0) return 0;
-    const completedCount = allModuleIds.filter((id) =>
-      student.completedModules.includes(id)
-    ).length;
-    return Math.round((completedCount / allModuleIds.length) * 100);
-  }, [currentCareer, student.completedModules]);
+  }, [degreeSubjects, quizStageFilter]);
 
   // Toggle Module Completion
   function toggleModuleCompletion(moduleId) {
@@ -542,17 +540,28 @@ function App() {
         </nav>
 
         <div className="sidebar-bottom">
-          {/* Active Career Path Pill */}
+          {/* Active Degree Card */}
           <div
-            className="career-track-pill-sidebar"
-            onClick={() => openPage("Career Paths")}
-            title="Click to switch your career path or degree track"
+            className="sidebar-course-card"
+            onClick={() => setIsProfileModalOpen(true)}
+            title="Click to switch your university degree or career path"
           >
-            <div className="career-track-label">
-              {currentCareer.discipline.split(" ")[0]} Track
+            <div className="sidebar-course-header">
+              <span className="sidebar-course-icon">{currentDegreeProgram.icon}</span>
+              <div className="sidebar-course-info">
+                <div className="sidebar-course-tag">ENROLLED COURSE</div>
+                <div className="sidebar-course-title">{currentDegreeProgram.shortName}</div>
+              </div>
             </div>
-            <div className="career-track-title-sidebar">
-              {currentCareer.icon} {currentCareer.title}
+            <div className="sidebar-course-progress-bar">
+              <div
+                className="sidebar-course-progress-fill"
+                style={{ width: `${degreeProgress}%` }}
+              />
+            </div>
+            <div className="sidebar-course-stats">
+              <span>{degreeCompletedCount}/{degreeModuleIds.length} Modules</span>
+              <strong>{degreeProgress}%</strong>
             </div>
           </div>
 
@@ -568,7 +577,7 @@ function App() {
             <div className="profile-avatar">{student.avatar}</div>
             <div className="profile-info">
               <strong>{student.name}</strong>
-              <span>Class of {student.gradYear} · {student.degree.split(" ")[0]}</span>
+              <span>Class of {student.gradYear} · {currentDegreeProgram.shortName}</span>
             </div>
           </div>
         </div>
@@ -588,19 +597,29 @@ function App() {
           </div>
 
           <div className="topbar-actions">
+            {/* Direct Instant Course Switcher Dropdown */}
+            <div className="course-switcher-pill" title="Switch your active course anytime">
+              <span className="course-switcher-label">COURSE:</span>
+              <select
+                className="course-switcher-select"
+                value={currentDegreeProgram.id}
+                onChange={(e) => handleSelectDegree(e.target.value)}
+                aria-label="Active Academic Course"
+              >
+                {DEGREE_PROGRAMS.map((dp) => (
+                  <option key={dp.id} value={dp.id}>
+                    {dp.icon} {dp.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div className="streak-badge" title="Daily Academic Streak">
               🔥 {student.streakDays} Day Streak
             </div>
             <div className="xp-badge" title="Knowledge XP Score">
               ⚡ {student.quizScore} XP
             </div>
-            <button
-              className="switch-track-btn"
-              onClick={() => setIsProfileModalOpen(true)}
-              title="Click to switch your university degree or career path"
-            >
-              {student.avatar} {currentDegreeProgram.shortName} · Switch Degree ↗
-            </button>
           </div>
         </header>
 
@@ -610,7 +629,7 @@ function App() {
         {active === "Overview" && (
           <div className="page-container">
             <div className="eyebrow">
-              <span className="eyebrow-line" /> YOUR PERSONAL LEARNING SPACE
+              <span className="eyebrow-line" /> {currentDegreeProgram.shortName.toUpperCase()} · PERSONAL LEARNING SPACE
             </div>
 
             {/* HERO BANNER */}
@@ -620,9 +639,7 @@ function App() {
                   Welcome back, <span>{student.name}</span>.
                 </h1>
                 <p className="hero-subtitle">
-                  Enrolled in <strong>{student.degree}</strong> on the{" "}
-                  <strong>{currentCareer.title}</strong> path. Keep progressing
-                  through your independent curriculum modules today.
+                  Enrolled in <strong>{currentDegreeProgram.title}</strong>. Your dashboard, subjects, and study materials are strictly personalized to <strong>{currentDegreeProgram.shortName}</strong>.
                 </p>
 
                 {/* Quick AI Search/Ask */}
@@ -630,7 +647,7 @@ function App() {
                   <input
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
-                    placeholder={`Ask Campus AI anything about ${currentCareer.title}...`}
+                    placeholder={`Ask Campus AI anything about ${currentDegreeProgram.shortName}...`}
                   />
                   <button type="submit">Ask AI ↗</button>
                 </form>
@@ -642,15 +659,15 @@ function App() {
               <div className="stat-card">
                 <div className="stat-icon teal">🎯</div>
                 <div className="stat-data">
-                  <h3>{trackProgress}%</h3>
-                  <p>Curriculum Progress</p>
+                  <h3>{degreeProgress}%</h3>
+                  <p>{currentDegreeProgram.shortName} Progress</p>
                 </div>
               </div>
 
               <div className="stat-card">
                 <div className="stat-icon cyan">📖</div>
                 <div className="stat-data">
-                  <h3>{student.completedModules.length}</h3>
+                  <h3>{degreeCompletedCount} / {degreeModuleIds.length}</h3>
                   <p>Modules Mastered</p>
                 </div>
               </div>
@@ -659,7 +676,7 @@ function App() {
                 <div className="stat-icon amber">⚡</div>
                 <div className="stat-data">
                   <h3>{student.quizScore} XP</h3>
-                  <p>Academic Knowledge Score</p>
+                  <p>Knowledge XP Score</p>
                 </div>
               </div>
 
@@ -677,6 +694,7 @@ function App() {
               <div className="track-banner-info">
                 <div className="track-banner-icon">{currentCareer.icon}</div>
                 <div className="track-banner-text">
+                  <div className="track-banner-tag">{currentDegreeProgram.shortName} Track</div>
                   <h3>{currentCareer.title}</h3>
                   <p>{currentCareer.tagline}</p>
                 </div>
@@ -684,13 +702,13 @@ function App() {
 
               <div className="track-progress-block">
                 <div className="progress-labels">
-                  <span>Track Progress</span>
-                  <strong>{trackProgress}%</strong>
+                  <span>Curriculum Progress</span>
+                  <strong>{degreeProgress}%</strong>
                 </div>
                 <div className="progress-bar-track">
                   <div
                     className="progress-bar-fill"
-                    style={{ width: `${trackProgress}%` }}
+                    style={{ width: `${degreeProgress}%` }}
                   />
                 </div>
               </div>
@@ -706,19 +724,19 @@ function App() {
             {/* RECOMMENDED SUBJECTS FOR ACTIVE CAREER */}
             <div className="section-header">
               <div>
-                <h2>Subjects in Your {currentCareer.title.split(" ")[0]} Track</h2>
-                <p>Curated foundational and advanced subjects aligned with your goals.</p>
+                <h2>Core Subjects in {currentDegreeProgram.shortName}</h2>
+                <p>Showing foundational & specialized subjects for your {currentDegreeProgram.title} program.</p>
               </div>
               <button
                 className="view-all-link"
                 onClick={() => openPage("Study Hub")}
               >
-                Browse all subjects ↗
+                Browse all {degreeSubjects.length} subjects ↗
               </button>
             </div>
 
             <div className="subjects-grid">
-              {SUBJECTS.filter((s) => currentCareer.subjectIds.includes(s.id))
+              {degreeSubjects
                 .slice(0, 3)
                 .map((subject) => {
                   const completedInSubject = subject.modules.filter((m) =>
@@ -757,36 +775,29 @@ function App() {
         {active === "Career Paths" && (
           <div className="page-container">
             <div className="eyebrow">
-              <span className="eyebrow-line" /> SPECIALIZED DEGREE TRACKS
+              <span className="eyebrow-line" /> {currentDegreeProgram.shortName.toUpperCase()} · SPECIALIZED CAREER TRACKS
             </div>
             <div className="section-header">
               <div>
-                <h2>University Degrees & Career Tracks</h2>
+                <h2>{currentDegreeProgram.shortName} Career Tracks</h2>
                 <p>
-                  Whether you are in <strong>Medicine (MBBS)</strong>, <strong>Law (LLB)</strong>, <strong>Business (MBA)</strong>, or <strong>Engineering & AI</strong>, select your path to customize your independent study hub.
+                  Specialized career specializations and industry roles aligned with your <strong>{currentDegreeProgram.title}</strong> curriculum.
                 </p>
               </div>
-            </div>
 
-            {/* Discipline Filter */}
-            <div className="filter-pills">
-              {DISCIPLINE_CATEGORIES.map((disc) => (
-                <button
-                  key={disc}
-                  className={`filter-pill ${
-                    selectedDiscipline === disc ? "active" : ""
-                  }`}
-                  onClick={() => setSelectedDiscipline(disc)}
-                >
-                  {disc}
-                </button>
-              ))}
+              <button
+                className="filter-pill"
+                onClick={() => setShowAllCareerTracks((prev) => !prev)}
+                style={{ alignSelf: "flex-start" }}
+              >
+                {showAllCareerTracks ? "← Show Only My Program" : "Browse All Programs ↗"}
+              </button>
             </div>
 
             <div className="career-tracks-grid">
               {CAREER_PATHS.filter((track) => {
-                if (selectedDiscipline === "All Disciplines") return true;
-                return track.discipline === selectedDiscipline;
+                if (showAllCareerTracks) return true;
+                return track.degreeId === currentDegreeProgram.id;
               }).map((track) => {
                 const isActive = student.careerPath === track.id;
                 return (
@@ -845,98 +856,49 @@ function App() {
             {!selectedSubjectId ? (
               <>
                 <div className="eyebrow">
-                  <span className="eyebrow-line" /> INDEPENDENT STUDY HUB · UNIVERSITY SELF-STUDY
+                  <span className="eyebrow-line" /> {currentDegreeProgram.shortName.toUpperCase()} · CURRICULUM & SELF-STUDY
                 </div>
                 <div className="section-header">
                   <div>
-                    <h2>Academic Disciplines & Subject Curriculums</h2>
+                    <h2>{currentDegreeProgram.title}</h2>
                     <p>
-                      Structured degree curriculums across Medicine, Law, Business, Engineering, and Psychology. Check off modules (+25 XP), consult AI, and take practice quizzes (+50 XP).
+                      Showing exclusively all {degreeSubjects.length} subjects for your {currentDegreeProgram.shortName} program. Check off modules (+25 XP), consult AI, and take practice quizzes (+50 XP).
                     </p>
                   </div>
                 </div>
 
-                {/* Degree Category Filter Pills */}
-                <div className="filter-pills">
-                  {[
-                    "My Degree",
-                    "All Degrees",
-                    "Medicine (MBBS)",
-                    "Law (LLB)",
-                    "Business (MBA/BBA)",
-                    "Engineering & AI",
-                    "Psychology",
-                  ].map((cat) => {
-                    let pillLabel = cat;
-                    if (cat === "My Degree") {
-                      pillLabel = `🎓 My Degree (${currentDegreeProgram.shortName})`;
-                    }
-                    return (
-                      <button
-                        key={cat}
-                        className={`filter-pill ${
-                          subjectCategoryFilter === cat ? "active" : ""
-                        }`}
-                        onClick={() => handleCategoryFilterChange(cat)}
-                      >
-                        {pillLabel}
-                      </button>
-                    );
-                  })}
-                </div>
-
                 {/* Active Degree Banner */}
-                {activeStudyDegree && (
-                  <div className="degree-banner-study">
-                    <div className="degree-banner-left">
-                      <div className="degree-banner-icon">
-                        {activeStudyDegree.icon}
-                      </div>
-                      <div>
-                        <h3 className="degree-banner-title">
-                          {activeStudyDegree.title}
-                        </h3>
-                        <p className="degree-banner-meta">
-                          <span>⏱ {activeStudyDegree.years}</span>
-                          <span>•</span>
-                          <span>
-                            {
-                              SUBJECTS.filter(
-                                (s) => s.degreeId === activeStudyDegree.id
-                              ).length
-                            }{" "}
-                            Curriculum Subjects
-                          </span>
-                          <span>•</span>
-                          <span>Self-Paced Guided Study</span>
-                        </p>
-                      </div>
+                <div className="degree-banner-study">
+                  <div className="degree-banner-left">
+                    <div className="degree-banner-icon">
+                      {currentDegreeProgram.icon}
                     </div>
-
                     <div>
-                      {currentDegreeProgram.id === activeStudyDegree.id ? (
-                        <span className="degree-enrolled-pill">
-                          ✓ Your Enrolled Degree
-                        </span>
-                      ) : (
-                        <button
-                          className="degree-enroll-btn"
-                          onClick={() =>
-                            handleEnrollInDegree(activeStudyDegree.id)
-                          }
-                        >
-                          Enroll in this Degree ↗
-                        </button>
-                      )}
+                      <h3 className="degree-banner-title">
+                        {currentDegreeProgram.title}
+                      </h3>
+                      <p className="degree-banner-meta">
+                        <span>⏱ {currentDegreeProgram.years}</span>
+                        <span>•</span>
+                        <span>{degreeSubjects.length} Curriculum Subjects</span>
+                        <span>•</span>
+                        <span>{degreeCompletedCount}/{degreeModuleIds.length} Modules Done ({degreeProgress}%)</span>
+                      </p>
                     </div>
                   </div>
-                )}
+
+                  <div>
+                    <span className="degree-enrolled-pill">
+                      ✓ Active Course
+                    </span>
+                  </div>
+                </div>
 
                 {/* Stage Filters (When a Degree is Active) */}
-                {activeStudyDegree && activeStudyDegree.stages && (
+                {currentDegreeProgram.stages && (
                   <div className="stage-pills-bar">
-                    <span className="stage-pills-label">ACADEMIC STAGE:</span>
-                    {activeStudyDegree.stages.map((stage) => (
+                    <span className="stage-pills-label">ACADEMIC STAGES:</span>
+                    {currentDegreeProgram.stages.map((stage) => (
                       <button
                         key={stage}
                         className={`stage-pill ${
@@ -973,7 +935,7 @@ function App() {
                   </div>
 
                   <span className="study-results-count">
-                    Showing {filteredSubjects.length} of {SUBJECTS.length} subjects
+                    Showing {filteredSubjects.length} of {degreeSubjects.length} {currentDegreeProgram.shortName} subjects
                   </span>
                 </div>
 
@@ -1506,41 +1468,35 @@ function App() {
         {active === "Quiz Lab" && (
           <div className="page-container">
             <div className="eyebrow">
-              <span className="eyebrow-line" /> ACADEMIC ASSESSMENT CHALLENGE
+              <span className="eyebrow-line" /> {currentDegreeProgram.shortName.toUpperCase()} · ASSESSMENT CHALLENGE
             </div>
             <div className="section-header">
               <div>
-                <h2>Interactive Quiz Lab</h2>
+                <h2>{currentDegreeProgram.shortName} Quiz Lab</h2>
                 <p>
-                  Test your clinical, legal, financial, and technical mastery. Earn +50 XP for each correct answer.
+                  Practice assessment questions strictly curated for your <strong>{currentDegreeProgram.title}</strong> curriculum. Earn +50 XP for each correct answer.
                 </p>
               </div>
             </div>
 
-            {/* Quiz Degree Filter */}
-            <div className="filter-pills" style={{ marginBottom: "20px" }}>
-              {[
-                "All",
-                "My Degree",
-                "Medicine (MBBS)",
-                "Law (LLB)",
-                "Business (MBA/BBA)",
-                "Engineering & AI",
-                "Psychology",
-              ].map((cat) => (
-                <button
-                  key={cat}
-                  className={`filter-pill ${
-                    quizDegreeFilter === cat ? "active" : ""
-                  }`}
-                  onClick={() => setQuizDegreeFilter(cat)}
-                >
-                  {cat === "My Degree"
-                    ? `🎓 My Degree (${currentDegreeProgram.shortName})`
-                    : cat}
-                </button>
-              ))}
-            </div>
+            {/* Quiz Stage Filter */}
+            {currentDegreeProgram.stages && (
+              <div className="filter-pills" style={{ marginBottom: "20px" }}>
+                {currentDegreeProgram.stages.map((stage) => (
+                  <button
+                    key={stage}
+                    className={`filter-pill ${
+                      quizStageFilter === stage ? "active" : ""
+                    }`}
+                    onClick={() => setQuizStageFilter(stage)}
+                  >
+                    {stage === "All Stages"
+                      ? `🎯 All ${currentDegreeProgram.shortName} Quizzes`
+                      : stage}
+                  </button>
+                ))}
+              </div>
+            )}
 
             <div className="quiz-container">
               {filteredQuizQuestions.map((q) => {
@@ -1758,58 +1714,29 @@ function App() {
               <div className="note-form-group">
                 <label>Enrolled Degree Program</label>
                 <select
-                  value={profileForm.degree}
+                  value={profileForm.degreeId || selectedDegreeId}
                   onChange={(e) => {
-                    const newDegree = e.target.value;
-                    let newAvatar = profileForm.avatar;
-                    let newCareer = profileForm.careerPath;
-
-                    if (newDegree.includes("MBBS")) {
-                      newAvatar = "🩺";
-                      newCareer = "mbbs-medicine";
-                    } else if (newDegree.includes("Law")) {
-                      newAvatar = "⚖️";
-                      newCareer = "law-advocate";
-                    } else if (newDegree.includes("Business") || newDegree.includes("MBA")) {
-                      newAvatar = "💼";
-                      newCareer = "business-finance";
-                    } else if (newDegree.includes("Psychology")) {
-                      newAvatar = "🧠";
-                      newCareer = "psychology-counseling";
-                    } else if (newDegree.includes("Computer") || newDegree.includes("AI")) {
-                      newAvatar = "👨‍💻";
-                      newCareer = "ai-engineer";
-                    }
+                    const newProg = DEGREE_PROGRAMS.find((p) => p.id === e.target.value);
+                    if (!newProg) return;
+                    const newCareer =
+                      CAREER_PATHS.find((cp) => cp.id === newProg.defaultCareer) ||
+                      CAREER_PATHS.find((cp) => cp.degreeId === newProg.id) ||
+                      CAREER_PATHS[0];
 
                     setProfileForm({
                       ...profileForm,
-                      degree: newDegree,
-                      avatar: newAvatar,
-                      careerPath: newCareer,
+                      degreeId: newProg.id,
+                      degree: newProg.title,
+                      avatar: newProg.icon,
+                      careerPath: newCareer.id,
                     });
                   }}
                 >
-                  <option value="MBBS (Bachelor of Medicine, Bachelor of Surgery)">
-                    🩺 MBBS (Bachelor of Medicine, Bachelor of Surgery)
-                  </option>
-                  <option value="LLB (Bachelor of Laws / Jurisprudence)">
-                    ⚖️ LLB (Bachelor of Laws / Jurisprudence)
-                  </option>
-                  <option value="MBA (Master of Business Administration)">
-                    💼 MBA (Master of Business Administration)
-                  </option>
-                  <option value="BBA / Finance & Accounting">
-                    📊 BBA / Finance & Accounting
-                  </option>
-                  <option value="BSc Psychology & Behavioral Science">
-                    🧠 BSc Psychology & Behavioral Science
-                  </option>
-                  <option value="BTech / BS Computer Science & AI">
-                    👨‍💻 BTech / BS Computer Science & AI
-                  </option>
-                  <option value="General University Degree">
-                    🎓 General University Degree
-                  </option>
+                  {DEGREE_PROGRAMS.map((dp) => (
+                    <option key={dp.id} value={dp.id}>
+                      {dp.icon} {dp.title}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -1821,9 +1748,13 @@ function App() {
                     setProfileForm({ ...profileForm, careerPath: e.target.value })
                   }
                 >
-                  {CAREER_PATHS.map((cp) => (
+                  {CAREER_PATHS.filter((cp) =>
+                    profileForm.degreeId
+                      ? cp.degreeId === profileForm.degreeId
+                      : cp.degreeId === selectedDegreeId
+                  ).map((cp) => (
                     <option key={cp.id} value={cp.id}>
-                      {cp.icon} {cp.title} ({cp.discipline.split(" ")[0]})
+                      {cp.icon} {cp.title}
                     </option>
                   ))}
                 </select>
@@ -1853,6 +1784,9 @@ function App() {
                   className="notes-add-button"
                   onClick={() => {
                     saveStudent(profileForm);
+                    if (profileForm.degreeId) {
+                      handleSelectDegree(profileForm.degreeId);
+                    }
                     setIsProfileModalOpen(false);
                   }}
                 >
