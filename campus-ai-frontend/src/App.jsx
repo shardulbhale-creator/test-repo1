@@ -7,6 +7,11 @@ import {
   CAREER_PATHS,
   SUBJECTS,
 } from "./data/curriculum";
+import CodeStudioLab from "./components/labs/CodeStudioLab";
+import Anatomy3DLab from "./components/labs/Anatomy3DLab";
+import MootCourtLab from "./components/labs/MootCourtLab";
+import FinanceLab from "./components/labs/FinanceLab";
+import PsychologyLab from "./components/labs/PsychologyLab";
 
 function App() {
   // Navigation State
@@ -136,6 +141,60 @@ function App() {
     if (degreeModuleIds.length === 0) return 0;
     return Math.round((degreeCompletedCount / degreeModuleIds.length) * 100);
   }, [degreeCompletedCount, degreeModuleIds]);
+
+  // Dynamic Specialized Experiential Lab Configuration matching active degree
+  const activeLabConfig = useMemo(() => {
+    switch (selectedDegreeId) {
+      case "btech-cs":
+        return {
+          id: "Specialized Lab",
+          navName: "Code Studio",
+          icon: "💻",
+          title: "B.Tech Algorithmic Code Studio",
+          tagline: "Live Compiler, LeetCode Challenges & Interactive Algorithm Visualizer",
+        };
+      case "mbbs":
+        return {
+          id: "Specialized Lab",
+          navName: "3D Anatomy Lab",
+          icon: "🧬",
+          title: "MBBS 3D Human Anatomy Atlas",
+          tagline: "Interactive 3D Body Explorer with Bones, Muscles, Organs & USMLE Pathology",
+        };
+      case "llb":
+        return {
+          id: "Specialized Lab",
+          navName: "Moot Court Arena",
+          icon: "⚖️",
+          title: "LLB Appellate Moot Court Arena",
+          tagline: "Constitutional & Criminal Mock Trial Simulator with Socratic Bench Grilling",
+        };
+      case "mba":
+        return {
+          id: "Specialized Lab",
+          navName: "Finance & DCF Lab",
+          icon: "📈",
+          title: "MBA Financial Valuation Simulator",
+          tagline: "Interactive DCF Modeler, WACC Sensitivity & Executive Buy/Sell Engine",
+        };
+      case "psychology":
+        return {
+          id: "Specialized Lab",
+          navName: "DSM-5 Case Lab",
+          icon: "🧠",
+          title: "Psychology Clinical Consultation Lab",
+          tagline: "DSM-5 Differential Diagnosis & CBT Cognitive Restructuring Simulator",
+        };
+      default:
+        return {
+          id: "Specialized Lab",
+          navName: "Specialized Lab",
+          icon: "🔬",
+          title: "Interactive Academic Simulator",
+          tagline: "Experiential Discipline Lab",
+        };
+    }
+  }, [selectedDegreeId]);
 
   // Switch Course/Degree Handler — Updates entire app instantly
   function handleSelectDegree(degreeId) {
@@ -860,20 +919,29 @@ function App() {
             { name: "Overview", icon: "⌂" },
             { name: "Career Paths", icon: "🧭" },
             { name: "Study Hub", icon: "📚" },
+            {
+              name: activeLabConfig.navName,
+              icon: activeLabConfig.icon,
+              page: "Specialized Lab",
+            },
             { name: "AI Assistant", icon: "✳" },
             { name: "My Notes", icon: "▤" },
             { name: "Quiz Lab", icon: "◎" },
-          ].map((item) => (
-            <button
-              key={item.name}
-              className={`nav-item ${active === item.name ? "active" : ""}`}
-              onClick={() => openPage(item.name)}
-            >
-              <span className="nav-icon">{item.icon}</span>
-              {item.name}
-              {active === item.name && <span className="active-dot" />}
-            </button>
-          ))}
+          ].map((item) => {
+            const isItemActive =
+              active === item.name || (item.page && active === item.page);
+            return (
+              <button
+                key={item.name}
+                className={`nav-item ${isItemActive ? "active" : ""}`}
+                onClick={() => openPage(item.page || item.name)}
+              >
+                <span className="nav-icon">{item.icon}</span>
+                {item.name}
+                {isItemActive && <span className="active-dot" />}
+              </button>
+            );
+          })}
         </nav>
 
         <div className="sidebar-bottom">
@@ -1055,6 +1123,25 @@ function App() {
                 onClick={() => openPage("Study Hub")}
               >
                 Continue Curriculum ↗
+              </button>
+            </div>
+
+            {/* FEATURED SPECIALIZED EXPERIENTIAL LAB BANNER */}
+            <div className="overview-lab-banner">
+              <div className="lab-banner-info">
+                <div className="lab-banner-icon">{activeLabConfig.icon}</div>
+                <div className="lab-banner-text">
+                  <div className="lab-banner-tag">{currentDegreeProgram.shortName} EXPERIENTIAL SUITE</div>
+                  <h3>{activeLabConfig.title}</h3>
+                  <p>{activeLabConfig.tagline}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                className="lab-launch-btn"
+                onClick={() => openPage("Specialized Lab")}
+              >
+                Launch {activeLabConfig.navName} ↗
               </button>
             </div>
 
@@ -2317,6 +2404,69 @@ function App() {
                 );
               })}
             </div>
+          </div>
+        )}
+
+        {/* =========================================================================
+            PAGE: SPECIALIZED EXPERIENTIAL LAB (COURSE ISOLATED)
+            ========================================================================= */}
+        {active === "Specialized Lab" && (
+          <div className="page-container">
+            {selectedDegreeId === "btech-cs" && (
+              <CodeStudioLab
+                student={student}
+                onAwardXp={(xp) =>
+                  saveStudent({ ...student, quizScore: student.quizScore + xp })
+                }
+                onSaveNote={(title, content, sub) =>
+                  saveContentToNotes(title, content, sub)
+                }
+              />
+            )}
+
+            {selectedDegreeId === "mbbs" && (
+              <Anatomy3DLab
+                onAwardXp={(xp) =>
+                  saveStudent({ ...student, quizScore: student.quizScore + xp })
+                }
+                onSaveNote={(title, content, sub) =>
+                  saveContentToNotes(title, content, sub)
+                }
+              />
+            )}
+
+            {selectedDegreeId === "llb" && (
+              <MootCourtLab
+                onAwardXp={(xp) =>
+                  saveStudent({ ...student, quizScore: student.quizScore + xp })
+                }
+                onSaveNote={(title, content, sub) =>
+                  saveContentToNotes(title, content, sub)
+                }
+              />
+            )}
+
+            {selectedDegreeId === "mba" && (
+              <FinanceLab
+                onAwardXp={(xp) =>
+                  saveStudent({ ...student, quizScore: student.quizScore + xp })
+                }
+                onSaveNote={(title, content, sub) =>
+                  saveContentToNotes(title, content, sub)
+                }
+              />
+            )}
+
+            {selectedDegreeId === "psychology" && (
+              <PsychologyLab
+                onAwardXp={(xp) =>
+                  saveStudent({ ...student, quizScore: student.quizScore + xp })
+                }
+                onSaveNote={(title, content, sub) =>
+                  saveContentToNotes(title, content, sub)
+                }
+              />
+            )}
           </div>
         )}
       </main>

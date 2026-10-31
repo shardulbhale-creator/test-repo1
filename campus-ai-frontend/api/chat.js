@@ -136,3 +136,7 @@ export default async function handler(req, res) {
     });
   }
 }
+
+function generateDisciplineFallback(q, careerName, discipline) {
+  return `### 💡 Campus AI Academic Tutor (${careerName || "Academic Study"})\n\nRegarding: **"${q}"** (${discipline || "General Curriculum"})\n\n1. **Core First Principles**: Analyze foundational definitions, system constraints, and underlying mechanisms.\n2. **Academic & Professional Practice**: Apply structured methodologies and precision terminology.\n3. **Recommended Next Step**: Solidify your recall with an interactive quiz or study module in Study Hub!`;
+}
