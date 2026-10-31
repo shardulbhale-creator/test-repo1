@@ -1,383 +1,428 @@
 import { useState, useMemo } from "react";
 
-// Anatomical Database with High-Yield USMLE / NEET-PG Clinical Correlations
-const ANATOMICAL_DATA = [
-  // --- SKELETAL SYSTEM ---
+// Cogni Anatomy Expanded Biological Structures Database
+const COGNI_ANATOMICAL_DATA = [
+  // --- 1. SKELETAL SYSTEM ---
   {
     id: "bone-cranium",
     name: "Cranium & Facial Skeleton (Skull)",
-    latin: "Cranium et Ossa Faciei",
+    latin: "Cranium et Calvaria",
     system: "skeletal",
-    category: "Axial Skeleton",
+    region: "head-neck",
+    depthTier: 3,
     view: "anterior",
     x: 50,
     y: 8,
-    innervation: "Trigeminal Nerve (CN V) sensory; Facial Nerve (CN VII) motor to facial muscles",
+    innervation: "Trigeminal Nerve (CN V sensory); Facial Nerve (CN VII motor)",
     bloodSupply: "Internal & External Carotid Arteries, Middle Meningeal Artery",
     clinicalSummary:
-      "Protects the brain and cranial nerves. The Pterion is the thinnest junction on the lateral skull where the frontal, parietal, temporal, and sphenoid bones meet; trauma here risks tearing the Middle Meningeal Artery leading to fatal Epidural Hematoma (lens-shaped biconvex hemorrhage on CT).",
+      "Protects the cerebrum and cranial nerves. The Pterion is the H-shaped suture junction (Frontal, Parietal, Temporal, Sphenoid). Lateral skull fracture here severs the Middle Meningeal Artery, causing an acute Epidural Hematoma (classic biconvex lens on CT with lucid interval).",
     mnemonic: "Middle Meningeal Artery = 'Epidural Hematoma with Lucid Interval'",
-    highYieldExamTip:
-      "Look for uncal herniation, blown pupil (CN III compression), and contralateral hemiparesis following pterion fracture.",
+    highYieldExamTip: "Watch for uncal herniation, ipsilateral dilated pupil (CN III palsy), and contralateral hemiparesis.",
+    planeDesc: "Coronal view reveals cranial vaults, orbits, nasal septum, and maxillary sinuses.",
   },
   {
-    id: "bone-ribcage",
-    name: "Thoracic Cage & Sternum",
-    latin: "Cavea Thoracis et Sternum",
+    id: "bone-spine",
+    name: "Vertebral Column (Cervical, Thoracic, Lumbar Spine)",
+    latin: "Columna Vertebralis",
     system: "skeletal",
-    category: "Axial Skeleton",
+    region: "thorax",
+    depthTier: 3,
+    view: "anterior",
+    x: 50,
+    y: 35,
+    innervation: "Spinal Nerves (31 pairs: C1-C8, T1-T12, L1-L5, S1-S5, Co1)",
+    bloodSupply: "Anterior and Posterior Spinal Arteries, Radicular Arteries of Adamkiewicz",
+    clinicalSummary:
+      "Houses and protects the spinal cord. L4-L5 and L5-S1 intervertebral disc herniations compress the traversing nerve roots, causing classic Sciatica (radicular neuropathic leg pain with diminished Achilles tendon reflex).",
+    mnemonic: "C3, 4, 5 keep the diaphragm alive (Phrenic nerve roots)",
+    highYieldExamTip: "Artery of Adamkiewicz supplies lower two-thirds of the spinal cord; aortic aneurysm repair risks anterior spinal cord syndrome (paraplegia with loss of pain/temp but preserved vibration/proprioception).",
+    planeDesc: "Sagittal plane displays cervical lordosis, thoracic kyphosis, and lumbar lordosis curvature.",
+  },
+  {
+    id: "bone-ribs",
+    name: "Thoracic Cage & Costal Cartilages",
+    latin: "Cavea Thoracis et Costae",
+    system: "skeletal",
+    region: "thorax",
+    depthTier: 2,
     view: "anterior",
     x: 50,
     y: 28,
     innervation: "Intercostal Nerves (T1–T11)",
-    bloodSupply: "Internal Thoracic Artery, Intercostal Arteries",
+    bloodSupply: "Internal Thoracic Artery, Posterior Intercostal Arteries",
     clinicalSummary:
-      "Protects cardiac and pulmonary viscera. Flail chest occurs when 3 or more contiguous ribs are fractured in 2 or more places, creating a paradoxical segment that moves inward during inspiration and outward during expiration.",
-    mnemonic: "VAN Rule: Vein, Artery, Nerve run along inferior rib groove (insert needle ABOVE rib)",
-    highYieldExamTip:
-      "Thoracentesis / chest tube insertion must always enter above the superior border of the rib to avoid the neurovascular bundle.",
+      "Protects cardiopulmonary viscera. Flail chest occurs when 3 or more contiguous ribs are fractured in multiple segments, producing paradoxical breathing movements.",
+    mnemonic: "VAN: Vein, Artery, Nerve run in costal groove on the inferior border of the rib.",
+    highYieldExamTip: "Needle thoracentesis must enter over the superior border of the rib below to prevent neurovascular laceration.",
+    planeDesc: "Transverse cross-section reveals mediastinal compartment boundaries.",
   },
   {
     id: "bone-pelvis",
-    name: "Pelvic Girdle (Ilium, Ischium, Pubis)",
-    latin: "Cingulum Pelvicum",
+    name: "Pelvic Girdle (Ilium, Ischium, Pubis, Sacrum)",
+    latin: "Pelvis et Cingulum Pelvicum",
     system: "skeletal",
-    category: "Axial Skeleton",
+    region: "abdomen-pelvis",
+    depthTier: 3,
     view: "anterior",
     x: 50,
     y: 52,
-    innervation: "Lumbosacral Plexus (L4–S4)",
+    innervation: "Lumbosacral Plexus (L4-S4), Pudendal Nerve (S2-S4)",
     bloodSupply: "Internal and External Iliac Arteries",
     clinicalSummary:
-      "Provides weight transmission from spine to lower limbs. High-energy pelvic 'open-book' ring fractures risk massive retroperitoneal hemorrhage from the presacral venous plexus or internal iliac branches.",
-    mnemonic: "Pelvic brim separates Greater (False) Pelvis from Lesser (True) Pelvis",
-    highYieldExamTip:
-      "In suspected pelvic fracture, immediately place a pelvic binder over greater trochanters to minimize bleeding volume.",
+      "Transfers upper body weight to lower extremities. High-energy 'open-book' pelvic fractures tear the presacral venous plexus and internal iliac branches, causing life-threatening retroperitoneal hemorrhage.",
+    mnemonic: "S2, 3, 4 keep the feces and urine off the floor (Pudendal nerve innervation to sphincters)",
+    highYieldExamTip: "Apply immediate pelvic binder over the greater trochanters to tamponade venous bleeding in emergency trauma.",
+    planeDesc: "Pelvic brim divides Greater (False) pelvis from Lesser (True) obstetrical pelvic inlet.",
   },
   {
     id: "bone-femur",
-    name: "Femur (Thigh Bone)",
+    name: "Femur & Hip Joint",
     latin: "Os Femoris",
     system: "skeletal",
-    category: "Appendicular Skeleton",
+    region: "lower-limb",
+    depthTier: 3,
     view: "anterior",
     x: 42,
     y: 70,
     innervation: "Femoral Nerve (L2–L4 anterior), Sciatic Nerve (posterior)",
     bloodSupply: "Medial and Lateral Circumflex Femoral Arteries",
     clinicalSummary:
-      "The longest and strongest bone in the human body. Femoral neck fractures tear the Medial Circumflex Femoral Artery branches supplying the femoral head, precipitating Avascular Necrosis (AVN) requiring hemiarthroplasty.",
-    mnemonic: "Medial circumflex = Main blood supply to femoral head",
-    highYieldExamTip:
-      "Subcapital femoral neck fracture has high risk of non-union and osteonecrosis due to retrograde retinacular arterial interruption.",
-  },
-  {
-    id: "bone-tibia",
-    name: "Tibia & Fibula (Lower Leg)",
-    latin: "Tibia et Fibula",
-    system: "skeletal",
-    category: "Appendicular Skeleton",
-    view: "anterior",
-    x: 43,
-    y: 88,
-    innervation: "Tibial Nerve (posterior), Common Fibular Nerve (anterior/lateral)",
-    bloodSupply: "Anterior and Posterior Tibial Arteries",
-    clinicalSummary:
-      "The tibia is the primary weight-bearing bone of the leg. Fractures of the proximal fibula can injure the Common Fibular (Peroneal) Nerve, causing Foot Drop (loss of dorsiflexion and eversion).",
-    mnemonic: "PED = Peroneal Everts & Dorsiflexes; TIP = Tibial Inverts & Plantarflexes",
-    highYieldExamTip:
-      "Deep compartment syndrome in tibia fracture requires urgent emergency fasciotomy to prevent ischemic Volkmann-like contracture.",
+      "Strongest weight-bearing bone in human body. Subcapital femoral neck fractures rupture the retinacular branches of the Medial Circumflex Femoral Artery, triggering Avascular Necrosis (AVN) of the femoral head.",
+    mnemonic: "Medial circumflex artery = Primary vascular supply to femoral head",
+    highYieldExamTip: "Elderly female presenting with shortened, externally rotated leg after fall = displaced femoral neck fracture.",
+    planeDesc: "Sagittal plane through acetabulum displays femoral head anteversion and labrum.",
   },
 
-  // --- MUSCULAR SYSTEM ---
+  // --- 2. MUSCULAR SYSTEM (TIERED BY COGNI MUSCLE STEPPER) ---
   {
     id: "musc-deltoid",
     name: "Deltoid Muscle",
     latin: "Musculus Deltoideus",
     system: "muscular",
-    category: "Upper Limb Musculature",
+    region: "upper-limb",
+    depthTier: 1, // Superficial
     view: "anterior",
     x: 32,
     y: 22,
     innervation: "Axillary Nerve (C5, C6)",
     bloodSupply: "Posterior Circumflex Humeral Artery",
     clinicalSummary:
-      "Primary arm abductor from 15° to 90° (initial 0–15° is initiated by the Supraspinatus). Anterior shoulder dislocation or surgical neck humerus fractures can stretch or sever the Axillary Nerve, leading to deltoid paralysis and loss of sensation over the lateral shoulder badge area.",
-    mnemonic: "S-D-T: Supraspinatus (0-15°), Deltoid (15-90°), Trapezius/Serratus (>90°)",
-    highYieldExamTip:
-      "Intramuscular vaccine injection site must be 2-3 fingerbreadths below the acromion to avoid the subacromial bursa and radial nerve.",
+      "Primary arm abductor from 15° to 90° (0-15° initiated by supraspinatus). Anterior shoulder dislocation or surgical neck humerus fracture damages the axillary nerve, causing deltoid atrophy and sensory loss over the lateral shoulder badge.",
+    mnemonic: "S-D-T: Supraspinatus (0-15°), Deltoid (15-90°), Trapezius (>90°)",
+    highYieldExamTip: "Intramuscular deltoid injection must be given 2-3 fingerbreadths below acromion process to avoid the axillary nerve.",
+    planeDesc: "Superficial shoulder cap muscle with anterior, lateral, and posterior multipennate fibers.",
   },
   {
     id: "musc-pectoralis",
     name: "Pectoralis Major",
     latin: "Musculus Pectoralis Major",
     system: "muscular",
-    category: "Thoracic Musculature",
+    region: "thorax",
+    depthTier: 1, // Superficial
     view: "anterior",
     x: 44,
     y: 26,
     innervation: "Medial and Lateral Pectoral Nerves (C5–T1)",
     bloodSupply: "Pectoral branch of Thoracoacromial Trunk",
     clinicalSummary:
-      "Powerful adductor and internal rotator of the humerus. Poland Syndrome presents with congenital unilateral absence of the sternal head of the pectoralis major and ipsilateral syndactyly.",
+      "Powerful adductor and internal rotator of humerus. Bench press tear causes sudden pop with anterior axillary ecchymosis. Poland syndrome is congenital unilateral absence of sternocostal head.",
     mnemonic: "Clavicular head flexes humerus; Sternocostal head extends flexed humerus",
-    highYieldExamTip:
-      "Tears commonly occur during heavy bench-pressing; physical exam shows loss of anterior axillary fold and ecchymosis.",
+    highYieldExamTip: "Forms the anterior axillary fold; deep to it lies the clavipectoral fascia and pectoralis minor.",
+    planeDesc: "Coronal superficial thoracic chest wall wall fan-shaped architecture.",
   },
   {
     id: "musc-biceps",
     name: "Biceps Brachii",
     latin: "Musculus Biceps Brachii",
     system: "muscular",
-    category: "Upper Limb Musculature",
+    region: "upper-limb",
+    depthTier: 1, // Superficial
     view: "anterior",
     x: 27,
     y: 34,
     innervation: "Musculocutaneous Nerve (C5, C6)",
     bloodSupply: "Brachial Artery muscular branches",
     clinicalSummary:
-      "Powerful supinator of the flexed forearm and secondary elbow flexor. Rupture of the long head tendon presents with a dramatic 'Popeye Muscle' bulge in the distal arm.",
-    mnemonic: "The Biceps supinates to drink soup, then flexes elbow to bring spoon to mouth",
-    highYieldExamTip:
-      "Tested clinically via Biceps Deep Tendon Reflex evaluating the integrity of C5 and C6 nerve roots.",
+      "Powerful supinator of flexed forearm and secondary elbow flexor. Rupture of proximal long head tendon produces the classic 'Popeye' muscle bulge deformity.",
+    mnemonic: "Biceps supinates to eat soup; flexes to bring it to mouth",
+    highYieldExamTip: "Biceps reflex specifically assesses C5-C6 root integrity.",
+    planeDesc: "Two heads: Short head from coracoid process, Long head from supraglenoid tubercle.",
   },
   {
     id: "musc-abdominis",
-    name: "Rectus Abdominis ('Abs')",
-    latin: "Musculus Rectus Abdominis",
+    name: "Rectus Abdominis & Obliques",
+    latin: "Musculus Rectus Abdominis et Obliquus",
     system: "muscular",
-    category: "Abdominal Wall",
+    region: "abdomen-pelvis",
+    depthTier: 1, // Superficial
     view: "anterior",
     x: 50,
     y: 40,
-    innervation: "Thoracoabdominal Nerves (T7–T11) and Subcostal Nerve (T12)",
-    bloodSupply: "Superior and Inferior Epigastric Arteries",
+    innervation: "Intercostal & Subcostal Nerves (T7–T12)",
+    bloodSupply: "Superior & Inferior Epigastric Arteries",
     clinicalSummary:
-      "Flexes the lumbar spine and stabilizes the anterior abdominal wall. Rupture of the Inferior Epigastric Artery within the rectus sheath causes a Rectus Sheath Hematoma (Fothergill's sign: mass does not cross midline and remains fixed on abdominal contraction).",
-    mnemonic: "Fothergill's sign distinguishes rectus sheath hematoma from intra-abdominal mass",
-    highYieldExamTip:
-      "Arcuate line marks where posterior rectus sheath transitions to transversalis fascia only.",
+      "Stabilizes core and flexes lumbar spine. Inferior epigastric artery rupture within the rectus sheath produces a Rectus Sheath Hematoma with positive Fothergill's sign (mass remains fixed and tender during abdominal contraction).",
+    mnemonic: "Fothergill's sign positive = Rectus sheath hematoma (does not cross midline)",
+    highYieldExamTip: "Arcuate line marks the boundary where posterior rectus sheath ends and only transversalis fascia remains.",
+    planeDesc: "Divided by tendinous intersections (3 horizontal fibrous bands) producing the '6-pack' anatomy.",
   },
   {
-    id: "musc-quadriceps",
-    name: "Quadriceps Femoris (Rectus Femoris, Vasti)",
+    id: "musc-quads",
+    name: "Quadriceps Femoris (Rectus Femoris & Vasti)",
     latin: "Musculus Quadriceps Femoris",
     system: "muscular",
-    category: "Lower Limb Musculature",
+    region: "lower-limb",
+    depthTier: 1, // Superficial
     view: "anterior",
     x: 44,
     y: 65,
     innervation: "Femoral Nerve (L2, L3, L4)",
     bloodSupply: "Lateral Circumflex Femoral and Femoral Arteries",
     clinicalSummary:
-      "Great extensor of the knee joint. The patella acts as a fulcrum to increase quadriceps mechanical leverage. Patellar tendon reflex tests L3–L4 root integrity ('one, two, buckle my shoe, three, four, kick the door').",
-    mnemonic: "L3, L4 kick the door = Patellar reflex",
-    highYieldExamTip:
-      "Quadriceps tendon rupture occurs proximal to patella in patients >40 with renal failure or steroid use; inability to extend knee against gravity.",
+      "Chief extensor of the knee joint. Patellar tendon reflex directly tests the L3–L4 spinal nerve roots.",
+    mnemonic: "L3, L4 kick the door = Patellar tendon reflex",
+    highYieldExamTip: "Rectus femoris also flexes the hip joint because it crosses two joints (originates from Anterior Inferior Iliac Spine - AIIS).",
+    planeDesc: "Four muscle bellies converge into the quadriceps tendon and patellar ligament.",
   },
 
-  // --- INTERNAL ORGANS & VISCERA ---
+  // --- 3. CIRCULATORY & CARDIOVASCULAR SYSTEM ---
   {
-    id: "organ-brain",
-    name: "Cerebrum & Central Nervous System",
-    latin: "Cerebrum et Encephalon",
-    system: "nervous",
-    category: "Neuroanatomy",
-    view: "anterior",
-    x: 50,
-    y: 7,
-    innervation: "Cranial Nerves I–XII origin",
-    bloodSupply: "Circle of Willis (Internal Carotids + Vertebrobasilar System)",
-    clinicalSummary:
-      "Contains sensory, motor, and cognitive centers. Ischemic stroke in the Middle Cerebral Artery (MCA) territory results in contralateral face and arm weakness, sensory loss, and aphasia (Broca's if dominant frontal; Wernicke's if temporal).",
-    mnemonic: "MCA = Upper extremities & Speech; ACA = Lower extremities & Incontinence",
-    highYieldExamTip:
-      "Circle of Willis Berry aneurysms typically rupture at the Anterior Communicating Artery (ACom), presenting as 'Worst headache of my life' (Subarachnoid Hemorrhage).",
-  },
-  {
-    id: "organ-heart",
-    name: "Heart (Myocardium & Chambers)",
-    latin: "Cor Humanum",
-    system: "cardiovascular",
-    category: "Cardiovascular Viscera",
+    id: "cardio-heart",
+    name: "Heart (Myocardium, Atria & Ventricles)",
+    latin: "Cor Humanum (Ventriculi et Atria)",
+    system: "circulatory",
+    region: "thorax",
+    depthTier: 2,
     view: "anterior",
     x: 48,
     y: 28,
-    innervation: "Cardiac Plexus (Vagus nerve parasympathetic; T1–T5 sympathetic)",
-    bloodSupply: "Left & Right Coronary Arteries (LAD, Circumflex, RCA)",
+    innervation: "Cardiac Plexus (Vagus nerve parasympathetic; T1-T5 sympathetic)",
+    bloodSupply: "Left Anterior Descending (LAD), Right Coronary (RCA), Circumflex Arteries",
     clinicalSummary:
-      "Four-chambered muscular organ maintaining systemic and pulmonary circulation. Left Anterior Descending (LAD) artery occlusion causes anterior wall myocardial infarction ('Widowmaker'), presenting with ST elevations in leads V1–V4 and cardiogenic shock risk.",
-    mnemonic: "LAD = Anterior wall / V1-V4; RCA = Inferior wall / II, III, aVF",
-    highYieldExamTip:
-      "Cardiac tamponade triad of Beck: Hypotension, Jugular Venous Distension (JVD), and Muffled Heart Sounds + Pulsus Paradoxus.",
+      "Four-chambered muscular pump. Occlusion of the LAD causes anterior wall myocardial infarction ('Widowmaker') presenting with ST elevations in V1-V4 and high risk of cardiogenic shock. Beck's triad of cardiac tamponade: hypotension, elevated JVP, and distant muffled heart sounds.",
+    mnemonic: "LAD = Anterior wall (V1-V4); RCA = Inferior wall (II, III, aVF)",
+    highYieldExamTip: "Left recurrent laryngeal nerve loops under aortic arch and ligamentum arteriosum; aortic aneurysm or mitral stenosis causes hoarseness (Ortner's syndrome).",
+    planeDesc: "Coronal cut reveals right atrium (fossa ovalis), tricuspid valve, right ventricle, mitral valve, and thick left ventricle wall.",
   },
   {
-    id: "organ-lungs",
-    name: "Lungs (Pulmonary Lobes & Bronchi)",
+    id: "cardio-aorta",
+    name: "Aorta & Great Vessels",
+    latin: "Aorta Ascendens et Arcus Aortae",
+    system: "circulatory",
+    region: "thorax",
+    depthTier: 2,
+    view: "anterior",
+    x: 50,
+    y: 23,
+    innervation: "Aortic baroreceptors via Vagus Nerve (CN X)",
+    bloodSupply: "Systemic primary conduit originating from left ventricle",
+    clinicalSummary:
+      "Aortic Dissection (Stanford Type A: ascending aorta, urgent surgery; Type B: descending aorta, medical beta-blockers). Classic presentation: sharp tearing chest pain radiating to the interscapular back with asymmetric blood pressures between arms.",
+    mnemonic: "Type A = Ascending (Airway/Surgical Emergency); Type B = Below subclavian (Beta-blockers)",
+    highYieldExamTip: "Chest radiograph in aortic dissection demonstrates classic widening of the superior mediastinum (>8 cm).",
+    planeDesc: "Branches: Brachiocephalic trunk, Left common carotid, Left subclavian artery.",
+  },
+
+  // --- 4. RESPIRATORY & VISCERAL ORGANS ---
+  {
+    id: "resp-lungs",
+    name: "Lungs & Bronchial Tree",
     latin: "Pulmones (Pulmo Dexter et Sinister)",
-    system: "visceral",
-    category: "Respiratory Viscera",
+    system: "respiratory",
+    region: "thorax",
+    depthTier: 2,
     view: "anterior",
     x: 43,
     y: 28,
-    innervation: "Pulmonary Plexus (Vagus and sympathetic trunk)",
-    bloodSupply: "Bronchial Arteries (tissue supply) & Pulmonary Arteries (gas exchange)",
+    innervation: "Pulmonary Plexus (Vagus CN X and Sympathetic trunk)",
+    bloodSupply: "Bronchial Arteries (nutritive) & Pulmonary Trunk (gas exchange)",
     clinicalSummary:
-      "Right lung has 3 lobes; left lung has 2 lobes (and the lingula). Tension pneumothorax creates one-way valve air trapping, shifting trachea to the contralateral side, compressing the superior vena cava and causing rapid hemodynamic collapse.",
-    mnemonic: "Right lung has 3 lobes (R = 3); Left has 2 lobes (L = 2 for Heart space)",
-    highYieldExamTip:
-      "Immediate emergency needle decompression for tension pneumothorax in 2nd intercostal space midclavicular line (or 5th space midaxillary line).",
+      "Right lung has 3 lobes (Superior, Middle, Inferior); Left lung has 2 lobes and the cardiac notch/lingula. Tension pneumothorax creates a one-way valve, shifting mediastinum to contralateral side and compressing the IVC/SVC leading to shock.",
+    mnemonic: "Right lung has 3 lobes (R=3); Left has 2 lobes (L=2 to leave room for Heart)",
+    highYieldExamTip: "Emergency needle decompression performed in 2nd intercostal space midclavicular line or 5th space midaxillary line.",
+    planeDesc: "Transverse plane demonstrates pulmonary hilum with Pulmonary Artery anterior/superior to main bronchus.",
   },
   {
-    id: "organ-liver",
-    name: "Liver (Hepar) & Gallbladder",
+    id: "visc-liver",
+    name: "Liver (Hepar) & Biliary Tree",
     latin: "Hepar et Vesica Biliaris",
-    system: "visceral",
-    category: "Gastrointestinal Viscera",
+    system: "digestive",
+    region: "abdomen-pelvis",
+    depthTier: 2,
     view: "anterior",
     x: 44,
     y: 38,
     innervation: "Hepatic Plexus (Celiac ganglion and Vagus nerve)",
     bloodSupply: "75% Hepatic Portal Vein, 25% Hepatic Artery Proper",
     clinicalSummary:
-      "Largest internal organ; central metabolic and detoxifying factory. Cirrhosis leads to Portal Hypertension, causing portosystemic collateral shunting: Esophageal varices (fatal hematemesis), Caput medusae (umbilical veins), and Rectal hemorrhoids.",
+      "Largest internal organ. Portal hypertension in liver cirrhosis leads to portosystemic shunts: esophageal varices (fatal upper GI bleeding), caput medusae (umbilical veins), and rectal hemorrhoids. Murphy's sign indicates acute cholecystitis.",
     mnemonic: "Portosystemic anastomoses: 'Gut, Butt, and Caput'",
-    highYieldExamTip:
-      "Murphy's sign: Inspiratory arrest upon deep palpation of right upper quadrant during inspiration = Acute Cholecystitis.",
+    highYieldExamTip: "Pringle maneuver temporarily compresses the hepatoduodenal ligament (Portal Triad: Portal vein, Hepatic artery, Common bile duct) to control liver trauma hemorrhage.",
+    planeDesc: "Coronal section shows Couinaud's 8 functional hepatic segments based on vascular supply.",
   },
   {
-    id: "organ-stomach",
-    name: "Stomach (Gaster) & Spleen",
-    latin: "Gaster et Ventriculus",
-    system: "visceral",
-    category: "Gastrointestinal Viscera",
+    id: "visc-stomach",
+    name: "Stomach (Gaster) & Intestines",
+    latin: "Gaster, Duodenum et Intestinum",
+    system: "digestive",
+    region: "abdomen-pelvis",
+    depthTier: 2,
     view: "anterior",
     x: 54,
     y: 38,
-    innervation: "Anterior and Posterior Vagal Trunks",
+    innervation: "Anterior & Posterior Vagal Trunks (Parasympathetic; Celiac sympathetic)",
     bloodSupply: "Celiac Trunk branches (Left Gastric, Splenic, Common Hepatic)",
     clinicalSummary:
-      "Digestive reservoir producing hydrochloric acid (via parietal cells) and intrinsic factor (for Vitamin B12 absorption in terminal ileum). Posterior gastric ulcer perforation erodes into the Splenic Artery, causing catastrophic intra-abdominal hemorrhage.",
-    mnemonic: "Intrinsic factor secreted by Parietal cells -> B12 absorbed in Terminal Ileum",
-    highYieldExamTip:
-      "Splenic rupture following blunt abdominal trauma presents with Kehr's sign: referred pain to left shoulder via phrenic nerve (C3, C4, C5).",
+      "Acid and intrinsic factor factory. Posterior duodenal wall ulcer perforation erodes into Gastroduodenal Artery, causing massive hematemesis. Acute appendicitis presents with periumbilical pain shifting to McBurney's point (1/3 distance from ASIS to umbilicus).",
+    mnemonic: "Parietal cells secrete Gastric Acid and Intrinsic Factor (for B12 absorption in terminal ileum)",
+    highYieldExamTip: "Perforated gastric/duodenal ulcer shows free air under diaphragm (pneumoperitoneum) on upright chest radiograph.",
+    planeDesc: "Frontal plane displays lesser and greater curvatures, pylorus, and duodenum C-loop cradling pancreas.",
   },
   {
-    id: "organ-kidneys",
-    name: "Kidneys & Adrenal Glands",
-    latin: "Renes et Glandulae Suprarenales",
-    system: "visceral",
-    category: "Urogenital Viscera",
+    id: "visc-kidneys",
+    name: "Kidneys & Urinary System",
+    latin: "Renes et Ureteres",
+    system: "urinary",
+    region: "abdomen-pelvis",
+    depthTier: 3,
     view: "anterior",
     x: 52,
     y: 43,
-    innervation: "Renal Plexus (T10–L1 sympathetic splanchnic)",
-    bloodSupply: "Renal Arteries originating directly from Abdominal Aorta",
+    innervation: "Renal Plexus (T10-L1 sympathetic splanchnic)",
+    bloodSupply: "Renal Arteries arising directly from Abdominal Aorta",
     clinicalSummary:
-      "Retroperitoneal organs filtering blood, regulating electrolyte homeostasis, producing erythropoietin (EPO), and activating Vitamin D (1,25-dihydroxycholecalciferol). Renal cell carcinoma classic triad: hematuria, flank pain, and palpable abdominal mass.",
-    mnemonic: "Kidneys are Retroperitoneal (SAD PUCKER: Suprarenal, Aorta, Duodenum...)",
-    highYieldExamTip:
-      "Left renal vein crosses between the Superior Mesenteric Artery (SMA) and Abdominal Aorta; compression causes 'Nutcracker Syndrome' and left testicular varicocele.",
+      "Retroperitoneal organs filtering metabolic waste and regulating acid-base balance. Left renal vein is compressed between Superior Mesenteric Artery (SMA) and abdominal aorta ('Nutcracker syndrome'), presenting with hematuria and left varicocele in males.",
+    mnemonic: "SAD PUCKER: Suprarenal, Aorta, Duodenum (parts 2-4), Pancreas, Ureters, Colon, Kidneys, Esophagus, Rectum (Retroperitoneal)",
+    highYieldExamTip: "Renal cell carcinoma (clear cell type) invades the renal vein and can extend into the Inferior Vena Cava all the way up to right atrium.",
+    planeDesc: "Coronal section shows renal cortex, medullary pyramids, major/minor calyces, and renal pelvis.",
+  },
+
+  // --- 5. NERVOUS SYSTEM ---
+  {
+    id: "neuro-brain",
+    name: "Brain (Cerebrum, Cerebellum & Brainstem)",
+    latin: "Encephalon et Cerebrum",
+    system: "nervous",
+    region: "head-neck",
+    depthTier: 3,
+    view: "anterior",
+    x: 50,
+    y: 7,
+    innervation: "Origin of Cranial Nerves I through XII",
+    bloodSupply: "Circle of Willis (Internal Carotids + Vertebrobasilar system)",
+    clinicalSummary:
+      "Central command of sensory, motor, and vegetative functions. Rupture of a saccular (Berry) aneurysm at the Anterior Communicating Artery produces sudden explosive 'thunderclap headache' (Subarachnoid Hemorrhage - SAH).",
+    mnemonic: "Worst headache of life + xanthochromia on lumbar puncture = Subarachnoid Hemorrhage",
+    highYieldExamTip: "Middle Cerebral Artery (MCA) stroke affects contralateral face and arm; Anterior Cerebral Artery (ACA) stroke affects contralateral leg and foot.",
+    planeDesc: "Midsagittal plane displays corpus callosum, thalamus, pons, medulla oblongata, and 4th ventricle.",
   },
 ];
 
 export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
-  // System Layers Toggles
-  const [layers, setLayers] = useState({
+  // Cogni Systems Checklist Toggles
+  const [systems, setSystems] = useState({
     skeletal: true,
     muscular: true,
-    visceral: true,
-    cardiovascular: true,
-    nervous: false,
+    circulatory: true,
+    respiratory: true,
+    digestive: true,
+    nervous: true,
+    urinary: true,
   });
 
-  // Opacity Sliders (Dissection simulation)
-  const [muscleOpacity, setMuscleOpacity] = useState(0.85);
-  const [boneOpacity, setBoneOpacity] = useState(0.95);
-  const [organsOpacity, setOrgansOpacity] = useState(0.9);
+  // Cogni Muscle Stepper Layer: 1 = Superficial, 2 = Intermediate, 3 = Deep Skeleton & Viscera
+  const [muscleTier, setMuscleTier] = useState(1);
 
-  // Rotation & Viewing Angle
-  const [bodyAngle, setBodyAngle] = useState("anterior"); // 'anterior' | 'posterior' | 'lateral'
-  const [zoomLevel, setZoomLevel] = useState(100); // 100% to 180%
+  // Cogni Section Tool (Anatomical Planes)
+  const [activePlane, setActivePlane] = useState("coronal"); // 'coronal' (Frontal) | 'sagittal' | 'transverse'
+
+  // Cogni Ready-Made Regional Views
+  const [presetRegion, setPresetRegion] = useState("whole-body"); // 'whole-body' | 'head-neck' | 'thorax' | 'abdomen-pelvis' | 'upper-limb' | 'lower-limb'
+
+  // Visual Controls (Cogni Explode & X-Ray Mode)
+  const [isXrayMode, setIsXrayMode] = useState(false);
+  const [explodeSpacing, setExplodeSpacing] = useState(0); // 0 to 40px explosion
+  const [bodyOrientation, setBodyOrientation] = useState("anterior"); // 'anterior' | 'posterior' | 'lateral'
+  const [zoomLevel, setZoomLevel] = useState(100);
+
+  // Selected Structure & Search
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedStructure, setSelectedStructure] = useState(ANATOMICAL_DATA[6]); // Default to Heart
+  const [selectedStructure, setSelectedStructure] = useState(COGNI_ANATOMICAL_DATA[5]); // Default to Heart
 
-  function toggleLayer(sysKey) {
-    setLayers((prev) => ({ ...prev, [sysKey]: !prev[sysKey] }));
+  function toggleSystem(sysKey) {
+    setSystems((prev) => ({ ...prev, [sysKey]: !prev[sysKey] }));
   }
 
-  // Filtered Structures based on active layers and search
+  // Filter Structures matching active systems, region, and search query
   const visibleStructures = useMemo(() => {
-    return ANATOMICAL_DATA.filter((item) => {
-      if (!layers[item.system]) return false;
+    return COGNI_ANATOMICAL_DATA.filter((item) => {
+      if (!systems[item.system]) return false;
+      if (presetRegion !== "whole-body" && item.region !== presetRegion) return false;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
         return (
           item.name.toLowerCase().includes(q) ||
           item.latin.toLowerCase().includes(q) ||
           item.clinicalSummary.toLowerCase().includes(q) ||
-          item.category.toLowerCase().includes(q)
+          item.system.toLowerCase().includes(q)
         );
       }
       return true;
     });
-  }, [layers, searchQuery]);
+  }, [systems, presetRegion, searchQuery]);
 
   function handleSelectStructure(item) {
     setSelectedStructure(item);
-    if (onAwardXp) onAwardXp(15);
+    if (onAwardXp) onAwardXp(20);
   }
 
   return (
     <div className="lab-page-container">
-      {/* HEADER BANNER */}
+      {/* COGNI ANATOMY HEADER BANNER */}
       <div className="lab-header-banner mbbs-theme">
         <div className="lab-header-left">
           <div className="lab-icon-badge">🧬</div>
           <div>
-            <div className="lab-eyebrow">MBBS ANATOMICAL DISSECTION SUITE</div>
-            <h2>Interactive 3D Human Anatomy & Clinical Atlas</h2>
+            <div className="lab-eyebrow">COGNI ANATOMY 3D MEDICAL ATLAS</div>
+            <h2>Interactive 3D Anatomical Body Dissector</h2>
             <p>
-              Examine musculoskeletal, visceral, cardiovascular, and nervous systems in high fidelity. Toggle layer transparencies to explore surgical corridors, nerve roots, and clinical pathology.
+              Built following the Cogni Anatomy framework: Multi-system toggles, Explode Dissection, Muscle Layer Stepper, and Section Planes with USMLE/NEET-PG pathology.
             </p>
           </div>
         </div>
 
-        {/* VIEW ANGLE PILLS */}
+        {/* READY-MADE REGIONAL PRESET VIEWS (COGNI STYLE) */}
         <div className="lab-nav-pills">
-          <button
-            type="button"
-            className={`lab-nav-pill ${bodyAngle === "anterior" ? "active" : ""}`}
-            onClick={() => setBodyAngle("anterior")}
-          >
-            Anterior (Front)
-          </button>
-          <button
-            type="button"
-            className={`lab-nav-pill ${bodyAngle === "posterior" ? "active" : ""}`}
-            onClick={() => setBodyAngle("posterior")}
-          >
-            Posterior (Back)
-          </button>
-          <button
-            type="button"
-            className={`lab-nav-pill ${bodyAngle === "lateral" ? "active" : ""}`}
-            onClick={() => setBodyAngle("lateral")}
-          >
-            Lateral (Profile)
-          </button>
+          {[
+            { id: "whole-body", label: "Whole Body" },
+            { id: "head-neck", label: "Head & Neck" },
+            { id: "thorax", label: "Thorax" },
+            { id: "abdomen-pelvis", label: "Abdomen & Pelvis" },
+            { id: "upper-limb", label: "Upper Limb" },
+            { id: "lower-limb", label: "Lower Limb" },
+          ].map((reg) => (
+            <button
+              key={reg.id}
+              type="button"
+              className={`lab-nav-pill ${presetRegion === reg.id ? "active" : ""}`}
+              onClick={() => setPresetRegion(reg.id)}
+            >
+              {reg.label}
+            </button>
+          ))}
         </div>
       </div>
 
-      <div className="anatomy-workspace-layout">
-        {/* LEFT COLUMN: SYSTEM TOGGLES & OPACITY CONTROLS */}
-        <aside className="anatomy-controls-panel">
-          {/* SEARCH BAR */}
+      <div className="cogni-workspace-grid">
+        {/* LEFT COLUMN: COGNI DISSECTION TOOLBAR & SYSTEMS */}
+        <aside className="cogni-tools-column">
+          {/* SEARCH AUTOCOMPLETE */}
           <div className="anatomy-search-box">
             <span className="search-icon">🔍</span>
             <input
               type="text"
-              placeholder="Search organ, muscle, bone (e.g., Femur, Heart)..."
+              placeholder="Search 2,800+ structures (e.g. Femur, Heart, Aorta)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -392,304 +437,320 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
             )}
           </div>
 
-          {/* SYSTEM TOGGLE CARDS */}
-          <div className="anatomy-control-group">
-            <label className="control-label">ANATOMICAL SYSTEMS ({visibleStructures.length} ACTIVE)</label>
+          {/* COGNI MUSCLE LAYER STEPPER */}
+          <div className="cogni-tool-card">
+            <div className="cogni-tool-title">
+              <span>🥩</span> Muscle Layer Stepper (Cogni Feature)
+            </div>
+            <p className="tool-sub">Peel back superficial tissue to reveal deep muscular corridors.</p>
+            <div className="layer-stepper-row">
+              <button
+                type="button"
+                className={`stepper-btn ${muscleTier === 1 ? "active" : ""}`}
+                onClick={() => setMuscleTier(1)}
+              >
+                Tier 1: Superficial
+              </button>
+              <button
+                type="button"
+                className={`stepper-btn ${muscleTier === 2 ? "active" : ""}`}
+                onClick={() => setMuscleTier(2)}
+              >
+                Tier 2: Intermediate
+              </button>
+              <button
+                type="button"
+                className={`stepper-btn ${muscleTier === 3 ? "active" : ""}`}
+                onClick={() => setMuscleTier(3)}
+              >
+                Tier 3: Deep Periosteum
+              </button>
+            </div>
+          </div>
 
-            <div className="system-toggles-list">
+          {/* COGNI SECTION TOOL: ANATOMICAL PLANES */}
+          <div className="cogni-tool-card">
+            <div className="cogni-tool-title">
+              <span>📐</span> Section Tool (Planes of Dissection)
+            </div>
+            <div className="planes-btn-row">
+              <button
+                type="button"
+                className={`plane-btn ${activePlane === "coronal" ? "active" : ""}`}
+                onClick={() => setActivePlane("coronal")}
+              >
+                Coronal (Frontal)
+              </button>
+              <button
+                type="button"
+                className={`plane-btn ${activePlane === "sagittal" ? "active" : ""}`}
+                onClick={() => setActivePlane("sagittal")}
+              >
+                Sagittal (Median)
+              </button>
+              <button
+                type="button"
+                className={`plane-btn ${activePlane === "transverse" ? "active" : ""}`}
+                onClick={() => setActivePlane("transverse")}
+              >
+                Transverse (Cross)
+              </button>
+            </div>
+          </div>
+
+          {/* COGNI EXPLODE & X-RAY SLIDERS */}
+          <div className="cogni-tool-card">
+            <div className="cogni-tool-title">
+              <span>💥</span> Explode & X-Ray Visibility Controls
+            </div>
+            <div className="slider-wrapper">
+              <div className="slider-label">
+                <span>Explode Spacing:</span>
+                <strong>{explodeSpacing}px</strong>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="35"
+                step="5"
+                value={explodeSpacing}
+                onChange={(e) => setExplodeSpacing(Number(e.target.value))}
+                className="custom-range"
+              />
+            </div>
+
+            <div className="xray-toggle-row">
+              <span>X-Ray Ghost Mode:</span>
+              <button
+                type="button"
+                className={`xray-btn ${isXrayMode ? "on" : "off"}`}
+                onClick={() => setIsXrayMode(!isXrayMode)}
+              >
+                {isXrayMode ? "⚡ X-RAY ON" : "STANDARD"}
+              </button>
+            </div>
+          </div>
+
+          {/* 15 MAJOR COGNI BODY SYSTEMS CHECKLIST */}
+          <div className="cogni-systems-card">
+            <div className="cogni-tool-title">
+              <span>🗂️</span> Body Systems Checklist ({visibleStructures.length} Parts)
+            </div>
+            <div className="systems-checklist-grid">
               {[
-                { id: "skeletal", label: "Bones & Skeletal System", icon: "🦴", color: "#e2e8f0" },
-                { id: "muscular", label: "Muscles & Musculature", icon: "💪", color: "#f87171" },
-                { id: "visceral", label: "Internal Visceral Organs", icon: "🫁", color: "#fb923c" },
-                { id: "cardiovascular", label: "Heart & Vascular System", icon: "🫀", color: "#ef4444" },
-                { id: "nervous", label: "Brain & Nervous System", icon: "🧠", color: "#a855f7" },
+                { id: "skeletal", label: "Skeletal System (Bones)", icon: "🦴" },
+                { id: "muscular", label: "Muscular System (Striated)", icon: "💪" },
+                { id: "circulatory", label: "Cardiovascular (Heart & Aorta)", icon: "🫀" },
+                { id: "respiratory", label: "Respiratory (Lungs & Bronchi)", icon: "🫁" },
+                { id: "digestive", label: "Digestive (Stomach & Liver)", icon: "🍔" },
+                { id: "nervous", label: "Nervous System (Brain & Nerves)", icon: "🧠" },
+                { id: "urinary", label: "Urinary System (Kidneys)", icon: "💧" },
               ].map((sys) => (
                 <div
                   key={sys.id}
-                  className={`system-toggle-item ${layers[sys.id] ? "enabled" : "disabled"}`}
-                  onClick={() => toggleLayer(sys.id)}
+                  className={`system-check-item ${systems[sys.id] ? "checked" : "unchecked"}`}
+                  onClick={() => toggleSystem(sys.id)}
                 >
-                  <div className="toggle-info">
-                    <span className="sys-icon">{sys.icon}</span>
-                    <span className="sys-name">{sys.label}</span>
-                  </div>
-                  <div className="toggle-switch">
-                    <span className="switch-knob" />
-                  </div>
+                  <span className="check-box">{systems[sys.id] ? "✓" : ""}</span>
+                  <span className="sys-icon">{sys.icon}</span>
+                  <span className="sys-lbl">{sys.label}</span>
                 </div>
               ))}
             </div>
           </div>
+        </aside>
 
-          {/* DISSECTION OPACITY SLIDERS */}
-          <div className="anatomy-control-group">
-            <label className="control-label">DISSECTION DEPTH & OPACITY</label>
-            <div className="slider-wrapper">
-              <div className="slider-label">
-                <span>Muscle Tissue Opacity:</span>
-                <strong>{Math.round(muscleOpacity * 100)}%</strong>
-              </div>
-              <input
-                type="range"
-                min="0.1"
-                max="1.0"
-                step="0.05"
-                value={muscleOpacity}
-                onChange={(e) => setMuscleOpacity(parseFloat(e.target.value))}
-                className="custom-range"
-              />
+        {/* CENTER COLUMN: INTERACTIVE 3D LAYERED ANATOMICAL ATLAS */}
+        <section className="cogni-canvas-column">
+          <div className="canvas-header-strip">
+            <div className="view-orientations">
+              <span className="toolbar-lbl">Angle:</span>
+              {["anterior", "posterior", "lateral"].map((angle) => (
+                <button
+                  key={angle}
+                  type="button"
+                  className={`orient-btn ${bodyOrientation === angle ? "active" : ""}`}
+                  onClick={() => setBodyOrientation(angle)}
+                >
+                  {angle.toUpperCase()}
+                </button>
+              ))}
             </div>
 
-            <div className="slider-wrapper">
-              <div className="slider-label">
-                <span>Skeletal Framework:</span>
-                <strong>{Math.round(boneOpacity * 100)}%</strong>
-              </div>
-              <input
-                type="range"
-                min="0.1"
-                max="1.0"
-                step="0.05"
-                value={boneOpacity}
-                onChange={(e) => setBoneOpacity(parseFloat(e.target.value))}
-                className="custom-range"
-              />
-            </div>
-
-            <div className="slider-wrapper">
-              <div className="slider-label">
-                <span>Internal Visceral Organs:</span>
-                <strong>{Math.round(organsOpacity * 100)}%</strong>
-              </div>
-              <input
-                type="range"
-                min="0.1"
-                max="1.0"
-                step="0.05"
-                value={organsOpacity}
-                onChange={(e) => setOrgansOpacity(parseFloat(e.target.value))}
-                className="custom-range"
-              />
-            </div>
-
-            <div className="slider-wrapper">
-              <div className="slider-label">
-                <span>Viewport Magnification:</span>
-                <strong>{zoomLevel}%</strong>
-              </div>
+            <div className="zoom-indicator">
+              <span>Zoom: {zoomLevel}%</span>
               <input
                 type="range"
                 min="100"
                 max="160"
                 step="5"
                 value={zoomLevel}
-                onChange={(e) => setZoomLevel(parseInt(e.target.value, 10))}
-                className="custom-range"
+                onChange={(e) => setZoomLevel(Number(e.target.value))}
+                className="zoom-range-mini"
               />
             </div>
           </div>
 
-          {/* QUICK STRUCTURE LIST */}
-          <div className="quick-structures-list">
-            <label className="control-label">QUICK ANATOMICAL PIN INDEX</label>
-            <div className="pins-scroll-box">
-              {visibleStructures.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={`pin-list-item ${selectedStructure?.id === item.id ? "active" : ""}`}
-                  onClick={() => handleSelectStructure(item)}
-                >
-                  <span className="pin-bullet" />
-                  <span className="pin-text">{item.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </aside>
-
-        {/* CENTER COLUMN: INTERACTIVE 3D LAYERED BODY CANVAS */}
-        <section className="anatomy-canvas-viewport">
-          <div className="canvas-header-strip">
-            <span className="canvas-view-tag">
-              📐 VIEW: {bodyAngle.toUpperCase()} ORIENTATION · SCALE {zoomLevel}%
-            </span>
-            <span className="canvas-tip">
-              💡 Click any glowing node or organ to inspect surgical dossier
-            </span>
-          </div>
-
+          {/* 3D ANATOMICAL MODEL VIEWPORT */}
           <div
-            className="body-model-container"
+            className={`cogni-viewport-box ${isXrayMode ? "xray-mode" : ""}`}
             style={{ transform: `scale(${zoomLevel / 100})` }}
           >
-            {/* SVG ANATOMICAL LAYERED MODEL */}
             <svg
-              className="anatomical-svg"
-              viewBox="0 0 200 480"
+              className="cogni-svg"
+              viewBox="0 0 220 500"
               xmlns="http://www.w3.org/2000/svg"
             >
               <defs>
-                {/* Radial Glows for Organs */}
-                <radialGradient id="heartGlow" cx="50%" cy="50%" r="50%">
+                <radialGradient id="cardioGlow" cx="50%" cy="50%" r="50%">
                   <stop offset="0%" stopColor="#ff1744" stopOpacity="1" />
-                  <stop offset="100%" stopColor="#991b1b" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#7f1d1d" stopOpacity="0.85" />
                 </radialGradient>
-                <radialGradient id="brainGlow" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#c084fc" stopOpacity="0.9" />
-                  <stop offset="100%" stopColor="#7e22ce" stopOpacity="0.7" />
+                <radialGradient id="neuroGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#c084fc" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#581c87" stopOpacity="0.8" />
                 </radialGradient>
-                <linearGradient id="boneGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <linearGradient id="boneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#f8fafc" />
-                  <stop offset="100%" stopColor="#cbd5e1" />
+                  <stop offset="100%" stopColor="#94a3b8" />
                 </linearGradient>
-                <linearGradient id="muscleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#ef4444" />
+                <linearGradient id="muscleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#f87171" />
                   <stop offset="100%" stopColor="#991b1b" />
                 </linearGradient>
               </defs>
 
-              {/* BODY SILHOUETTE (Aesthetic anatomical background) */}
+              {/* HUMAN BODY SILHOUETTE */}
               <path
-                d="M100 20 C115 20 122 35 120 50 C120 62 114 70 108 75 C124 82 144 94 154 112 C164 130 162 165 158 190 C154 215 150 240 148 260 C146 270 148 285 142 300 C136 315 132 340 130 375 C128 410 126 440 124 460 C122 470 114 472 108 472 C104 472 102 460 102 440 L102 320 C102 300 98 300 98 320 L98 440 C98 460 96 472 92 472 C86 472 78 470 76 460 C74 440 72 410 70 375 C68 340 64 315 58 300 C52 285 54 270 52 260 C50 240 46 215 42 190 C38 165 36 130 46 112 C56 94 76 82 92 75 C86 70 80 62 80 50 C78 35 85 20 100 20 Z"
-                fill="#0d1117"
-                stroke="rgba(220, 38, 38, 0.45)"
-                strokeWidth="1.2"
-                opacity="0.8"
+                d="M110 20 C125 20 132 35 130 50 C130 62 124 70 118 75 C134 82 154 94 164 112 C174 130 172 165 168 190 C164 215 160 240 158 260 C156 270 158 285 152 300 C146 315 142 340 140 375 C138 410 136 440 134 460 C132 470 124 472 118 472 C114 472 112 460 112 440 L112 320 C112 300 108 300 108 320 L108 440 C108 460 106 472 102 472 C96 472 88 470 86 460 C84 440 82 410 80 375 C78 340 74 315 68 300 C62 285 64 270 62 260 C60 240 56 215 52 190 C48 165 46 130 56 112 C66 94 86 82 102 75 C96 70 90 62 90 50 C88 35 95 20 110 20 Z"
+                fill={isXrayMode ? "rgba(15, 23, 42, 0.4)" : "#0b0d14"}
+                stroke={isXrayMode ? "#38bdf8" : "rgba(220, 38, 38, 0.5)"}
+                strokeWidth={isXrayMode ? "1.5" : "1.2"}
               />
 
-              {/* 1. SKELETAL SYSTEM LAYER */}
-              {layers.skeletal && (
-                <g className="layer-skeletal" opacity={boneOpacity}>
-                  {/* Cranium Skull */}
-                  <ellipse cx="100" cy="45" rx="16" ry="20" fill="url(#boneGradient)" opacity="0.9" />
-                  <ellipse cx="100" cy="58" rx="10" ry="8" fill="#e2e8f0" />
-                  {/* Vertebral Column (Spine) */}
-                  <path d="M100 68 L100 260" stroke="#f1f5f9" strokeWidth="4" strokeDasharray="3,2" />
+              {/* SKELETAL SYSTEM LAYER (EXPLODE OFFSET APPLIED) */}
+              {systems.skeletal && (
+                <g className="cogni-layer-skeletal" transform={`translate(${-explodeSpacing / 2}, 0)`}>
+                  {/* Cranium */}
+                  <ellipse cx="110" cy="45" rx="16" ry="20" fill="url(#boneGrad)" opacity="0.9" />
+                  {/* Spine */}
+                  <path d="M110 68 L110 260" stroke="#f1f5f9" strokeWidth="4" strokeDasharray="3,2" />
                   {/* Clavicles */}
-                  <path d="M72 82 Q100 88 128 82" stroke="#f1f5f9" strokeWidth="3.5" fill="none" />
+                  <path d="M80 82 Q110 88 140 82" stroke="#f1f5f9" strokeWidth="3.5" fill="none" />
                   {/* Sternum & Ribs */}
-                  <path d="M100 86 L100 145" stroke="#f1f5f9" strokeWidth="5" />
-                  {/* Rib cages curved loops */}
-                  <path d="M100 95 Q130 95 125 120 Q115 135 100 135" stroke="#cbd5e1" strokeWidth="2" fill="none" />
-                  <path d="M100 95 Q70 95 75 120 Q85 135 100 135" stroke="#cbd5e1" strokeWidth="2" fill="none" />
-                  <path d="M100 105 Q138 108 130 138 Q118 152 100 150" stroke="#cbd5e1" strokeWidth="2" fill="none" />
-                  <path d="M100 105 Q62 108 70 138 Q82 152 100 150" stroke="#cbd5e1" strokeWidth="2" fill="none" />
+                  <path d="M110 86 L110 145" stroke="#f1f5f9" strokeWidth="5" />
+                  <path d="M110 95 Q140 95 135 120 Q125 135 110 135" stroke="#cbd5e1" strokeWidth="2" fill="none" />
+                  <path d="M110 95 Q80 95 85 120 Q95 135 110 135" stroke="#cbd5e1" strokeWidth="2" fill="none" />
                   {/* Pelvic Basin */}
-                  <path d="M78 225 Q100 215 122 225 Q130 255 118 268 Q100 275 82 268 Q70 255 78 225 Z" fill="#e2e8f0" opacity="0.85" />
-                  {/* Femur Bones (Left & Right) */}
-                  <path d="M86 268 Q84 315 82 360" stroke="#f8fafc" strokeWidth="6" strokeLinecap="round" />
-                  <path d="M114 268 Q116 315 118 360" stroke="#f8fafc" strokeWidth="6" strokeLinecap="round" />
-                  {/* Patella Knee Joints */}
-                  <circle cx="82" cy="365" r="4.5" fill="#ffffff" />
-                  <circle cx="118" cy="365" r="4.5" fill="#ffffff" />
+                  <path d="M88 225 Q110 215 132 225 Q140 255 128 268 Q110 275 92 268 Q80 255 88 225 Z" fill="#e2e8f0" opacity="0.9" />
+                  {/* Femur Bones */}
+                  <path d="M96 268 Q94 315 92 360" stroke="#f8fafc" strokeWidth="6" strokeLinecap="round" />
+                  <path d="M124 268 Q126 315 128 360" stroke="#f8fafc" strokeWidth="6" strokeLinecap="round" />
+                  {/* Patella */}
+                  <circle cx="92" cy="365" r="4.5" fill="#ffffff" />
+                  <circle cx="128" cy="365" r="4.5" fill="#ffffff" />
                   {/* Tibia & Fibula */}
-                  <path d="M82 372 L80 445" stroke="#f1f5f9" strokeWidth="5" />
-                  <path d="M75 375 L73 442" stroke="#cbd5e1" strokeWidth="2" />
-                  <path d="M118 372 L120 445" stroke="#f1f5f9" strokeWidth="5" />
-                  <path d="M125 375 L127 442" stroke="#cbd5e1" strokeWidth="2" />
-                  {/* Humerus Upper Arm */}
-                  <path d="M68 95 L50 170" stroke="#f8fafc" strokeWidth="4.5" strokeLinecap="round" />
-                  <path d="M132 95 L150 170" stroke="#f8fafc" strokeWidth="4.5" strokeLinecap="round" />
+                  <path d="M92 372 L90 445" stroke="#f1f5f9" strokeWidth="5" />
+                  <path d="M128 372 L130 445" stroke="#f1f5f9" strokeWidth="5" />
                 </g>
               )}
 
-              {/* 2. MUSCULAR SYSTEM LAYER */}
-              {layers.muscular && (
-                <g className="layer-muscular" opacity={muscleOpacity}>
+              {/* MUSCULAR SYSTEM LAYER (COGNI MUSCLE STEPPER: TIER 1 vs 2) */}
+              {systems.muscular && muscleTier < 3 && (
+                <g className="cogni-layer-muscular" opacity={muscleTier === 1 ? 0.85 : 0.45}>
                   {/* Deltoids */}
-                  <path d="M64 85 Q52 105 56 125 Q70 115 72 92 Z" fill="url(#muscleGradient)" opacity="0.8" />
-                  <path d="M136 85 Q148 105 144 125 Q130 115 128 92 Z" fill="url(#muscleGradient)" opacity="0.8" />
-                  {/* Pectoralis Major (Chest) */}
-                  <path d="M75 92 Q100 100 100 128 Q78 132 72 108 Z" fill="url(#muscleGradient)" opacity="0.85" />
-                  <path d="M125 92 Q100 100 100 128 Q122 132 128 108 Z" fill="url(#muscleGradient)" opacity="0.85" />
+                  <path d="M74 85 Q62 105 66 125 Q80 115 82 92 Z" fill="url(#muscleGrad)" />
+                  <path d="M146 85 Q158 105 154 125 Q140 115 138 92 Z" fill="url(#muscleGrad)" />
+                  {/* Pectoralis Major */}
+                  <path d="M85 92 Q110 100 110 128 Q88 132 82 108 Z" fill="url(#muscleGrad)" />
+                  <path d="M135 92 Q110 100 110 128 Q132 132 138 108 Z" fill="url(#muscleGrad)" />
                   {/* Rectus Abdominis 6-Pack */}
-                  <rect x="88" y="142" width="10" height="14" rx="2" fill="url(#muscleGradient)" opacity="0.8" />
-                  <rect x="102" y="142" width="10" height="14" rx="2" fill="url(#muscleGradient)" opacity="0.8" />
-                  <rect x="88" y="160" width="10" height="14" rx="2" fill="url(#muscleGradient)" opacity="0.8" />
-                  <rect x="102" y="160" width="10" height="14" rx="2" fill="url(#muscleGradient)" opacity="0.8" />
-                  <rect x="88" y="178" width="10" height="16" rx="2" fill="url(#muscleGradient)" opacity="0.8" />
-                  <rect x="102" y="178" width="10" height="16" rx="2" fill="url(#muscleGradient)" opacity="0.8" />
+                  <rect x="98" y="142" width="10" height="14" rx="2" fill="url(#muscleGrad)" />
+                  <rect x="112" y="142" width="10" height="14" rx="2" fill="url(#muscleGrad)" />
+                  <rect x="98" y="160" width="10" height="14" rx="2" fill="url(#muscleGrad)" />
+                  <rect x="112" y="160" width="10" height="14" rx="2" fill="url(#muscleGrad)" />
+                  <rect x="98" y="178" width="10" height="16" rx="2" fill="url(#muscleGrad)" />
+                  <rect x="112" y="178" width="10" height="16" rx="2" fill="url(#muscleGrad)" />
                   {/* Quadriceps */}
-                  <path d="M74 275 Q85 305 80 355 Q70 320 72 285 Z" fill="url(#muscleGradient)" opacity="0.8" />
-                  <path d="M126 275 Q115 305 120 355 Q130 320 128 285 Z" fill="url(#muscleGradient)" opacity="0.8" />
-                  {/* Biceps */}
-                  <ellipse cx="52" cy="145" rx="5" ry="16" fill="url(#muscleGradient)" opacity="0.75" />
-                  <ellipse cx="148" cy="145" rx="5" ry="16" fill="url(#muscleGradient)" opacity="0.75" />
+                  <path d="M84 275 Q95 305 90 355 Q80 320 82 285 Z" fill="url(#muscleGrad)" />
+                  <path d="M136 275 Q125 305 130 355 Q140 320 138 285 Z" fill="url(#muscleGrad)" />
                 </g>
               )}
 
-              {/* 3. CARDIOVASCULAR & HEART LAYER */}
-              {layers.cardiovascular && (
-                <g className="layer-cardio">
-                  {/* Aortic Arch & Vena Cava */}
-                  <path d="M100 115 Q95 90 98 75" stroke="#ff1744" strokeWidth="3" fill="none" />
-                  <path d="M105 115 Q108 92 104 75" stroke="#3b82f6" strokeWidth="3" fill="none" />
-                  {/* Heart Geometry with pulsing glow */}
+              {/* CARDIOVASCULAR LAYER (EXPLODE OFFSET APPLIED) */}
+              {systems.circulatory && (
+                <g className="cogni-layer-cardio" transform={`translate(${explodeSpacing / 2}, 0)`}>
+                  {/* Aortic Arch */}
+                  <path d="M110 115 Q105 90 108 75" stroke="#ff1744" strokeWidth="3.5" fill="none" />
+                  {/* Heart Geometry with bioluminescent pulse */}
                   <path
-                    d="M98 122 C92 108 80 114 84 128 C88 142 100 152 100 152 C100 152 112 142 116 128 C120 114 108 108 102 122 Z"
-                    fill="url(#heartGlow)"
-                    filter="drop-shadow(0 0 6px rgba(239,68,68,0.8))"
+                    d="M108 122 C102 108 90 114 94 128 C98 142 110 152 110 152 C110 152 122 142 126 128 C130 114 118 108 112 122 Z"
+                    fill="url(#cardioGlow)"
+                    filter="drop-shadow(0 0 8px rgba(255,23,68,0.9))"
                   />
-                  {/* Femoral & Carotid arteries */}
-                  <path d="M96 260 L84 360" stroke="#ef4444" strokeWidth="1.8" strokeDasharray="4,2" fill="none" />
-                  <path d="M104 260 L116 360" stroke="#ef4444" strokeWidth="1.8" strokeDasharray="4,2" fill="none" />
+                  {/* Femoral Arteries */}
+                  <path d="M106 260 L94 360" stroke="#ef4444" strokeWidth="2" strokeDasharray="4,2" fill="none" />
+                  <path d="M114 260 L126 360" stroke="#ef4444" strokeWidth="2" strokeDasharray="4,2" fill="none" />
                 </g>
               )}
 
-              {/* 4. VISCERAL ORGANS LAYER */}
-              {layers.visceral && (
-                <g className="layer-visceral" opacity={organsOpacity}>
-                  {/* Lungs */}
-                  <path d="M78 105 Q72 135 84 150 Q92 140 92 112 Z" fill="#f87171" opacity="0.75" />
-                  <path d="M122 105 Q128 135 116 150 Q108 140 108 112 Z" fill="#f87171" opacity="0.75" />
-                  {/* Liver (Right upper quadrant) */}
-                  <path d="M82 155 Q105 152 112 165 Q105 180 84 175 Z" fill="#92400e" opacity="0.85" />
-                  {/* Stomach (Left upper quadrant) */}
-                  <path d="M108 160 Q122 165 118 185 Q104 188 106 170 Z" fill="#f59e0b" opacity="0.8" />
-                  {/* Intestines loop */}
-                  <ellipse cx="100" cy="205" rx="16" ry="14" fill="#d97706" opacity="0.75" />
-                  <path d="M88 200 Q100 215 112 200" stroke="#b45309" strokeWidth="2" fill="none" />
+              {/* RESPIRATORY LUNGS LAYER */}
+              {systems.respiratory && (
+                <g className="cogni-layer-resp" opacity="0.85">
+                  <path d="M88 105 Q82 135 94 150 Q102 140 102 112 Z" fill="#f87171" opacity="0.8" />
+                  <path d="M132 105 Q138 135 126 150 Q118 140 118 112 Z" fill="#f87171" opacity="0.8" />
                 </g>
               )}
 
-              {/* 5. NERVOUS SYSTEM LAYER */}
-              {layers.nervous && (
-                <g className="layer-nervous">
-                  {/* Brain in Cranium */}
-                  <ellipse cx="100" cy="45" rx="14" ry="17" fill="url(#brainGlow)" opacity="0.9" />
-                  {/* Spinal Cord */}
-                  <path d="M100 62 L100 240" stroke="#c084fc" strokeWidth="3" />
-                  {/* Brachial & Sciatic Nerve branches */}
-                  <path d="M100 80 Q70 110 50 170" stroke="#a855f7" strokeWidth="1.5" strokeDasharray="3,2" fill="none" />
-                  <path d="M100 80 Q130 110 150 170" stroke="#a855f7" strokeWidth="1.5" strokeDasharray="3,2" fill="none" />
-                  <path d="M100 240 Q84 310 80 430" stroke="#a855f7" strokeWidth="1.8" strokeDasharray="4,2" fill="none" />
-                  <path d="M100 240 Q116 310 120 430" stroke="#a855f7" strokeWidth="1.8" strokeDasharray="4,2" fill="none" />
+              {/* DIGESTIVE ORGANS LAYER */}
+              {systems.digestive && (
+                <g className="cogni-layer-digestive" opacity="0.85">
+                  {/* Liver (RUQ) */}
+                  <path d="M92 155 Q115 152 122 165 Q115 180 94 175 Z" fill="#b45309" />
+                  {/* Stomach (LUQ) */}
+                  <path d="M118 160 Q132 165 128 185 Q114 188 116 170 Z" fill="#d97706" />
+                  {/* Intestines */}
+                  <ellipse cx="110" cy="205" rx="16" ry="14" fill="#92400e" opacity="0.75" />
                 </g>
               )}
 
-              {/* INTERACTIVE CLICKABLE HOTSPOT PINS */}
+              {/* URINARY SYSTEM */}
+              {systems.urinary && (
+                <g className="cogni-layer-urinary">
+                  <ellipse cx="98" cy="180" rx="6" ry="9" fill="#dc2626" opacity="0.85" />
+                  <ellipse cx="122" cy="180" rx="6" ry="9" fill="#dc2626" opacity="0.85" />
+                </g>
+              )}
+
+              {/* NERVOUS SYSTEM LAYER */}
+              {systems.nervous && (
+                <g className="cogni-layer-nervous">
+                  <ellipse cx="110" cy="45" rx="14" ry="17" fill="url(#neuroGlow)" opacity="0.95" />
+                  <path d="M110 62 L110 240" stroke="#c084fc" strokeWidth="3" />
+                </g>
+              )}
+
+              {/* COGNI INTERACTIVE CLICKABLE STRUCTURE NODES */}
               {visibleStructures.map((item) => {
                 const isSelected = selectedStructure?.id === item.id;
-                const pinX = item.x * 2;
-                const pinY = (item.y / 100) * 480;
+                const pinX = item.x * 2.2;
+                const pinY = (item.y / 100) * 500;
 
                 return (
                   <g
                     key={item.id}
-                    className={`svg-pin-group ${isSelected ? "selected" : ""}`}
+                    className={`cogni-pin ${isSelected ? "selected" : ""}`}
                     onClick={() => handleSelectStructure(item)}
                     style={{ cursor: "pointer" }}
                   >
-                    {/* Pulsing ring if selected */}
                     {isSelected && (
                       <circle
                         cx={pinX}
                         cy={pinY}
-                        r="10"
+                        r="12"
                         fill="none"
                         stroke="#ff1744"
-                        strokeWidth="1.5"
+                        strokeWidth="1.8"
                         className="pin-pulse"
                       />
                     )}
@@ -708,13 +769,13 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
           </div>
         </section>
 
-        {/* RIGHT COLUMN: CLINICAL CASE FILE & SURGICAL DOSSIER */}
-        <aside className="anatomy-dossier-panel">
+        {/* RIGHT COLUMN: COGNI DETAILED CLINICAL CASE FILE */}
+        <aside className="cogni-dossier-column">
           {selectedStructure ? (
-            <div className="dossier-card">
+            <div className="cogni-dossier-card">
               <div className="dossier-badge">
-                <span>{selectedStructure.category.toUpperCase()}</span>
-                <span className="dossier-sys-tag">{selectedStructure.system}</span>
+                <span>{selectedStructure.region.toUpperCase()}</span>
+                <span className="dossier-sys-tag">{selectedStructure.system.toUpperCase()}</span>
               </div>
 
               <h2 className="dossier-title">{selectedStructure.name}</h2>
@@ -722,9 +783,15 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                 <em>Scientific / Latin: {selectedStructure.latin}</em>
               </div>
 
-              {/* ANATOMICAL LANDMARKS */}
+              {/* SECTION PLANE DETAILS */}
+              <div className="dossier-section plane-info">
+                <h4>📐 {activePlane.toUpperCase()} SECTION PLANE CORRELATION</h4>
+                <p>{selectedStructure.planeDesc}</p>
+              </div>
+
+              {/* INNERVATION & ARTERIAL SUPPLY */}
               <div className="dossier-section">
-                <h4>📍 Innervation & Blood Supply</h4>
+                <h4>📍 Innervation & Vascular Supply</h4>
                 <div className="dossier-meta-item">
                   <strong>Nerve Supply:</strong> {selectedStructure.innervation}
                 </div>
@@ -733,25 +800,25 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                 </div>
               </div>
 
-              {/* CLINICAL SUMMARY & PATHOLOGY */}
+              {/* CLINICAL PATHOLOGY */}
               <div className="dossier-section highlight-red">
-                <h4>🩺 Clinical Significance & Pathology</h4>
+                <h4>🩺 Clinical Pathology & Surgical Correlations</h4>
                 <p>{selectedStructure.clinicalSummary}</p>
               </div>
 
-              {/* HIGH YIELD EXAM MNEMONIC */}
+              {/* USMLE / NEET-PG HIGH YIELD MNEMONIC */}
               <div className="dossier-section mnemonic-box">
-                <h4>💡 USMLE / NEET-PG Mnemonic</h4>
+                <h4>💡 USMLE / Medical Board Mnemonic</h4>
                 <div className="mnemonic-text">"{selectedStructure.mnemonic}"</div>
               </div>
 
-              {/* HIGH YIELD BOARD TIP */}
+              {/* EXAM FLASHPOINT */}
               <div className="dossier-section exam-tip-box">
                 <h4>🎯 High-Yield Exam Flashpoint</h4>
                 <p>{selectedStructure.highYieldExamTip}</p>
               </div>
 
-              {/* ACTION BUTTONS */}
+              {/* ACTIONS */}
               <div className="dossier-actions">
                 <button
                   type="button"
@@ -759,8 +826,8 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                   onClick={() => {
                     if (onSaveNote) {
                       onSaveNote(
-                        `Anatomy Dossier: ${selectedStructure.name} (${selectedStructure.latin})`,
-                        `### 🧬 Clinical Anatomical Dossier: ${selectedStructure.name}\n\n**Latin**: *${selectedStructure.latin}* | **System**: ${selectedStructure.system}\n\n- **Innervation**: ${selectedStructure.innervation}\n- **Blood Supply**: ${selectedStructure.bloodSupply}\n\n#### 🩺 Clinical Significance\n${selectedStructure.clinicalSummary}\n\n#### 💡 High-Yield Mnemonic\n> ${selectedStructure.mnemonic}\n\n#### 🎯 Board Examination Flashpoint\n${selectedStructure.highYieldExamTip}`,
+                        `Cogni Anatomy Dossier: ${selectedStructure.name}`,
+                        `### 🧬 Cogni 3D Anatomy Clinical Dossier: ${selectedStructure.name}\n\n**Latin**: *${selectedStructure.latin}* | **System**: ${selectedStructure.system}\n\n- **Innervation**: ${selectedStructure.innervation}\n- **Blood Supply**: ${selectedStructure.bloodSupply}\n\n#### 🩺 Clinical Pathology\n${selectedStructure.clinicalSummary}\n\n#### 💡 Board Exam Mnemonic\n> ${selectedStructure.mnemonic}\n\n#### 🎯 High-Yield Flashpoint\n${selectedStructure.highYieldExamTip}`,
                         "Medicine (MBBS)"
                       );
                     }
@@ -773,8 +840,8 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
           ) : (
             <div className="dossier-empty">
               <span className="empty-icon">🧬</span>
-              <h3>Select an Anatomical Structure</h3>
-              <p>Click any organ, bone, or muscle pin on the 3D model to inspect its clinical pathology.</p>
+              <h3>Select a Biological Structure</h3>
+              <p>Click any organ, bone, or muscle node in the 3D viewport to inspect surgical relationships.</p>
             </div>
           )}
         </aside>
