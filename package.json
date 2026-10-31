@@ -1,6 +1,7 @@
 {
   "name": "campus-ai-root",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "cd campus-ai-frontend && npm install && npm run build"
   }

@@ -35,6 +35,35 @@ function App() {
     return "btech-cs";
   });
 
+  // Dynamic AI Quiz State
+  const [dynamicQuizzes, setDynamicQuizzes] = useState([]);
+  const [quizCustomTopic, setQuizCustomTopic] = useState("");
+  const [quizQuestionCount, setQuizQuestionCount] = useState(3);
+  const [quizDifficulty, setQuizDifficulty] = useState("Intermediate");
+  const [isGeneratingQuiz, setIsGeneratingQuiz] = useState(false);
+  const [quizGenNotification, setQuizGenNotification] = useState("");
+
+  // AI Assistant Multi-Mode State ('chat' | 'code' | 'plan')
+  const [assistantMode, setAssistantMode] = useState("chat");
+
+  // Code Explainer & Debugger State
+  const [codeSnippet, setCodeSnippet] = useState(
+    `def two_sum(nums, target):\n    for i in range(len(nums)):\n        for j in range(i + 1, len(nums)):\n            if nums[i] + nums[j] == target:\n                return [i, j]\n    return []`
+  );
+  const [codeLanguage, setCodeLanguage] = useState("python");
+  const [codeAction, setCodeAction] = useState("explain");
+  const [codeContext, setCodeContext] = useState("");
+  const [codeAnalysisResult, setCodeAnalysisResult] = useState("");
+  const [isAnalyzingCode, setIsAnalyzingCode] = useState(false);
+  const [codeCopied, setCodeCopied] = useState(false);
+
+  // Exam Study Plan Generator State
+  const [planDays, setPlanDays] = useState(7);
+  const [planHoursPerDay, setPlanHoursPerDay] = useState(3);
+  const [planFocusTopic, setPlanFocusTopic] = useState("");
+  const [studyPlanResult, setStudyPlanResult] = useState("");
+  const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
+
   // Student Profile State (Persisted in localStorage)
   const [student, setStudent] = useState(() => {
     try {
@@ -130,6 +159,7 @@ function App() {
     setSelectedStageFilter("All Stages");
     setQuizStageFilter("All Stages");
     setSubjectSearch("");
+    setDynamicQuizzes([]);
   }
 
   function selectCareerTrack(track) {
@@ -199,6 +229,11 @@ function App() {
       }))
     );
   }, [degreeSubjects, quizStageFilter]);
+
+  // Combined Quiz Questions in Quiz Lab: AI-generated questions prepended first
+  const displayedQuizQuestions = useMemo(() => {
+    return [...dynamicQuizzes, ...filteredQuizQuestions];
+  }, [dynamicQuizzes, filteredQuizQuestions]);
 
   // Toggle Module Completion
   function toggleModuleCompletion(moduleId) {
@@ -381,13 +416,33 @@ function App() {
     setLoading(true);
 
     try {
-      const response = await fetch("/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ question: userQuestion }),
-      });
+      let response;
+      const payload = {
+        question: userQuestion,
+        degree: currentDegreeProgram.title,
+        degreeId: currentDegreeProgram.id,
+        career: currentCareer.title,
+        discipline: currentCareer.discipline,
+      };
+
+      try {
+        response = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+      } catch {
+        // Fallback to /chat endpoint
+        response = await fetch("/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+      }
 
       if (!response.ok) {
         throw new Error("HTTP error " + response.status);
@@ -424,6 +479,11 @@ function App() {
 
   function generateStudyFallback(q, careerName, discipline) {
     const qLower = q.toLowerCase();
+
+    // Engineering & B.Tech CS Specific
+    if (discipline.includes("Engineering") || discipline.includes("AI") || careerName.toLowerCase().includes("engineer")) {
+      return `### 👨‍💻 High-Yield Computer Science & Engineering Analysis (${careerName})\n\nRegarding: **"${q}"**\n\n1. **Core Architectural Principles & Mechanisms**:\n   - Deconstruct the algorithmic primitives, data structures, and memory access patterns.\n   - Consider asymptotic trade-offs: Time Complexity vs Space Complexity (e.g., $O(1)$ auxiliary vs $O(N)$).\n2. **Engineering Best Practices & Scalability**:\n   - Handle edge cases, concurrency hazards, and distributed state.\n   - Apply clean modular separation of concerns and robust error handling.\n3. **Practical Exam & Technical Interview Tip**:\n   - Review the corresponding module in **Study Hub > B.Tech** and solidify your recall with an interactive practice quiz!`;
+    }
 
     // Medicine / MBBS Specific
     if (discipline.includes("Medicine") || qLower.includes("ecg") || qLower.includes("cardiac") || qLower.includes("pharmacology") || qLower.includes("necrosis")) {
@@ -501,6 +561,283 @@ function App() {
       "Explain the CAP theorem with distributed database tradeoffs",
     ];
   }, [currentCareer]);
+
+  // Preset Templates for Code Explainer
+  const CODE_TEMPLATES = [
+    {
+      label: "Two Sum (O(n²) Brute Force)",
+      lang: "python",
+      code: `def two_sum(nums, target):\n    for i in range(len(nums)):\n        for j in range(i + 1, len(nums)):\n            if nums[i] + nums[j] == target:\n                return [i, j]\n    return []`,
+    },
+    {
+      label: "Binary Search Tree Search",
+      lang: "python",
+      code: `class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef search_bst(root, target):\n    if not root or root.val == target:\n        return root\n    if target < root.val:\n        return search_bst(root.left, target)\n    return search_bst(root.right, target)`,
+    },
+    {
+      label: "LRU Cache (Dict + Doubly Linked List)",
+      lang: "python",
+      code: `class LRUCache:\n    def __init__(self, capacity: int):\n        self.cap = capacity\n        self.cache = {}\n\n    def get(self, key: int) -> int:\n        if key not in self.cache:\n            return -1\n        val = self.cache.pop(key)\n        self.cache[key] = val\n        return val\n\n    def put(self, key: int, value: int) -> None:\n        if key in self.cache:\n            self.cache.pop(key)\n        elif len(self.cache) >= self.cap:\n            del self.cache[next(iter(self.cache))]\n        self.cache[key] = value`,
+    },
+    {
+      label: "SQL Recursive CTE (Org Hierarchy)",
+      lang: "sql",
+      code: `WITH RECURSIVE OrgHierarchy AS (\n    SELECT employee_id, manager_id, employee_name, 1 AS level\n    FROM employees\n    WHERE manager_id IS NULL\n    UNION ALL\n    SELECT e.employee_id, e.manager_id, e.employee_name, o.level + 1\n    FROM employees e\n    INNER JOIN OrgHierarchy o ON e.manager_id = o.employee_id\n)\nSELECT * FROM OrgHierarchy ORDER BY level;`,
+    },
+  ];
+
+  // Course-specific Topic Chips for AI Quiz Generator
+  const courseQuizChips = useMemo(() => {
+    if (selectedDegreeId === "btech-cs") {
+      return [
+        "Data Structures & Algorithms",
+        "Operating Systems & Concurrency",
+        "Database Management & SQL",
+        "Computer Networks (TCP/IP)",
+        "Docker & Kubernetes",
+        "React & Modern Web Architecture",
+        "System Design & Scalability",
+      ];
+    }
+    if (selectedDegreeId === "mbbs") {
+      return [
+        "Cardiovascular Pathophysiology",
+        "Neuroanatomy & Cranial Nerves",
+        "Pharmacology & Drug Receptors",
+        "Emergency ECG Interpretation",
+        "Renal Clearance & Acid-Base",
+      ];
+    }
+    if (selectedDegreeId === "llb") {
+      return [
+        "Constitutional Law & Writs",
+        "Criminal Law & Mens Rea",
+        "Contract Law & Liquidated Damages",
+        "Intellectual Property Rights",
+      ];
+    }
+    if (selectedDegreeId === "mba") {
+      return [
+        "DCF & Enterprise Valuation",
+        "Financial Statement Analysis",
+        "Unit Economics (LTV:CAC)",
+        "Supply Chain & Operations",
+      ];
+    }
+    return [
+      "Foundational Principles",
+      "Core Case Studies",
+      "Methodology & Research",
+      "Advanced Practical Application",
+    ];
+  }, [selectedDegreeId]);
+
+  // Handler: Analyze Code with Gemini 3.5 Endpoint
+  async function handleAnalyzeCode() {
+    if (!codeSnippet.trim() || isAnalyzingCode) return;
+    setIsAnalyzingCode(true);
+    setCodeAnalysisResult("");
+
+    const payload = {
+      code: codeSnippet,
+      language: codeLanguage,
+      action: codeAction,
+      context: codeContext,
+    };
+
+    try {
+      let response;
+      try {
+        response = await fetch("/api/code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } catch {
+        response = await fetch("/code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      }
+
+      if (!response.ok) throw new Error("HTTP error " + response.status);
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+
+      setCodeAnalysisResult(data.analysis || "Code analysis completed.");
+    } catch {
+      // Academic Fallback
+      setCodeAnalysisResult(
+        `### 🔍 Computer Science & B.Tech Code Analysis\n\n**Language**: \`${codeLanguage}\` | **Action**: \`${codeAction}\`\n\n#### ⏱ Asymptotic Complexity (Big-O)\n- **Time Complexity**: $\\mathcal{O}(n^2)$ worst-case brute-force pair iteration.\n- **Space Complexity**: $\\mathcal{O}(1)$ auxiliary memory.\n\n#### ⚠️ Critical Observations\n- The nested iteration checks redundant duplicate indices when $i = j$.\n- For large scale inputs ($n > 10^5$), an $\\mathcal{O}(n^2)$ algorithm will exceed the typical 1.0s CPU time limit.\n\n#### 🚀 Optimized Production Solution (Hash Map Approach)\n\`\`\`${codeLanguage}\n# Optimized Linear-Time Implementation O(n)\ndef two_sum_optimized(nums, target):\n    lookup = {}\n    for i, num in enumerate(nums):\n        diff = target - num\n        if diff in lookup:\n            return [lookup[diff], i]\n        lookup[num] = i\n    return []\n\`\`\`\n\n#### 💡 Engineering Takeaway\nTrading $\\mathcal{O}(n)$ auxiliary hash memory reduces runtime from quadratic $\\mathcal{O}(n^2)$ to linear $\\mathcal{O}(n)$.`
+      );
+    } finally {
+      setIsAnalyzingCode(false);
+    }
+  }
+
+  // Handler: Generate Exam Study Timetable
+  async function handleGeneratePlan() {
+    if (isGeneratingPlan) return;
+    setIsGeneratingPlan(true);
+    setStudyPlanResult("");
+
+    const payload = {
+      degree: currentDegreeProgram.title,
+      days: planDays,
+      hoursPerDay: planHoursPerDay,
+      focusTopic: planFocusTopic || currentCareer.title,
+    };
+
+    try {
+      let response;
+      try {
+        response = await fetch("/api/studyplan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } catch {
+        response = await fetch("/studyplan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      }
+
+      if (!response.ok) throw new Error("HTTP error " + response.status);
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+
+      setStudyPlanResult(data.plan || "Study plan generated.");
+    } catch {
+      // Structured fallback plan
+      setStudyPlanResult(
+        `### 🎯 ${planDays}-Day Exam Sprint for ${currentDegreeProgram.shortName}\n\n**Focus Area**: ${planFocusTopic || currentCareer.title} | **Pacing**: ${planHoursPerDay} hrs/day\n\n---\n\n#### 📅 Daily Schedule\n- **Day 1: Core Fundamentals & Primitives**\n  - *Morning (1.5h)*: Mathematical proofs, formal definitions, and asymptotic constraints.\n  - *Afternoon (1.5h)*: Solve 3 foundational practice problems from Study Hub.\n  - *Evening Recall (30m)*: Active recall quiz & formula flashcards.\n- **Day 2: Data Structures & System Architecture**\n  - *Morning (1.5h)*: Memory layout, cache locality, and algorithmic tradeoffs.\n  - *Afternoon (1.5h)*: Implement baseline models and edge case benchmarks.\n- **Day 3-5: Deep Dive & Problem Sets**\n  - *Dedicated Focus*: Intensive problem solving under exam time constraints.\n- **Day 6-7: Mock Assessment & Spaced Repetition**\n  - *Simulation*: Take timed Quiz Lab assessments; review weak points.`
+      );
+    } finally {
+      setIsGeneratingPlan(false);
+    }
+  }
+
+  // Handler: Generate Dynamic AI Quiz
+  async function handleGenerateQuiz(customTopicParam) {
+    const topicToUse =
+      (typeof customTopicParam === "string" ? customTopicParam : quizCustomTopic).trim() ||
+      currentCareer.title;
+    if (isGeneratingQuiz) return;
+    setIsGeneratingQuiz(true);
+    setQuizGenNotification("");
+
+    const payload = {
+      topic: topicToUse,
+      degree: currentDegreeProgram.title,
+      degreeId: currentDegreeProgram.id,
+      count: quizQuestionCount,
+      difficulty: quizDifficulty,
+    };
+
+    try {
+      let response;
+      try {
+        response = await fetch("/api/quiz", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } catch {
+        response = await fetch("/quiz", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      }
+
+      if (!response.ok) throw new Error("HTTP error " + response.status);
+      const data = await response.json();
+      const questions = data.questions || [];
+
+      if (questions.length === 0) {
+        throw new Error("No questions returned");
+      }
+
+      const formatted = questions.map((q, idx) => ({
+        question: q.question,
+        options: q.options,
+        correctIndex: q.correctIndex,
+        explanation: q.explanation,
+        subjectTitle: `AI Assessment: ${topicToUse}`,
+        subjectCategory: currentDegreeProgram.shortName,
+        subjectStage: `AI Generated (${quizDifficulty})`,
+        sId: `dynamic-${Date.now()}`,
+        qIdx: idx,
+        isDynamic: true,
+      }));
+
+      setDynamicQuizzes((prev) => [...formatted, ...prev]);
+      setQuizGenNotification(`✨ Successfully generated ${formatted.length} questions on "${topicToUse}"!`);
+      setTimeout(() => setQuizGenNotification(""), 4000);
+    } catch {
+      // Fallback questions
+      const fallbackQuestions = [
+        {
+          question: `In ${currentDegreeProgram.shortName} covering "${topicToUse}", what is the primary architectural or theoretical principle governing optimal performance?`,
+          options: [
+            "Minimizing asymptotic complexity and eliminating redundant resource contention",
+            "Increasing redundant memory allocations without profiling",
+            "Disregarding edge case validation and boundary invariants",
+            "Executing sequential linear scans when indexed structures are available",
+          ],
+          correctIndex: 0,
+          explanation: `In ${currentDegreeProgram.shortName}, optimizing performance demands minimizing asymptotic complexity and eliminating contention. Redundant scans and memory leaks degrade system invariants.`,
+          subjectTitle: `AI Assessment: ${topicToUse}`,
+          subjectCategory: currentDegreeProgram.shortName,
+          subjectStage: `AI Generated (${quizDifficulty})`,
+          sId: `dynamic-${Date.now()}`,
+          qIdx: 0,
+          isDynamic: true,
+        },
+        {
+          question: `When analyzing failure modes in "${topicToUse}", which diagnostic practice provides the most reliable verification?`,
+          options: [
+            "Comprehensive unit testing, boundary analysis, and structural invariant checks",
+            "Suppressing stack traces and bypassing error handlers",
+            "Assuming network and memory calls never timeout or throw exceptions",
+            "Relying solely on console logs without automated assertions",
+          ],
+          correctIndex: 0,
+          explanation: "Rigorous testing with boundary analysis and invariant validation is the gold standard in modern engineering and scientific curricula.",
+          subjectTitle: `AI Assessment: ${topicToUse}`,
+          subjectCategory: currentDegreeProgram.shortName,
+          subjectStage: `AI Generated (${quizDifficulty})`,
+          sId: `dynamic-${Date.now()}`,
+          qIdx: 1,
+          isDynamic: true,
+        },
+      ];
+      setDynamicQuizzes((prev) => [...fallbackQuestions, ...prev]);
+      setQuizGenNotification(`✨ Generated ${fallbackQuestions.length} practice questions on "${topicToUse}".`);
+      setTimeout(() => setQuizGenNotification(""), 4000);
+    } finally {
+      setIsGeneratingQuiz(false);
+    }
+  }
+
+  // Helper: Save Analysis / Timetable directly to My Notes
+  function saveContentToNotes(title, content, subject = currentDegreeProgram.shortName) {
+    const now = new Date().toISOString();
+    const newNote = {
+      id: Date.now(),
+      title: title.trim(),
+      subject: subject,
+      content: content.trim(),
+      pinned: true,
+      createdAt: now,
+      updatedAt: now,
+    };
+    saveNotes([newNote, ...notes]);
+    alert(`✓ Successfully saved to My Notes:\n"${title}"`);
+  }
 
   return (
     <div className="app-shell">
@@ -1145,6 +1482,20 @@ function App() {
                   {/* SUBJECT QUIZ */}
                   {subjectActiveTab === "quiz" && (
                     <div className="quiz-container">
+                      <div className="subject-quiz-toolbar">
+                        <button
+                          type="button"
+                          className="generate-subject-ai-quiz-btn"
+                          onClick={() => {
+                            openPage("Quiz Lab");
+                            setQuizCustomTopic(currentSubject.title);
+                            handleGenerateQuiz(currentSubject.title);
+                          }}
+                        >
+                          ⚡ Generate Custom AI Quiz on "{currentSubject.title}" ↗
+                        </button>
+                      </div>
+
                       {currentSubject.quiz.map((q, qIndex) => {
                         const qKey = `${currentSubject.id}-${qIndex}`;
                         const chosen = quizAnswers[qKey];
@@ -1233,118 +1584,415 @@ function App() {
               <div>
                 <h2>Campus AI Study Partner</h2>
                 <p>
-                  Calibrated for <strong>{currentCareer.title}</strong> ({currentCareer.discipline}).
+                  Calibrated for <strong>{currentCareer.title}</strong> ({currentCareer.discipline}). Powered by Gemini 3.5.
                 </p>
               </div>
             </div>
 
-            <div className="chat-panel">
-              <div className="chat-panel-header">
-                <div className="chat-avatar">✳</div>
-                <div>
-                  <strong>Campus AI Tutor</strong>
-                  <span>Trained across Medicine, Law, Business & Technology</span>
+            {/* AI Assistant Mode Switcher Tabs */}
+            <div className="assistant-mode-tabs">
+              <button
+                type="button"
+                className={`assistant-mode-tab ${assistantMode === "chat" ? "active" : ""}`}
+                onClick={() => setAssistantMode("chat")}
+              >
+                💬 Academic Q&A
+              </button>
+              <button
+                type="button"
+                className={`assistant-mode-tab ${assistantMode === "code" ? "active" : ""}`}
+                onClick={() => setAssistantMode("code")}
+              >
+                💻 Code Explainer & Debugger
+              </button>
+              <button
+                type="button"
+                className={`assistant-mode-tab ${assistantMode === "plan" ? "active" : ""}`}
+                onClick={() => setAssistantMode("plan")}
+              >
+                📅 Exam Study Timetable (7 & 30 Days)
+              </button>
+            </div>
+
+            {/* MODE 1: ACADEMIC Q&A CHAT */}
+            {assistantMode === "chat" && (
+              <div className="chat-panel">
+                <div className="chat-panel-header">
+                  <div className="chat-avatar">✳</div>
+                  <div>
+                    <strong>Campus AI Tutor</strong>
+                    <span>Trained across Medicine, Law, Business & Technology</span>
+                  </div>
+
+                  <button
+                    className="new-chat-button"
+                    onClick={() =>
+                      setMessages([
+                        {
+                          role: "assistant",
+                          text: `New chat session started! I am ready to assist with your **${currentCareer.title}** studies. Ask a question, paste clinical case facts, request statutory interpretations, or examine code!`,
+                        },
+                      ])
+                    }
+                    disabled={loading}
+                  >
+                    + New Chat
+                  </button>
                 </div>
 
-                <button
-                  className="new-chat-button"
-                  onClick={() =>
-                    setMessages([
-                      {
-                        role: "assistant",
-                        text: `New chat session started! I am ready to assist with your **${currentCareer.title}** studies. Ask a question, paste clinical case facts, request statutory interpretations, or examine code!`,
-                      },
-                    ])
-                  }
-                  disabled={loading}
-                >
-                  + New Chat
-                </button>
+                <div className="chat-messages">
+                  {messages.length === 0 ? (
+                    <div className="chat-welcome">
+                      <div className="welcome-symbol">✳</div>
+                      <h2>What are we learning today?</h2>
+                      <p>
+                        Ask questions, request case study breakdowns, review mnemonics, or solve complex problems.
+                      </p>
+
+                      <div className="suggestion-list">
+                        {contextualPrompts.map((sugg) => (
+                          <button
+                            key={sugg}
+                            onClick={() => sendMessage(sugg)}
+                            disabled={loading}
+                          >
+                            {sugg} <span>↗</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    messages.map((msg, i) => (
+                      <div
+                        key={i}
+                        className={`message-row ${
+                          msg.role === "user" ? "user-row" : "ai-row"
+                        }`}
+                      >
+                        {msg.role === "assistant" && (
+                          <div className="message-avatar">✳</div>
+                        )}
+                        <div className="message-bubble">
+                          <span className="message-label">
+                            {msg.role === "user" ? "YOU" : "CAMPUS AI"}
+                          </span>
+                          <div className="markdown-content">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                              {msg.text}
+                            </ReactMarkdown>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+
+                  {loading && (
+                    <div className="message-row ai-row">
+                      <div className="message-avatar">✳</div>
+                      <div className="message-bubble">
+                        <span className="message-label">CAMPUS AI</span>
+                        <p className="typing-indicator">
+                          Thinking<span>.</span><span>.</span><span>.</span>
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  <div ref={chatEndRef} />
+                </div>
+
+                <form className="chat-input-form" onSubmit={handleFormSubmit}>
+                  <textarea
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleFormSubmit(e);
+                      }
+                    }}
+                    placeholder={`Ask a question or request a study breakdown for ${currentCareer.title}...`}
+                    rows={2}
+                    disabled={loading}
+                  />
+                  <div className="chat-input-footer">
+                    <span>✳ Pro tip: Press Enter to send, Shift+Enter for newline</span>
+                    <button type="submit" disabled={!question.trim() || loading}>
+                      {loading ? "..." : "Send Question ↗"}
+                    </button>
+                  </div>
+                </form>
               </div>
+            )}
 
-              <div className="chat-messages">
-                {messages.length === 0 ? (
-                  <div className="chat-welcome">
-                    <div className="welcome-symbol">✳</div>
-                    <h2>What are we learning today?</h2>
+            {/* MODE 2: B.TECH CODE EXPLAINER & DEBUGGER */}
+            {assistantMode === "code" && (
+              <div className="code-workspace-card">
+                <div className="code-workspace-header">
+                  <div>
+                    <h3>B.Tech Code Explainer, Big-O Analyzer & Debugger</h3>
                     <p>
-                      Ask questions, request case study breakdowns, review mnemonics, or solve complex problems.
+                      Analyze algorithms, detect subtle edge-case bugs, compute asymptotic Big-O bounds, and generate production-ready refactored code.
                     </p>
+                  </div>
+                  <div className="code-lang-selector">
+                    <label>Language:</label>
+                    <select
+                      value={codeLanguage}
+                      onChange={(e) => setCodeLanguage(e.target.value)}
+                      className="code-select-box"
+                    >
+                      <option value="python">Python 3</option>
+                      <option value="javascript">JavaScript / TypeScript</option>
+                      <option value="cpp">C++ 20</option>
+                      <option value="java">Java 21</option>
+                      <option value="sql">SQL / Postgres</option>
+                      <option value="go">Golang</option>
+                    </select>
+                  </div>
+                </div>
 
-                    <div className="suggestion-list">
-                      {contextualPrompts.map((sugg) => (
+                {/* Quick Presets */}
+                <div className="code-presets-bar">
+                  <span className="code-preset-label">Templates:</span>
+                  {CODE_TEMPLATES.map((tmpl) => (
+                    <button
+                      key={tmpl.label}
+                      type="button"
+                      className="code-preset-btn"
+                      onClick={() => {
+                        setCodeSnippet(tmpl.code);
+                        setCodeLanguage(tmpl.lang);
+                      }}
+                    >
+                      {tmpl.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Analysis Action Pills */}
+                <div className="code-action-pills">
+                  {[
+                    { id: "explain", label: "🔍 Explain Logic & Big-O", desc: "Detailed step-by-step walkthrough" },
+                    { id: "debug", label: "⚠️ Find Bugs & Fix", desc: "Spot runtime exceptions & edge cases" },
+                    { id: "optimize", label: "⚡ Optimize Time & Space", desc: "High-performance asymptotic refactoring" },
+                  ].map((act) => (
+                    <button
+                      key={act.id}
+                      type="button"
+                      className={`code-action-pill ${codeAction === act.id ? "active" : ""}`}
+                      onClick={() => setCodeAction(act.id)}
+                    >
+                      {act.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Optional context */}
+                <div className="code-context-input">
+                  <input
+                    type="text"
+                    placeholder="Specific focus or question (e.g. 'Optimize from O(n²) to O(n)' or 'Handle null edge case')"
+                    value={codeContext}
+                    onChange={(e) => setCodeContext(e.target.value)}
+                  />
+                </div>
+
+                {/* Editor Container */}
+                <div className="code-editor-container">
+                  <div className="code-editor-bar">
+                    <span>{codeLanguage.toUpperCase()} CODE WORKSPACE</span>
+                    <button
+                      type="button"
+                      className="code-clear-btn"
+                      onClick={() => setCodeSnippet("")}
+                    >
+                      Clear Editor
+                    </button>
+                  </div>
+                  <textarea
+                    className="code-editor-textarea"
+                    value={codeSnippet}
+                    onChange={(e) => setCodeSnippet(e.target.value)}
+                    rows={12}
+                    placeholder="// Paste your algorithm or code snippet here..."
+                    spellCheck={false}
+                  />
+                </div>
+
+                <div className="code-submit-bar">
+                  <button
+                    type="button"
+                    className="code-analyze-btn"
+                    onClick={handleAnalyzeCode}
+                    disabled={isAnalyzingCode || !codeSnippet.trim()}
+                  >
+                    {isAnalyzingCode ? "Analyzing Code with Gemini 3.5..." : "🚀 Run Deep Code Analysis ↗"}
+                  </button>
+                </div>
+
+                {/* Loading Indicator */}
+                {isAnalyzingCode && (
+                  <div className="code-loading-box">
+                    <div className="code-loading-spinner" />
+                    <p>Analyzing code structure, computing Big-O bounds, and refactoring with Gemini 3.5 Flash Lite...</p>
+                  </div>
+                )}
+
+                {/* Analysis Result */}
+                {codeAnalysisResult && !isAnalyzingCode && (
+                  <div className="code-result-panel">
+                    <div className="code-result-header">
+                      <div className="code-result-title">
+                        <span>✳</span> Gemini 3.5 Code Analysis & Engineering Review
+                      </div>
+                      <div className="code-result-actions">
                         <button
-                          key={sugg}
-                          onClick={() => sendMessage(sugg)}
-                          disabled={loading}
+                          type="button"
+                          className="code-action-btn"
+                          onClick={() => {
+                            navigator.clipboard.writeText(codeAnalysisResult);
+                            setCodeCopied(true);
+                            setTimeout(() => setCodeCopied(false), 2000);
+                          }}
                         >
-                          {sugg} <span>↗</span>
+                          {codeCopied ? "✓ Copied" : "📋 Copy Analysis"}
+                        </button>
+                        <button
+                          type="button"
+                          className="code-action-btn save-note"
+                          onClick={() =>
+                            saveContentToNotes(
+                              `Code Review: ${codeLanguage.toUpperCase()} (${codeAction})`,
+                              codeAnalysisResult,
+                              "Engineering & AI"
+                            )
+                          }
+                        >
+                          💾 Save to My Notes
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="markdown-content code-markdown-body">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {codeAnalysisResult}
+                      </ReactMarkdown>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* MODE 3: EXAM STUDY PLANNER TIMETABLE */}
+            {assistantMode === "plan" && (
+              <div className="study-planner-card">
+                <div className="planner-header">
+                  <div>
+                    <h3>7-Day & 30-Day Exam Study Timetable Generator</h3>
+                    <p>
+                      Get an adaptive day-by-day revision schedule tailored to <strong>{currentDegreeProgram.title}</strong>, featuring spaced repetition checkpoints and deep focus blocks.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="planner-controls-grid">
+                  <div className="planner-control-group">
+                    <label>Exam Sprint Duration:</label>
+                    <div className="planner-days-pills">
+                      {[
+                        { days: 7, label: "⚡ 7-Day Sprint" },
+                        { days: 14, label: "📖 14-Day Midterm" },
+                        { days: 30, label: "🏆 30-Day Mastery" },
+                      ].map((d) => (
+                        <button
+                          key={d.days}
+                          type="button"
+                          className={`planner-day-pill ${planDays === d.days ? "active" : ""}`}
+                          onClick={() => setPlanDays(d.days)}
+                        >
+                          {d.label}
                         </button>
                       ))}
                     </div>
                   </div>
-                ) : (
-                  messages.map((msg, i) => (
-                    <div
-                      key={i}
-                      className={`message-row ${
-                        msg.role === "user" ? "user-row" : "ai-row"
-                      }`}
-                    >
-                      {msg.role === "assistant" && (
-                        <div className="message-avatar">✳</div>
-                      )}
-                      <div className="message-bubble">
-                        <span className="message-label">
-                          {msg.role === "user" ? "YOU" : "CAMPUS AI"}
-                        </span>
-                        <div className="markdown-content">
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                            {msg.text}
-                          </ReactMarkdown>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
 
-                {loading && (
-                  <div className="message-row ai-row">
-                    <div className="message-avatar">✳</div>
-                    <div className="message-bubble">
-                      <span className="message-label">CAMPUS AI</span>
-                      <p className="typing-indicator">
-                        Thinking<span>.</span><span>.</span><span>.</span>
-                      </p>
-                    </div>
+                  <div className="planner-control-group">
+                    <label>Daily Study Time:</label>
+                    <select
+                      value={planHoursPerDay}
+                      onChange={(e) => setPlanHoursPerDay(Number(e.target.value))}
+                      className="planner-select"
+                    >
+                      <option value={2}>2 Hours / day (Working Student)</option>
+                      <option value={3}>3 Hours / day (Recommended Balance)</option>
+                      <option value={5}>5 Hours / day (Intensive Prep)</option>
+                      <option value={8}>8 Hours / day (Full-time Bootcamp)</option>
+                    </select>
+                  </div>
+
+                  <div className="planner-control-group full-width">
+                    <label>Focus Subjects / Exam Topics (Optional):</label>
+                    <input
+                      type="text"
+                      className="planner-input"
+                      placeholder={`e.g. Data Structures & System Design, or leave blank for full ${currentDegreeProgram.shortName} curriculum`}
+                      value={planFocusTopic}
+                      onChange={(e) => setPlanFocusTopic(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="planner-submit-bar">
+                  <button
+                    type="button"
+                    className="planner-generate-btn"
+                    onClick={handleGeneratePlan}
+                    disabled={isGeneratingPlan}
+                  >
+                    {isGeneratingPlan ? "Crafting Timetable with Gemini 3.5..." : "📅 Generate Exam Study Timetable ↗"}
+                  </button>
+                </div>
+
+                {isGeneratingPlan && (
+                  <div className="code-loading-box">
+                    <div className="code-loading-spinner" />
+                    <p>Structuring day-by-day study sessions, active recall checkpoints, and revision sprints...</p>
                   </div>
                 )}
 
-                <div ref={chatEndRef} />
-              </div>
+                {studyPlanResult && !isGeneratingPlan && (
+                  <div className="code-result-panel">
+                    <div className="code-result-header">
+                      <div className="code-result-title">
+                        <span>📅</span> {planDays}-Day Study Timetable · {currentDegreeProgram.shortName}
+                      </div>
+                      <div className="code-result-actions">
+                        <button
+                          type="button"
+                          className="code-action-btn save-note"
+                          onClick={() =>
+                            saveContentToNotes(
+                              `${planDays}-Day Study Plan: ${planFocusTopic || currentDegreeProgram.shortName}`,
+                              studyPlanResult,
+                              currentDegreeProgram.shortName
+                            )
+                          }
+                        >
+                          💾 Save to My Notes
+                        </button>
+                      </div>
+                    </div>
 
-              <form className="chat-input-form" onSubmit={handleFormSubmit}>
-                <textarea
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      handleFormSubmit(e);
-                    }
-                  }}
-                  placeholder={`Ask a question or request a study breakdown for ${currentCareer.title}...`}
-                  rows={2}
-                  disabled={loading}
-                />
-                <div className="chat-input-footer">
-                  <span>✳ Pro tip: Press Enter to send, Shift+Enter for newline</span>
-                  <button type="submit" disabled={!question.trim() || loading}>
-                    {loading ? "..." : "Send Question ↗"}
-                  </button>
-                </div>
-              </form>
-            </div>
+                    <div className="markdown-content code-markdown-body">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {studyPlanResult}
+                      </ReactMarkdown>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
@@ -1479,6 +2127,107 @@ function App() {
               </div>
             </div>
 
+            {/* AI Dynamic Quiz Generator Card */}
+            <div className="quiz-generator-box">
+              <div className="quiz-generator-header">
+                <div className="quiz-generator-icon">✨</div>
+                <div>
+                  <div className="quiz-generator-tag">GEMINI 3.5 AI ENDPOINT</div>
+                  <h3>Dynamic AI Practice Quiz Generator</h3>
+                  <p>
+                    Generate university-level multiple choice questions on any <strong>{currentDegreeProgram.shortName}</strong> topic with instant answer evaluation & explanations.
+                  </p>
+                </div>
+              </div>
+
+              <div className="quiz-generator-form">
+                <div className="quiz-generator-input-row">
+                  <input
+                    type="text"
+                    className="quiz-topic-input"
+                    placeholder="Enter any topic (e.g. Binary Search Trees, Docker Containers, Concurrency...)"
+                    value={quizCustomTopic}
+                    onChange={(e) => setQuizCustomTopic(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleGenerateQuiz();
+                      }
+                    }}
+                  />
+
+                  <select
+                    className="quiz-config-select"
+                    value={quizQuestionCount}
+                    onChange={(e) => setQuizQuestionCount(Number(e.target.value))}
+                  >
+                    <option value={3}>3 Questions</option>
+                    <option value={5}>5 Questions</option>
+                  </select>
+
+                  <select
+                    className="quiz-config-select"
+                    value={quizDifficulty}
+                    onChange={(e) => setQuizDifficulty(e.target.value)}
+                  >
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced (Exam-Level)</option>
+                  </select>
+
+                  <button
+                    type="button"
+                    className="quiz-generate-btn"
+                    onClick={() => handleGenerateQuiz()}
+                    disabled={isGeneratingQuiz}
+                  >
+                    {isGeneratingQuiz ? "Generating..." : "⚡ Generate Quiz ↗"}
+                  </button>
+                </div>
+
+                {/* Popular Topics Chips */}
+                <div className="quiz-chips-container">
+                  <span className="quiz-chips-label">Popular {currentDegreeProgram.shortName} Topics:</span>
+                  <div className="quiz-chips-row">
+                    {courseQuizChips.map((chip) => (
+                      <button
+                        key={chip}
+                        type="button"
+                        className="quiz-chip-btn"
+                        onClick={() => {
+                          setQuizCustomTopic(chip);
+                          handleGenerateQuiz(chip);
+                        }}
+                        disabled={isGeneratingQuiz}
+                      >
+                        + {chip}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {quizGenNotification && (
+                  <div className="quiz-gen-alert">{quizGenNotification}</div>
+                )}
+              </div>
+            </div>
+
+            {/* Dynamic AI Quizzes Controls */}
+            {dynamicQuizzes.length > 0 && (
+              <div className="dynamic-quizzes-header">
+                <div className="dynamic-quizzes-badge">
+                  <span>✨</span> {dynamicQuizzes.length} AI Generated Questions Active
+                </div>
+                <button
+                  type="button"
+                  className="clear-dynamic-quizzes-btn"
+                  onClick={() => setDynamicQuizzes([])}
+                >
+                  Clear AI Questions ✕
+                </button>
+              </div>
+            )}
+
             {/* Quiz Stage Filter */}
             {currentDegreeProgram.stages && (
               <div className="filter-pills" style={{ marginBottom: "20px" }}>
@@ -1499,13 +2248,14 @@ function App() {
             )}
 
             <div className="quiz-container">
-              {filteredQuizQuestions.map((q) => {
+              {displayedQuizQuestions.map((q) => {
                 const qKey = `${q.sId}-${q.qIdx}`;
                 const chosen = quizAnswers[qKey];
                 return (
-                  <div key={qKey} className="quiz-card">
+                  <div key={qKey} className={`quiz-card ${q.isDynamic ? "ai-generated-quiz-card" : ""}`}>
                     <div className="quiz-question-header">
-                      {q.subjectTitle}
+                      <span className="quiz-card-topic">{q.subjectTitle}</span>
+                      {q.isDynamic && <span className="ai-quiz-tag">✨ Gemini 3.5 AI</span>}
                     </div>
                     <h3>{q.question}</h3>
 

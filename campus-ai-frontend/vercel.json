@@ -1,5 +1,13 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    { "source": "/api/chat", "destination": "/api/chat.js" },
+    { "source": "/chat", "destination": "/api/chat.js" },
+    { "source": "/api/quiz", "destination": "/api/quiz.js" },
+    { "source": "/quiz", "destination": "/api/quiz.js" },
+    { "source": "/api/code", "destination": "/api/code.js" },
+    { "source": "/code", "destination": "/api/code.js" },
+    { "source": "/api/studyplan", "destination": "/api/studyplan.js" },
+    { "source": "/studyplan", "destination": "/api/studyplan.js" },
+    { "source": "/((?!api/).*)", "destination": "/" }
   ]
 }

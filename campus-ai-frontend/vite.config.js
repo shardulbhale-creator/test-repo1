@@ -10,9 +10,29 @@ export default defineConfig({
     port: 5173,
     allowedHosts: true, // Allow all hosts (including Cloudflare Tunnel)
     proxy: {
+      '/api/chat': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/chat/, '/chat'),
+      },
       '/chat': {
         target: 'http://127.0.0.1:8000',
         changeOrigin: true,
+      },
+      '/api/quiz': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/quiz/, '/quiz'),
+      },
+      '/api/code': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/code/, '/code'),
+      },
+      '/api/studyplan': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/studyplan/, '/studyplan'),
       },
     },
   },
