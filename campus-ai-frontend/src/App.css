@@ -5938,3 +5938,129 @@
   line-height: 1.5;
   margin: 0;
 }
+
+/* ==========================================================================
+   THREE.JS HIGH-FIDELITY MEDICAL WORKSTATION VIEWPORT
+   ========================================================================== */
+.cogni-workspace-grid.expanded {
+  grid-template-columns: 280px 1fr;
+}
+
+.cogni-workspace-grid.expanded .cogni-dossier-column {
+  grid-column: span 2;
+}
+
+.cogni-canvas-column {
+  min-height: 720px;
+  background: radial-gradient(circle at 50% 30%, #0d1222 0%, #05070c 100%);
+  border: 1px solid rgba(220, 38, 38, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.canvas-hud-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.canvas-hud-btn {
+  padding: 6px 14px;
+  background: #141724;
+  border: 1px solid #28304a;
+  border-radius: var(--radius-sm);
+  color: #cbd5e1;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.canvas-hud-btn:hover {
+  background: rgba(220, 38, 38, 0.2);
+  border-color: var(--accent-ruby);
+  color: #ffffff;
+}
+
+.canvas-hud-btn.active {
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.4) 0%, rgba(153, 27, 27, 0.5) 100%);
+  border-color: #ef4444;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
+}
+
+.canvas-hud-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hud-badge-info {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 4px;
+  color: #7dd3fc;
+  letter-spacing: 0.3px;
+}
+
+.threejs-container {
+  width: 100%;
+  height: 680px;
+  min-height: 680px;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+
+.canvas-3d-mount {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: grab;
+}
+
+.canvas-3d-mount:active {
+  cursor: grabbing;
+}
+
+.canvas-hud-tooltip {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(9, 11, 18, 0.92);
+  border: 1px solid rgba(220, 38, 38, 0.6);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(220, 38, 38, 0.3);
+  border-radius: 30px;
+  padding: 8px 20px;
+  font-size: 12.5px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  animation: fadeIn 0.2s ease-out;
+  z-index: 10;
+}
+
+.canvas-hud-tooltip span {
+  color: var(--accent-ruby);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.canvas-hud-tooltip strong {
+  color: #ffffff;
+  font-weight: 700;
+}
