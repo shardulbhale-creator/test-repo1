@@ -5580,12 +5580,13 @@
    ========================================================================== */
 .cogni-workspace-grid {
   display: grid;
-  grid-template-columns: 290px 1fr 340px;
-  gap: 20px;
+  grid-template-columns: minmax(0, 1fr) 390px;
+  gap: 24px;
   align-items: start;
+  width: 100%;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1100px) {
   .cogni-workspace-grid {
     grid-template-columns: 1fr;
   }
@@ -5942,12 +5943,16 @@
 /* ==========================================================================
    THREE.JS HIGH-FIDELITY MEDICAL WORKSTATION VIEWPORT
    ========================================================================== */
+.cogni-workspace-grid.full-width,
 .cogni-workspace-grid.expanded {
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 1fr;
 }
 
+.cogni-workspace-grid.full-width .cogni-dossier-column,
 .cogni-workspace-grid.expanded .cogni-dossier-column {
-  grid-column: span 2;
+  grid-column: span 1;
+  width: 100%;
+  margin-top: 20px;
 }
 
 .cogni-canvas-column {
@@ -6190,15 +6195,33 @@
   letter-spacing: 0.3px;
 }
 
+.page-container:has(.lab-page-container) {
+  max-width: min(96vw, 1780px);
+  width: 100%;
+  padding: 24px 28px 64px;
+}
+
 .cogni-live-container {
   width: 100%;
-  height: 780px;
-  min-height: 780px;
+  height: 880px;
+  min-height: 880px;
   background: #06080e;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   position: relative;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 14px 50px rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(220, 38, 38, 0.45);
+  transition: height 0.3s ease;
+}
+
+.cogni-live-container.imax {
+  height: 980px;
+  min-height: 980px;
+}
+
+.cogni-live-container.compact {
+  height: 750px;
+  min-height: 750px;
 }
 
 .cogni-live-iframe {

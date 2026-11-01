@@ -443,8 +443,11 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
   // Viewport display mode: 'cogni-live' (Official live 3D Atlas) vs 'flashcards' (Active Recall)
   const [activeTab, setActiveTab] = useState("cogni-live");
 
-  // Workstation expansion mode (Full-width cinema view)
-  const [isExpanded, setIsExpanded] = useState(false);
+  // Layout mode: 'wide' (75% wide body + 25% dossier) or 'theater' (100% full-width body)
+  const [layoutMode, setLayoutMode] = useState("wide");
+
+  // Viewer height: 'normal' (880px) or 'imax' (980px)
+  const [viewerHeight, setViewerHeight] = useState("normal");
 
   // Search filter for presets & structures
   const [searchQuery, setSearchQuery] = useState("");
@@ -486,7 +489,7 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
       : `https://cogni.cards/anatomy/viewer/?preset=${activePreset.id}&lang=en`;
 
   return (
-    <div className={`lab-page-container ${isExpanded ? "expanded-workstation" : ""}`}>
+    <div className={`lab-page-container ${layoutMode === "theater" ? "expanded-workstation" : ""}`}>
       {/* =========================================================================
           HEADER BANNER: OFFICIAL COGNI ANATOMY 3D ATLAS FOR MBBS
           ========================================================================= */}
@@ -510,7 +513,7 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
             className={`lab-nav-pill ${activeTab === "cogni-live" ? "active" : ""}`}
             onClick={() => setActiveTab("cogni-live")}
           >
-            🌐 3D Interactive Body (Cogni)
+            🌐 3D Body Viewer
           </button>
           <button
             type="button"
@@ -521,11 +524,19 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
           </button>
           <button
             type="button"
-            className={`lab-nav-pill ${isExpanded ? "active" : ""}`}
-            onClick={() => setIsExpanded(!isExpanded)}
-            title="Toggle Full Workstation Mode"
+            className={`lab-nav-pill ${layoutMode === "theater" ? "active" : ""}`}
+            onClick={() => setLayoutMode(layoutMode === "theater" ? "wide" : "theater")}
+            title="Toggle 100% Full-Width Body"
           >
-            {isExpanded ? "↙ Exit Fullscreen" : "⛶ Fullscreen Workstation"}
+            {layoutMode === "theater" ? "🖥️ Split View (Wide Body)" : "⛶ 100% Full-Width Body"}
+          </button>
+          <button
+            type="button"
+            className={`lab-nav-pill ${viewerHeight === "imax" ? "active" : ""}`}
+            onClick={() => setViewerHeight(viewerHeight === "imax" ? "normal" : "imax")}
+            title="Toggle IMAX 980px vertical height"
+          >
+            {viewerHeight === "imax" ? "📐 Height: Normal (880px)" : "📺 Height: IMAX (980px)"}
           </button>
         </div>
       </div>
@@ -572,7 +583,7 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
       {/* =========================================================================
           MAIN WORKSPACE: 3D VIEWER (LEFT/CENTER) vs CLINICAL DOSSIER (RIGHT)
           ========================================================================= */}
-      <div className={`cogni-workspace-grid ${isExpanded ? "expanded" : ""}`}>
+      <div className={`cogni-workspace-grid ${layoutMode === "theater" ? "full-width" : ""}`}>
         {/* CENTER / PRIMARY VIEWPORT COLUMN */}
         <section className="cogni-canvas-column">
           {/* VIEWPORT CONTROLS BAR */}
@@ -612,7 +623,7 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
 
           {/* TAB 1: OFFICIAL COGNI ANATOMY 3D LIVE IFRAME VIEWER */}
           {activeTab === "cogni-live" && (
-            <div className="cogni-live-container">
+            <div className={`cogni-live-container ${viewerHeight}`}>
               <iframe
                 key={iframeKey + activePreset.id}
                 src={cogniViewerUrl}
