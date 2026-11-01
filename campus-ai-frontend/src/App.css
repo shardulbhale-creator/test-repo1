@@ -5578,6 +5578,13 @@
 /* ==========================================================================
    COGNI ANATOMY 3D VIEWER ATLAS (MBBS SPECIALIZED LAB)
    ========================================================================== */
+.cogni-workspace-stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  width: 100%;
+}
+
 .cogni-workspace-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 390px;
@@ -5904,19 +5911,62 @@
   transform: scale(1.15);
 }
 
-/* RIGHT COLUMN: CLINICAL DOSSIER */
+/* ==========================================================================
+   CLINICAL COMPANION DOSSIER & FULL-WIDTH STACKED LAYOUT
+   ========================================================================== */
+.cogni-canvas-column.full-width {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
 .cogni-dossier-column {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
+.cogni-dossier-column.full-width {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
 .cogni-dossier-card {
   background: #0d0f17;
   border: 1px solid rgba(220, 38, 38, 0.35);
   border-radius: var(--radius-lg);
-  padding: 20px;
+  padding: 22px 26px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+.dossier-top-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 20px;
+}
+
+.dossier-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.dossier-badge > span:first-child {
+  color: #94a3b8;
+  background: #141724;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid #23283e;
 }
 
 .dossier-sys-tag {
@@ -5924,6 +5974,134 @@
   font-weight: 800;
   color: var(--accent-ruby);
   text-transform: uppercase;
+}
+
+.dossier-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 4px 0 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dossier-latin {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.dossier-actions-top {
+  display: flex;
+  align-items: center;
+}
+
+.dossier-btn.save-note {
+  padding: 10px 18px;
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.25) 0%, rgba(153, 27, 27, 0.45) 100%);
+  border: 1px solid rgba(220, 38, 38, 0.6);
+  border-radius: var(--radius-sm);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dossier-btn.save-note:hover {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border-color: #f87171;
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.55);
+  transform: translateY(-1px);
+}
+
+.cogni-dossier-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 800px) {
+  .cogni-dossier-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dossier-section {
+  background: #111420;
+  border: 1px solid #1e2438;
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s ease;
+}
+
+.dossier-section:hover {
+  border-color: rgba(220, 38, 38, 0.4);
+}
+
+.dossier-section h4 {
+  font-size: 14px;
+  font-weight: 800;
+  color: #f1f5f9;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dossier-section p {
+  font-size: 13px;
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.dossier-meta-item {
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.5;
+  margin-top: 6px;
+  padding: 8px 12px;
+  background: #0b0d14;
+  border-radius: 4px;
+  border: 1px solid #1c2235;
+}
+
+.dossier-meta-item strong {
+  color: #e2e8f0;
+}
+
+.dossier-section.highlight-red {
+  background: rgba(220, 38, 38, 0.06);
+  border-color: rgba(220, 38, 38, 0.35);
+  border-left: 4px solid var(--accent-ruby);
+}
+
+.dossier-section.mnemonic-box {
+  background: rgba(245, 158, 11, 0.06);
+  border-color: rgba(245, 158, 11, 0.35);
+  border-left: 4px solid #f59e0b;
+}
+
+.mnemonic-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fef08a;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px dashed rgba(245, 158, 11, 0.4);
+  padding: 10px 14px;
+  border-radius: 6px;
+  line-height: 1.5;
   margin-bottom: 6px;
 }
 

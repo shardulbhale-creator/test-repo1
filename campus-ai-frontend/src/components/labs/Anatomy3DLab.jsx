@@ -443,9 +443,6 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
   // Viewport display mode: 'cogni-live' (Official live 3D Atlas) vs 'flashcards' (Active Recall)
   const [activeTab, setActiveTab] = useState("cogni-live");
 
-  // Layout mode: 'wide' (75% wide body + 25% dossier) or 'theater' (100% full-width body)
-  const [layoutMode, setLayoutMode] = useState("wide");
-
   // Viewer height: 'normal' (880px) or 'imax' (980px)
   const [viewerHeight, setViewerHeight] = useState("normal");
 
@@ -489,7 +486,7 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
       : `https://cogni.cards/anatomy/viewer/?preset=${activePreset.id}&lang=en`;
 
   return (
-    <div className={`lab-page-container ${layoutMode === "theater" ? "expanded-workstation" : ""}`}>
+    <div className="lab-page-container expanded-workstation">
       {/* =========================================================================
           HEADER BANNER: OFFICIAL COGNI ANATOMY 3D ATLAS FOR MBBS
           ========================================================================= */}
@@ -513,7 +510,7 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
             className={`lab-nav-pill ${activeTab === "cogni-live" ? "active" : ""}`}
             onClick={() => setActiveTab("cogni-live")}
           >
-            🌐 3D Body Viewer
+            🌐 3D Human Body (100% Full-Width)
           </button>
           <button
             type="button"
@@ -524,19 +521,11 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
           </button>
           <button
             type="button"
-            className={`lab-nav-pill ${layoutMode === "theater" ? "active" : ""}`}
-            onClick={() => setLayoutMode(layoutMode === "theater" ? "wide" : "theater")}
-            title="Toggle 100% Full-Width Body"
-          >
-            {layoutMode === "theater" ? "🖥️ Split View (Wide Body)" : "⛶ 100% Full-Width Body"}
-          </button>
-          <button
-            type="button"
             className={`lab-nav-pill ${viewerHeight === "imax" ? "active" : ""}`}
             onClick={() => setViewerHeight(viewerHeight === "imax" ? "normal" : "imax")}
             title="Toggle IMAX 980px vertical height"
           >
-            {viewerHeight === "imax" ? "📐 Height: Normal (880px)" : "📺 Height: IMAX (980px)"}
+            {viewerHeight === "imax" ? "📐 Normal Height (880px)" : "📺 Height: IMAX (980px)"}
           </button>
         </div>
       </div>
@@ -581,11 +570,11 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
       </div>
 
       {/* =========================================================================
-          MAIN WORKSPACE: 3D VIEWER (LEFT/CENTER) vs CLINICAL DOSSIER (RIGHT)
+          MAIN WORKSPACE: 100% FULL-WIDTH 3D BODY (TOP) + CLINICAL DOSSIER (BELOW)
           ========================================================================= */}
-      <div className={`cogni-workspace-grid ${layoutMode === "theater" ? "full-width" : ""}`}>
-        {/* CENTER / PRIMARY VIEWPORT COLUMN */}
-        <section className="cogni-canvas-column">
+      <div className="cogni-workspace-stacked">
+        {/* TOP SECTION: 100% FULL-WIDTH 3D HUMAN BODY VIEWPORT */}
+        <section className="cogni-canvas-column full-width">
           {/* VIEWPORT CONTROLS BAR */}
           <div className="canvas-header-strip">
             <div className="canvas-hud-toolbar">
@@ -675,75 +664,75 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
           )}
         </section>
 
-        {/* RIGHT COLUMN: CLINICAL SELF-STUDY COMPANION DOSSIER */}
-        <aside className="cogni-dossier-column">
+        {/* BOTTOM SECTION: CLINICAL SELF-STUDY COMPANION DOSSIER (LOCATED DIRECTLY BELOW) */}
+        <section className="cogni-dossier-column full-width">
           <div className="cogni-dossier-card">
-            <div className="dossier-badge">
-              <span>{activePreset.region.toUpperCase()}</span>
-              <span className="dossier-sys-tag">{activePreset.system.toUpperCase()}</span>
-            </div>
-
-            <h2 className="dossier-title">{activePreset.label}</h2>
-            <div className="dossier-latin">
-              <em>Scientific / Latin: {activePreset.latin}</em>
-              <span className="fma-code">{activePreset.fmaId}</span>
-            </div>
-
-            {/* ANATOMICAL OVERVIEW */}
-            <div className="dossier-section">
-              <h4>📖 Anatomical Architecture</h4>
-              <p className="dossier-summary-text">{activePreset.summary}</p>
-            </div>
-
-            {/* INNERVATION & VASCULAR SUPPLY */}
-            <div className="dossier-section">
-              <h4>📍 Innervation & Vascular Supply</h4>
-              <div className="dossier-meta-item">
-                <strong>Nerve Supply:</strong> {activePreset.innervation}
+            {/* DOSSIER HEADER WITH ONE-CLICK SAVE ACTION */}
+            <div className="dossier-top-strip">
+              <div>
+                <div className="dossier-badge">
+                  <span>{activePreset.region.toUpperCase()}</span>
+                  <span className="dossier-sys-tag">{activePreset.system.toUpperCase()}</span>
+                </div>
+                <h2 className="dossier-title">{activePreset.label}</h2>
+                <div className="dossier-latin">
+                  <em>Scientific / Latin: {activePreset.latin}</em>
+                  <span className="fma-code">{activePreset.fmaId}</span>
+                </div>
               </div>
-              <div className="dossier-meta-item">
-                <strong>Arterial Supply:</strong> {activePreset.bloodSupply}
+
+              <div className="dossier-actions-top">
+                <button
+                  type="button"
+                  className="dossier-btn save-note"
+                  onClick={() => {
+                    if (onSaveNote) {
+                      onSaveNote(
+                        `Cogni Anatomy: ${activePreset.label}`,
+                        `### 🧬 Cogni 3D Anatomy Study Notes: ${activePreset.label}\n\n**Latin**: *${activePreset.latin}* | **FMA**: \`${activePreset.fmaId}\`\n\n#### 📖 Overview\n${activePreset.summary}\n\n- **Innervation**: ${activePreset.innervation}\n- **Blood Supply**: ${activePreset.bloodSupply}\n\n#### 🩺 Clinical Pathology\n${activePreset.clinicalHighYield}\n\n#### 💡 Board Exam Mnemonic\n> ${activePreset.mnemonic}\n\n#### 🎯 Exam Tip\n${activePreset.examTip}`,
+                        "Medicine (MBBS)"
+                      );
+                    }
+                  }}
+                >
+                  💾 Save to Study Notes (+20 XP)
+                </button>
               </div>
             </div>
 
-            {/* CLINICAL PATHOLOGY */}
-            <div className="dossier-section highlight-red">
-              <h4>🩺 Clinical Pathology & Surgical Correlations</h4>
-              <p>{activePreset.clinicalHighYield}</p>
-            </div>
+            {/* MULTI-CARD CLINICAL DASHBOARD GRID */}
+            <div className="cogni-dossier-grid">
+              {/* CARD 1: ARCHITECTURE & INNERVATION */}
+              <div className="dossier-section">
+                <h4>📖 Anatomical Architecture & Innervation</h4>
+                <p className="dossier-summary-text">{activePreset.summary}</p>
+                <div className="dossier-meta-item" style={{ marginTop: "12px" }}>
+                  <strong>Nerve Supply:</strong> {activePreset.innervation}
+                </div>
+                <div className="dossier-meta-item">
+                  <strong>Arterial Supply:</strong> {activePreset.bloodSupply}
+                </div>
+              </div>
 
-            {/* USMLE / NEET-PG MNEMONIC */}
-            <div className="dossier-section mnemonic-box">
-              <h4>💡 High-Yield Board Exam Mnemonic</h4>
-              <div className="mnemonic-text">"{activePreset.mnemonic}"</div>
-            </div>
+              {/* CARD 2: CLINICAL PATHOLOGY & SURGICAL PEARLS */}
+              <div className="dossier-section highlight-red">
+                <h4>🩺 Clinical Pathology & Surgical Correlations</h4>
+                <p>{activePreset.clinicalHighYield}</p>
+              </div>
 
-            {/* EXAM FLASHPOINT */}
-            <div className="dossier-section exam-tip-box">
-              <h4>🎯 High-Yield Exam Flashpoint</h4>
-              <p>{activePreset.examTip}</p>
-            </div>
+              {/* CARD 3: USMLE / NEET-PG MNEMONICS & FLASHPOINTS */}
+              <div className="dossier-section mnemonic-box">
+                <h4>💡 High-Yield Board Exam Mnemonic</h4>
+                <div className="mnemonic-text">"{activePreset.mnemonic}"</div>
 
-            {/* ACTIONS */}
-            <div className="dossier-actions">
-              <button
-                type="button"
-                className="dossier-btn save-note"
-                onClick={() => {
-                  if (onSaveNote) {
-                    onSaveNote(
-                      `Cogni Anatomy: ${activePreset.label}`,
-                      `### 🧬 Cogni 3D Anatomy Study Notes: ${activePreset.label}\n\n**Latin**: *${activePreset.latin}* | **FMA**: \`${activePreset.fmaId}\`\n\n#### 📖 Overview\n${activePreset.summary}\n\n- **Innervation**: ${activePreset.innervation}\n- **Blood Supply**: ${activePreset.bloodSupply}\n\n#### 🩺 Clinical Pathology\n${activePreset.clinicalHighYield}\n\n#### 💡 Board Exam Mnemonic\n> ${activePreset.mnemonic}\n\n#### 🎯 Exam Tip\n${activePreset.examTip}`,
-                      "Medicine (MBBS)"
-                    );
-                  }
-                }}
-              >
-                💾 Save to Study Notes (+20 XP)
-              </button>
+                <h4 style={{ marginTop: "14px" }}>🎯 High-Yield Exam Flashpoint</h4>
+                <p style={{ color: "#fde68a", fontSize: "12.5px", lineHeight: "1.5", margin: 0 }}>
+                  {activePreset.examTip}
+                </p>
+              </div>
             </div>
           </div>
-        </aside>
+        </section>
       </div>
     </div>
   );
