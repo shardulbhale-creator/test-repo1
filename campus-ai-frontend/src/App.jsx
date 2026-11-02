@@ -22,6 +22,27 @@ function App() {
   const [quizStageFilter, setQuizStageFilter] = useState("All Stages");
   const [showAllCareerTracks, setShowAllCareerTracks] = useState(false);
 
+  // Sidebar Collapse State (ChatGPT Style)
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => {
+    try {
+      return localStorage.getItem("campus-ai-sidebar-collapsed") === "true";
+    } catch {
+      return false;
+    }
+  });
+
+  function toggleSidebar() {
+    setIsSidebarCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem("campus-ai-sidebar-collapsed", String(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  }
+
   // Active Selected Degree ID (Defaults to B.Tech)
   const [selectedDegreeId, setSelectedDegreeId] = useState(() => {
     try {
@@ -899,17 +920,71 @@ function App() {
   }
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${isSidebarCollapsed ? "sidebar-collapsed" : ""}`}>
+      {/* THIN EDGE STRIP (VISIBLE WHEN SIDEBAR IS COLLAPSED - EXACTLY LIKE CHATGPT) */}
+      {isSidebarCollapsed && (
+        <aside
+          className="sidebar-edge-rail"
+          onClick={toggleSidebar}
+          title="Open Sidebar (Click to expand)"
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => e.key === "Enter" && toggleSidebar()}
+          aria-label="Expand Sidebar"
+        >
+          <div className="edge-rail-line" />
+          <button
+            type="button"
+            className="edge-rail-toggle-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleSidebar();
+            }}
+            title="Open Sidebar"
+            aria-label="Open Sidebar"
+          >
+            <span className="edge-chevron">›</span>
+          </button>
+          <div className="edge-rail-hover-pill">
+            <span className="edge-pill-icon">◨</span>
+            <span className="edge-pill-text">Open Sidebar</span>
+          </div>
+        </aside>
+      )}
+
       {/* SIDEBAR NAVIGATION */}
-      <aside className="sidebar">
+      <aside className={`sidebar ${isSidebarCollapsed ? "collapsed" : ""}`}>
         <div className="brand">
           <div className="brand-symbol">c.</div>
-          <div>
+          <div className="brand-title-wrap">
             <h2>
               campus<span>ai</span>
             </h2>
             <p>ACADEMIC LEARNING PLATFORM</p>
           </div>
+          {/* Collapse Button inside Sidebar Header (Like ChatGPT) */}
+          <button
+            type="button"
+            className="sidebar-collapse-btn"
+            onClick={toggleSidebar}
+            title="Close sidebar"
+            aria-label="Close sidebar"
+          >
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <line x1="9" y1="3" x2="9" y2="21" />
+              <path d="m15 9-3 3 3 3" />
+            </svg>
+          </button>
         </div>
 
         <p className="workspace-label">ACADEMIC WORKSPACE</p>
@@ -992,13 +1067,43 @@ function App() {
       <main className="main-content">
         {/* TOPBAR */}
         <header className="topbar">
-          <div className="breadcrumb">
-            Workspace <span>/</span>{" "}
-            <span className="breadcrumb-current">
-              {selectedSubjectId && currentSubject
-                ? `${active} / ${currentSubject.title}`
-                : active}
-            </span>
+          <div className="topbar-left">
+            {/* Topbar Sidebar Toggle Button (Always accessible, highlighted when collapsed) */}
+            <button
+              type="button"
+              className={`topbar-sidebar-toggle-btn ${isSidebarCollapsed ? "is-collapsed" : ""}`}
+              onClick={toggleSidebar}
+              title={isSidebarCollapsed ? "Open sidebar" : "Close sidebar"}
+              aria-label={isSidebarCollapsed ? "Open sidebar" : "Close sidebar"}
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <line x1="9" y1="3" x2="9" y2="21" />
+                {isSidebarCollapsed ? (
+                  <path d="m13 15 3-3-3-3" />
+                ) : (
+                  <path d="m15 9-3 3 3 3" />
+                )}
+              </svg>
+            </button>
+
+            <div className="breadcrumb">
+              Workspace <span>/</span>{" "}
+              <span className="breadcrumb-current">
+                {selectedSubjectId && currentSubject
+                  ? `${active} / ${currentSubject.title}`
+                  : active}
+              </span>
+            </div>
           </div>
 
           <div className="topbar-actions">
