@@ -12,6 +12,8 @@ import Anatomy3DLab from "./components/labs/Anatomy3DLab";
 import MootCourtLab from "./components/labs/MootCourtLab";
 import FinanceLab from "./components/labs/FinanceLab";
 import PsychologyLab from "./components/labs/PsychologyLab";
+import AuthAccountModal from "./components/modals/AuthAccountModal";
+import { pushCloudData } from "./services/cloudSyncService";
 
 function App() {
   // Navigation State
@@ -114,10 +116,54 @@ function App() {
 
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [profileForm, setProfileForm] = useState(student);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [syncStatus, setSyncStatus] = useState("synced"); // "synced" | "syncing" | "offline"
+  const [lastSyncedAt, setLastSyncedAt] = useState(() => {
+    try {
+      return localStorage.getItem("campus-ai-last-sync") || new Date().toISOString();
+    } catch {
+      return new Date().toISOString();
+    }
+  });
 
   function saveStudent(updated) {
     setStudent(updated);
     localStorage.setItem("campus-ai-student", JSON.stringify(updated));
+  }
+
+  function handleAccountUpdate(updatedStudent, updatedNotes, syncedTime) {
+    if (updatedStudent) {
+      saveStudent(updatedStudent);
+      if (updatedStudent.degreeId) {
+        setSelectedDegreeId(updatedStudent.degreeId);
+        try {
+          localStorage.setItem("campus-ai-selected-degree", updatedStudent.degreeId);
+        } catch {
+          // ignore
+        }
+      }
+    }
+    if (updatedNotes) {
+      saveNotes(updatedNotes);
+    }
+    if (syncedTime) {
+      setLastSyncedAt(syncedTime);
+    }
+    setSyncStatus("synced");
+  }
+
+  function triggerBackgroundSync(studentToSync = student, notesToSync = notes) {
+    setSyncStatus("syncing");
+    pushCloudData(studentToSync.email, studentToSync, notesToSync)
+      .then((res) => {
+        if (res && res.syncedAt) {
+          setLastSyncedAt(res.syncedAt);
+        }
+        setSyncStatus("synced");
+      })
+      .catch(() => {
+        setSyncStatus("offline");
+      });
   }
 
   // Active Degree Program Object (100% matched to selected degree)
@@ -329,6 +375,7 @@ function App() {
       quizScore: Math.max(0, student.quizScore + xpDiff),
     };
     saveStudent(updatedStudent);
+    triggerBackgroundSync(updatedStudent, notes);
   }
 
   // Active Subject Object
@@ -352,6 +399,7 @@ function App() {
         quizScore: student.quizScore + 50,
       };
       saveStudent(updated);
+      triggerBackgroundSync(updated, notes);
     }
   }
 
@@ -421,7 +469,7 @@ function App() {
     } else {
       updatedNotes = [
         {
-          id: Date.now(),
+          id: `note-${now}`,
           title: noteTitle.trim(),
           subject: noteSubject,
           content: noteContent,
@@ -434,6 +482,7 @@ function App() {
     }
 
     saveNotes(updatedNotes);
+    triggerBackgroundSync(student, updatedNotes);
     setIsNoteEditorOpen(false);
   }
 
@@ -442,12 +491,14 @@ function App() {
       item.id === noteId ? { ...item, pinned: !item.pinned } : item
     );
     saveNotes(updated);
+    triggerBackgroundSync(student, updated);
   }
 
   function handleDeleteNote(noteId) {
     if (!window.confirm("Delete this study note?")) return;
     const updated = notes.filter((item) => item.id !== noteId);
     saveNotes(updated);
+    triggerBackgroundSync(student, updated);
   }
 
   const filteredNotes = notes
@@ -907,7 +958,7 @@ function App() {
   function saveContentToNotes(title, content, subject = currentDegreeProgram.shortName) {
     const now = new Date().toISOString();
     const newNote = {
-      id: Date.now(),
+      id: `note-${now}`,
       title: title.trim(),
       subject: subject,
       content: content.trim(),
@@ -1045,18 +1096,18 @@ function App() {
             </div>
           </div>
 
-          {/* Student Profile Card */}
+          {/* Student Profile Card (Cloud Synced) */}
           <div
             className="profile-card"
-            onClick={() => {
-              setProfileForm(student);
-              setIsProfileModalOpen(true);
-            }}
-            title="Click to view & edit your student profile"
+            onClick={() => setIsAuthModalOpen(true)}
+            title="Click to view cloud profile, switch demo scholars, or sync data"
           >
             <div className="profile-avatar">{student.avatar}</div>
             <div className="profile-info">
-              <strong>{student.name}</strong>
+              <div className="profile-name-row">
+                <strong>{student.name}</strong>
+                <span className="profile-cloud-dot" title="Cloud Synced 24/7" />
+              </div>
               <span>Class of {student.gradYear} · {currentDegreeProgram.shortName}</span>
             </div>
           </div>
@@ -1130,6 +1181,31 @@ function App() {
             <div className="xp-badge" title="Knowledge XP Score">
               ⚡ {student.quizScore} XP
             </div>
+
+            {/* Real-time Cloud Sync Status Pill */}
+            <button
+              type="button"
+              className={`topbar-cloud-sync-pill ${syncStatus}`}
+              onClick={() => setIsAuthModalOpen(true)}
+              title="Real-Time Cloud Synchronization (Click to open Account & Cloud Sync Hub)"
+            >
+              <span className="sync-pulse-dot" />
+              <span className="sync-label">
+                {syncStatus === "syncing" ? "Syncing..." : "Cloud Synced"}
+              </span>
+            </button>
+
+            {/* Authenticated Student Account Pill */}
+            <button
+              type="button"
+              className="topbar-account-pill"
+              onClick={() => setIsAuthModalOpen(true)}
+              title="Student Account & Cloud Profile Settings"
+            >
+              <span className="account-avatar">{student.avatar}</span>
+              <span className="account-name">{student.name}</span>
+              <span className="account-chevron">▾</span>
+            </button>
           </div>
         </header>
 
@@ -2802,6 +2878,21 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* =========================================================================
+          STUDENT CLOUD ACCOUNT & AUTHENTICATION HUB (OPTION C)
+          ========================================================================= */}
+      <AuthAccountModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        student={student}
+        notes={notes}
+        degreePrograms={DEGREE_PROGRAMS}
+        careerPaths={CAREER_PATHS}
+        onAccountUpdate={handleAccountUpdate}
+        syncStatus={syncStatus}
+        lastSyncedAt={lastSyncedAt}
+      />
     </div>
   );
 }

@@ -1194,6 +1194,26 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
   const [isSeeThrough, setIsSeeThrough] = useState(false);
   const [isIsolated, setIsIsolated] = useState(false);
 
+  // Advanced HUD Opacity & Camera Controls
+  const [systemOpacities, setSystemOpacities] = useState({
+    skeleton: 100,
+    muscles: 90,
+    vascular: 95,
+    nervous: 85,
+    organs: 80,
+  });
+  const [explodeValue, setExplodeValue] = useState(0);
+  const [activeCameraAngle, setActiveCameraAngle] = useState("Anterior");
+  const [isXrayActive, setIsXrayActive] = useState(false);
+  const [isAutoRotate, setIsAutoRotate] = useState(false);
+  const [contentsFilter, setContentsFilter] = useState("");
+  const [hudSettings, setHudSettings] = useState({
+    renderQuality: "Ultra HD (60fps)",
+    lightingMode: "Clinical Surgical Lamp",
+    nomenclature: "Bilingual (Latin & English)",
+    show3DPins: true,
+  });
+
   // Selected High-Yield Muscle from O.I.A.I. Directory
   const [selectedMuscle, setSelectedMuscle] = useState(HIGH_YIELD_MUSCLES_DIRECTORY[0]); // Default Trapezius
 
@@ -1496,45 +1516,269 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                     </button>
                   </div>
 
-                  {/* REGION FILTER CHIPS */}
-                  <div className="hud-region-pills">
-                    {["all", "Head", "Trunk", "Upper limb", "Lower limb"].map((reg) => (
-                      <button
-                        key={reg}
-                        type="button"
-                        className={`hud-region-chip ${regionFilter === reg ? "active" : ""}`}
-                        onClick={() => setRegionFilter(reg)}
-                      >
-                        {reg === "all" ? "Whole body" : reg}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* SYSTEMS LIST & CARDS */}
-                  <div className="hud-panel-body">
-                    <div className="hud-section-label">Musculoskeletal & Skeletal Structures</div>
-                    <div className="hud-structure-cards-list">
-                      {filteredParts.map((part) => {
-                        const isSelected = selectedStructure.id === part.id;
-                        return (
-                          <div
-                            key={part.id}
-                            className={`hud-structure-card ${isSelected ? "active" : ""}`}
-                            onClick={() => handleSelectStructure(part)}
+                  {/* TAB 1: SYSTEMS (REGION CHIPS & CARDS) */}
+                  {leftPanelTab === "systems" && (
+                    <>
+                      <div className="hud-region-pills">
+                        {["all", "Head", "Trunk", "Upper limb", "Lower limb"].map((reg) => (
+                          <button
+                            key={reg}
+                            type="button"
+                            className={`hud-region-chip ${regionFilter === reg ? "active" : ""}`}
+                            onClick={() => setRegionFilter(reg)}
                           >
-                            <div className="hud-card-icon">
-                              {part.category === "Skeleton" ? "🦴" : part.category === "Muscles" ? "🦾" : "🫀"}
-                            </div>
-                            <div className="hud-card-info">
-                              <strong>{part.name}</strong>
-                              <span>{part.category} · {part.region}</span>
-                            </div>
-                            {isSelected && <span className="hud-selected-dot">•</span>}
+                            {reg === "all" ? "Whole body" : reg}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="hud-panel-body">
+                        <div className="hud-section-label">Musculoskeletal & Skeletal Structures</div>
+                        <div className="hud-structure-cards-list">
+                          {filteredParts.map((part) => {
+                            const isSelected = selectedStructure.id === part.id;
+                            return (
+                              <div
+                                key={part.id}
+                                className={`hud-structure-card ${isSelected ? "active" : ""}`}
+                                onClick={() => handleSelectStructure(part)}
+                              >
+                                <div className="hud-card-icon">
+                                  {part.category === "Skeleton" ? "🦴" : part.category === "Muscles" ? "🦾" : "🫀"}
+                                </div>
+                                <div className="hud-card-info">
+                                  <strong>{part.name}</strong>
+                                  <span>{part.category} · {part.region}</span>
+                                </div>
+                                {isSelected && <span className="hud-selected-dot">•</span>}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {/* TAB 2: OPACITY CONTROLS */}
+                  {leftPanelTab === "opacity" && (
+                    <div className="hud-panel-body hud-opacity-panel">
+                      <div className="hud-section-label">System Layer Opacities</div>
+                      <div className="hud-opacity-slider-group">
+                        <div className="hud-slider-item">
+                          <div className="hud-slider-label-row">
+                            <span>🦴 Skeletal Framework</span>
+                            <strong>{systemOpacities.skeleton}%</strong>
                           </div>
-                        );
-                      })}
+                          <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={systemOpacities.skeleton}
+                            onChange={(e) =>
+                              setSystemOpacities({ ...systemOpacities, skeleton: Number(e.target.value) })
+                            }
+                          />
+                        </div>
+
+                        <div className="hud-slider-item">
+                          <div className="hud-slider-label-row">
+                            <span>🦾 Muscular System</span>
+                            <strong>{systemOpacities.muscles}%</strong>
+                          </div>
+                          <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={systemOpacities.muscles}
+                            onChange={(e) =>
+                              setSystemOpacities({ ...systemOpacities, muscles: Number(e.target.value) })
+                            }
+                          />
+                        </div>
+
+                        <div className="hud-slider-item">
+                          <div className="hud-slider-label-row">
+                            <span>🩸 Arteries & Veins</span>
+                            <strong>{systemOpacities.vascular}%</strong>
+                          </div>
+                          <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={systemOpacities.vascular}
+                            onChange={(e) =>
+                              setSystemOpacities({ ...systemOpacities, vascular: Number(e.target.value) })
+                            }
+                          />
+                        </div>
+
+                        <div className="hud-slider-item">
+                          <div className="hud-slider-label-row">
+                            <span>⚡ Nervous System</span>
+                            <strong>{systemOpacities.nervous}%</strong>
+                          </div>
+                          <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={systemOpacities.nervous}
+                            onChange={(e) =>
+                              setSystemOpacities({ ...systemOpacities, nervous: Number(e.target.value) })
+                            }
+                          />
+                        </div>
+
+                        <div className="hud-slider-item">
+                          <div className="hud-slider-label-row">
+                            <span>🫀 Visceral Organs</span>
+                            <strong>{systemOpacities.organs}%</strong>
+                          </div>
+                          <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={systemOpacities.organs}
+                            onChange={(e) =>
+                              setSystemOpacities({ ...systemOpacities, organs: Number(e.target.value) })
+                            }
+                          />
+                        </div>
+                      </div>
+
+                      <div className="hud-opacity-presets-row">
+                        <button
+                          type="button"
+                          className="hud-preset-pill"
+                          onClick={() =>
+                            setSystemOpacities({
+                              skeleton: 100,
+                              muscles: 25,
+                              vascular: 80,
+                              nervous: 80,
+                              organs: 30,
+                            })
+                          }
+                        >
+                          X-Ray Bones
+                        </button>
+                        <button
+                          type="button"
+                          className="hud-preset-pill"
+                          onClick={() =>
+                            setSystemOpacities({
+                              skeleton: 30,
+                              muscles: 100,
+                              vascular: 60,
+                              nervous: 40,
+                              organs: 30,
+                            })
+                          }
+                        >
+                          Myology Focus
+                        </button>
+                        <button
+                          type="button"
+                          className="hud-preset-pill reset"
+                          onClick={() =>
+                            setSystemOpacities({
+                              skeleton: 100,
+                              muscles: 90,
+                              vascular: 95,
+                              nervous: 85,
+                              organs: 80,
+                            })
+                          }
+                        >
+                          Reset 100%
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  )}
+
+                  {/* TAB 3: ANATOMICAL CONTENTS DIRECTORY */}
+                  {leftPanelTab === "contents" && (
+                    <div className="hud-panel-body hud-contents-panel">
+                      <div className="hud-contents-search-box">
+                        <input
+                          type="text"
+                          placeholder="Search anatomical directory..."
+                          value={contentsFilter}
+                          onChange={(e) => setContentsFilter(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="hud-contents-groups">
+                        <div className="hud-content-group">
+                          <div className="hud-group-title">
+                            <span>🦴 Osteology (Bones)</span>
+                            <span className="hud-group-count">
+                              {ANATOMICAL_PARTS_LIBRARY.filter((p) => p.category === "Skeleton").length}
+                            </span>
+                          </div>
+                          {ANATOMICAL_PARTS_LIBRARY.filter(
+                            (p) =>
+                              p.category === "Skeleton" &&
+                              p.name.toLowerCase().includes(contentsFilter.toLowerCase())
+                          ).map((p) => (
+                            <div
+                              key={p.id}
+                              className={`hud-content-item ${selectedStructure.id === p.id ? "active" : ""}`}
+                              onClick={() => handleSelectStructure(p)}
+                            >
+                              <span>{p.name}</span>
+                              <span className="hud-item-region">{p.region}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="hud-content-group">
+                          <div className="hud-group-title">
+                            <span>🦾 Myology (Musculature)</span>
+                            <span className="hud-group-count">
+                              {ANATOMICAL_PARTS_LIBRARY.filter((p) => p.category === "Muscles").length}
+                            </span>
+                          </div>
+                          {ANATOMICAL_PARTS_LIBRARY.filter(
+                            (p) =>
+                              p.category === "Muscles" &&
+                              p.name.toLowerCase().includes(contentsFilter.toLowerCase())
+                          ).map((p) => (
+                            <div
+                              key={p.id}
+                              className={`hud-content-item ${selectedStructure.id === p.id ? "active" : ""}`}
+                              onClick={() => handleSelectStructure(p)}
+                            >
+                              <span>{p.name}</span>
+                              <span className="hud-item-region">{p.region}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="hud-content-group">
+                          <div className="hud-group-title">
+                            <span>🫀 Viscera & Systems</span>
+                            <span className="hud-group-count">
+                              {ANATOMICAL_PARTS_LIBRARY.filter((p) => p.category === "Organs").length}
+                            </span>
+                          </div>
+                          {ANATOMICAL_PARTS_LIBRARY.filter(
+                            (p) =>
+                              p.category === "Organs" &&
+                              p.name.toLowerCase().includes(contentsFilter.toLowerCase())
+                          ).map((p) => (
+                            <div
+                              key={p.id}
+                              className={`hud-content-item ${selectedStructure.id === p.id ? "active" : ""}`}
+                              onClick={() => handleSelectStructure(p)}
+                            >
+                              <span>{p.name}</span>
+                              <span className="hud-item-region">{p.region}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 /* MINIMIZED FLOATING PILL AT TOP-LEFT */
@@ -1595,8 +1839,98 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                     </button>
                   </div>
 
+                  {/* =========================================================
+                      TAB 1: VIEW & CAMERA DISSECTION TOOLS
+                      ========================================================= */}
+                  {rightPanelTab === "view" && (
+                    <div className="hud-inspector-body hud-view-tools-body">
+                      <div className="hud-section-label">Camera Perspectives & Angles</div>
+                      <div className="hud-camera-grid">
+                        {[
+                          { id: "Anterior", label: "Anterior (Front)" },
+                          { id: "Posterior", label: "Posterior (Dorsal)" },
+                          { id: "Right Lateral", label: "Right Lateral" },
+                          { id: "Left Lateral", label: "Left Lateral" },
+                          { id: "Superior", label: "Superior (Cranial)" },
+                          { id: "Inferior", label: "Inferior (Caudal)" },
+                        ].map((angle) => (
+                          <button
+                            key={angle.id}
+                            type="button"
+                            className={`hud-camera-pill ${activeCameraAngle === angle.id ? "active" : ""}`}
+                            onClick={() => {
+                              setActiveCameraAngle(angle.id);
+                              setIframeKey((k) => k + 1);
+                            }}
+                          >
+                            📐 {angle.label}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="hud-section-label" style={{ marginTop: "16px" }}>
+                        Dissection & Explode Slider
+                      </div>
+                      <div className="hud-explode-container">
+                        <div className="hud-slider-label-row">
+                          <span>💥 Explode Anatomy</span>
+                          <strong>{explodeValue}%</strong>
+                        </div>
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          value={explodeValue}
+                          onChange={(e) => setExplodeValue(Number(e.target.value))}
+                        />
+                        <div className="hud-explode-ticks">
+                          <span>Assembled (0%)</span>
+                          <span>By System (50%)</span>
+                          <span>Full Explode (100%)</span>
+                        </div>
+                      </div>
+
+                      <div className="hud-section-label" style={{ marginTop: "16px" }}>
+                        Viewport Mode Toggles
+                      </div>
+                      <div className="hud-toggles-list">
+                        <button
+                          type="button"
+                          className={`hud-toggle-btn ${isXrayActive ? "active" : ""}`}
+                          onClick={() => setIsXrayActive(!isXrayActive)}
+                        >
+                          <span>🩻</span>
+                          <span>{isXrayActive ? "Disable X-Ray Mode" : "Enable X-Ray Mode"}</span>
+                        </button>
+                        <button
+                          type="button"
+                          className={`hud-toggle-btn ${isAutoRotate ? "active" : ""}`}
+                          onClick={() => setIsAutoRotate(!isAutoRotate)}
+                        >
+                          <span>🔄</span>
+                          <span>{isAutoRotate ? "Pause 360° Orbit" : "Auto-Rotate 360° Orbit"}</span>
+                        </button>
+                        <button
+                          type="button"
+                          className="hud-toggle-btn reset"
+                          onClick={() => {
+                            setExplodeValue(0);
+                            setIsXrayActive(false);
+                            setIsAutoRotate(false);
+                            setActiveCameraAngle("Anterior");
+                            setIframeKey((k) => k + 1);
+                          }}
+                        >
+                          <span>🎯</span>
+                          <span>Reset Camera & Viewport</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
                   {/* STRUCTURE DETAILS BODY MATCHING COGNI PHOTO 2 */}
-                  <div className="hud-inspector-body">
+                  {rightPanelTab === "structure" && (
+                    <div className="hud-inspector-body">
                     <div className={`structure-category-tag ${selectedStructure.category?.toLowerCase()}`}>
                       <span className="cat-bar" />
                       <span>{selectedStructure.category || "Structure"}</span>
@@ -1761,7 +2095,77 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                     >
                       Clear selection
                     </button>
-                  </div>
+                    </div>
+                  )}
+
+                  {/* =========================================================
+                      TAB 3: SETTINGS & RENDER PREFERENCES
+                      ========================================================= */}
+                  {rightPanelTab === "settings" && (
+                    <div className="hud-inspector-body hud-settings-body">
+                      <div className="hud-section-label">Atlas Display & Rendering</div>
+
+                      <div className="hud-setting-row">
+                        <label>Render Quality</label>
+                        <select
+                          value={hudSettings.renderQuality}
+                          onChange={(e) =>
+                            setHudSettings({ ...hudSettings, renderQuality: e.target.value })
+                          }
+                        >
+                          <option value="Ultra HD (60fps)">Ultra HD (60fps) · Anti-Aliased</option>
+                          <option value="Balanced (30fps)">Balanced (30fps) · Low Power</option>
+                        </select>
+                      </div>
+
+                      <div className="hud-setting-row">
+                        <label>Lighting Mode</label>
+                        <select
+                          value={hudSettings.lightingMode}
+                          onChange={(e) =>
+                            setHudSettings({ ...hudSettings, lightingMode: e.target.value })
+                          }
+                        >
+                          <option value="Clinical Surgical Lamp">Clinical Surgical Lamp (Cold White)</option>
+                          <option value="Studio Obsidian">Studio Obsidian (Dark High-Contrast)</option>
+                          <option value="Radiology Warm">Radiology Warm (Soft Focus)</option>
+                        </select>
+                      </div>
+
+                      <div className="hud-setting-row">
+                        <label>Anatomical Nomenclature</label>
+                        <select
+                          value={hudSettings.nomenclature}
+                          onChange={(e) =>
+                            setHudSettings({ ...hudSettings, nomenclature: e.target.value })
+                          }
+                        >
+                          <option value="Bilingual (Latin & English)">Bilingual (Terminologia Anatomica + English)</option>
+                          <option value="English (Modern)">English (Modern Clinical)</option>
+                          <option value="Latin Only">Latin Only (Standard Medical)</option>
+                        </select>
+                      </div>
+
+                      <div className="hud-setting-toggle-row">
+                        <span>Show 3D Floating Anatomy Pins</span>
+                        <input
+                          type="checkbox"
+                          checked={hudSettings.show3DPins}
+                          onChange={(e) =>
+                            setHudSettings({ ...hudSettings, show3DPins: e.target.checked })
+                          }
+                        />
+                      </div>
+
+                      <button
+                        type="button"
+                        className="hud-save-settings-btn"
+                        onClick={() => setRightPanelTab("structure")}
+                      >
+                        ✓ Return to Structure Inspector
+                      </button>
+                    </div>
+                  )}
                 </div>
               ) : (
                 /* MINIMIZED FLOATING PILL AT TOP-RIGHT */
