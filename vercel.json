@@ -10,6 +10,10 @@
     { "source": "/code", "destination": "/api/code.js" },
     { "source": "/api/studyplan", "destination": "/api/studyplan.js" },
     { "source": "/studyplan", "destination": "/api/studyplan.js" },
+    { "source": "/api/auth", "destination": "/api/auth.js" },
+    { "source": "/auth", "destination": "/api/auth.js" },
+    { "source": "/api/sync", "destination": "/api/sync.js" },
+    { "source": "/sync", "destination": "/api/sync.js" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
