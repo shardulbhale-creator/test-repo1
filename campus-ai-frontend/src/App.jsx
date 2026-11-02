@@ -212,6 +212,25 @@ function App() {
     return Math.round((degreeCompletedCount / degreeModuleIds.length) * 100);
   }, [degreeCompletedCount, degreeModuleIds]);
 
+  // Overview Course & Study Material Explorer State
+  const [overviewSubjectId, setOverviewSubjectId] = useState(null);
+  const [overviewActiveTab, setOverviewActiveTab] = useState("modules");
+  const [overviewStageFilter, setOverviewStageFilter] = useState("All Stages");
+
+  const currentOverviewSubject = useMemo(() => {
+    if (!overviewSubjectId) return null;
+    return degreeSubjects.find((s) => s.id === overviewSubjectId) || null;
+  }, [degreeSubjects, overviewSubjectId]);
+
+  const overviewFilteredSubjects = useMemo(() => {
+    return degreeSubjects.filter((s) => {
+      if (overviewStageFilter && overviewStageFilter !== "All Stages") {
+        return s.stage === overviewStageFilter;
+      }
+      return true;
+    });
+  }, [degreeSubjects, overviewStageFilter]);
+
   // Dynamic Specialized Experiential Lab Configuration matching active degree
   const activeLabConfig = useMemo(() => {
     switch (selectedDegreeId) {
@@ -285,7 +304,9 @@ function App() {
     };
     saveStudent(updated);
     setSelectedSubjectId(null);
+    setOverviewSubjectId(null);
     setSelectedStageFilter("All Stages");
+    setOverviewStageFilter("All Stages");
     setQuizStageFilter("All Stages");
     setSubjectSearch("");
     setDynamicQuizzes([]);
@@ -1053,11 +1074,6 @@ function App() {
               icon: activeLabConfig.icon,
               page: "Specialized Lab",
             },
-            {
-              name: "AI Assistant",
-              icon: "✳",
-              action: () => setIsFloatingAssistantOpen((prev) => !prev),
-            },
             { name: "My Notes", icon: "▤" },
             { name: "Quiz Lab", icon: "◎" },
           ].map((item) => {
@@ -1077,9 +1093,6 @@ function App() {
               >
                 <span className="nav-icon">{item.icon}</span>
                 {item.name}
-                {item.name === "AI Assistant" && isFloatingAssistantOpen && (
-                  <span className="nav-assistant-pill">Open</span>
-                )}
                 {isItemActive && <span className="active-dot" />}
               </button>
             );
@@ -1209,167 +1222,423 @@ function App() {
         </header>
 
         {/* =========================================================================
-            PAGE: OVERVIEW
+            PAGE: OVERVIEW — DEGREE COURSES & STUDY MATERIAL EXPLORER
             ========================================================================= */}
         {active === "Overview" && (
           <div className="page-container">
             <div className="eyebrow">
-              <span className="eyebrow-line" /> {currentDegreeProgram.shortName.toUpperCase()} · PERSONAL LEARNING SPACE
+              <span className="eyebrow-line" /> ACADEMIC DEGREE COURSES · STUDY MATERIAL &amp; SYLLABUS EXPLORER
             </div>
 
-            {/* HERO BANNER */}
-            <section className="overview-hero">
-              <div className="hero-main">
-                <h1>
-                  Welcome back, <span>{student.name}</span>.
-                </h1>
-                <p className="hero-subtitle">
-                  Enrolled in <strong>{currentDegreeProgram.title}</strong>. Your dashboard, subjects, and study materials are strictly personalized to <strong>{currentDegreeProgram.shortName}</strong>.
-                </p>
+            {/* 1. INTERACTIVE COURSE SELECTOR BAR */}
+            <section className="courses-explorer-bar">
+              <div className="courses-bar-header">
+                <div>
+                  <span className="courses-bar-eyebrow">CHOOSE DEGREE PROGRAM &amp; DISCIPLINE</span>
+                  <h2 className="courses-bar-title">Academic Courses &amp; University Pathways</h2>
+                </div>
+                <span className="courses-active-badge">
+                  Active Track: <strong>{currentDegreeProgram.shortName}</strong>
+                </span>
+              </div>
 
-                {/* Quick AI Search/Ask */}
-                <form className="hero-quick-prompt" onSubmit={handleFormSubmit}>
-                  <input
-                    value={question}
-                    onChange={(e) => setQuestion(e.target.value)}
-                    placeholder={`Ask Campus AI anything about ${currentDegreeProgram.shortName}...`}
-                  />
-                  <button type="submit">Ask AI ↗</button>
-                </form>
+              <div className="courses-tab-grid">
+                {DEGREE_PROGRAMS.map((dp) => {
+                  const isSelected = dp.id === selectedDegreeId;
+                  return (
+                    <button
+                      key={dp.id}
+                      type="button"
+                      className={`course-tab-card ${isSelected ? "selected" : ""}`}
+                      onClick={() => handleSelectDegree(dp.id)}
+                    >
+                      <div className="course-tab-icon-wrap">
+                        <span className="course-tab-icon">{dp.icon}</span>
+                        {isSelected && <span className="course-active-dot">● Active</span>}
+                      </div>
+                      <div className="course-tab-info">
+                        <div className="course-tab-name">{dp.shortName}</div>
+                        <div className="course-tab-years">{dp.years} Program</div>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </section>
 
-            {/* STATS ROW */}
-            <div className="stats-grid">
-              <div className="stat-card">
-                <div className="stat-icon teal">🎯</div>
-                <div className="stat-data">
-                  <h3>{degreeProgress}%</h3>
-                  <p>{currentDegreeProgram.shortName} Progress</p>
+            {/* 2. ACTIVE COURSE SHOWCASE & LAB QUICK LAUNCH */}
+            <section className="course-showcase-card">
+              <div className="showcase-left">
+                <div className="showcase-badge">
+                  <span>{currentDegreeProgram.icon}</span>
+                  <span>{currentDegreeProgram.shortName.toUpperCase()} ENROLLED CURRICULUM</span>
+                </div>
+                <h1 className="showcase-title">{currentDegreeProgram.title}</h1>
+                <p className="showcase-desc">
+                  Browse complete core syllabuses, clinical/technical lecture modules, key concepts, study notes, and specialized hands-on virtual labs for <strong>{currentDegreeProgram.shortName}</strong>.
+                </p>
+
+                <div className="showcase-actions">
+                  <button
+                    type="button"
+                    className="showcase-primary-btn"
+                    onClick={() => openPage("Specialized Lab")}
+                  >
+                    <span>{activeLabConfig.icon}</span>
+                    <span>Launch {activeLabConfig.navName} ↗</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="showcase-secondary-btn"
+                    onClick={() => openPage("Study Hub")}
+                  >
+                    <span>📚</span>
+                    <span>Full Study Hub ({degreeSubjects.length} Subjects)</span>
+                  </button>
                 </div>
               </div>
 
-              <div className="stat-card">
-                <div className="stat-icon cyan">📖</div>
-                <div className="stat-data">
-                  <h3>{degreeCompletedCount} / {degreeModuleIds.length}</h3>
-                  <p>Modules Mastered</p>
+              <div className="showcase-metrics">
+                <div className="showcase-metric-item">
+                  <span className="metric-val">{degreeProgress}%</span>
+                  <span className="metric-lbl">Curriculum Progress</span>
+                </div>
+                <div className="showcase-metric-item">
+                  <span className="metric-val">{degreeSubjects.length}</span>
+                  <span className="metric-lbl">Core Subjects</span>
+                </div>
+                <div className="showcase-metric-item">
+                  <span className="metric-val">{degreeCompletedCount} / {degreeModuleIds.length}</span>
+                  <span className="metric-lbl">Modules Mastered</span>
+                </div>
+                <div className="showcase-metric-item">
+                  <span className="metric-val">{student.quizScore} XP</span>
+                  <span className="metric-lbl">Knowledge XP</span>
                 </div>
               </div>
+            </section>
 
-              <div className="stat-card">
-                <div className="stat-icon amber">⚡</div>
-                <div className="stat-data">
-                  <h3>{student.quizScore} XP</h3>
-                  <p>Knowledge XP Score</p>
+            {/* 3. STUDY MATERIAL & SYLLABUS DIRECT EXPLORER */}
+            {overviewSubjectId && currentOverviewSubject ? (
+              /* INLINE SUBJECT STUDY MATERIAL & SYLLABUS VIEWER */
+              <section className="overview-subject-detail-view">
+                <div className="overview-detail-top-nav">
+                  <button
+                    type="button"
+                    className="overview-back-subjects-btn"
+                    onClick={() => setOverviewSubjectId(null)}
+                  >
+                    ← Back to {currentDegreeProgram.shortName} Subjects
+                  </button>
+                  <span className="overview-detail-hint">
+                    Viewing Modules &amp; Study Guide
+                  </span>
                 </div>
-              </div>
 
-              <div className="stat-card">
-                <div className="stat-icon indigo">📝</div>
-                <div className="stat-data">
-                  <h3>{notes.length}</h3>
-                  <p>Study Notes Saved</p>
-                </div>
-              </div>
-            </div>
+                <div className="subject-detail-header">
+                  <div>
+                    <div className="eyebrow">
+                      <span className="eyebrow-line" /> {currentOverviewSubject.category} · {currentOverviewSubject.level}
+                    </div>
+                    <h1 style={{ margin: "0 0 10px", fontSize: "30px", fontWeight: "800" }}>
+                      {currentOverviewSubject.icon} {currentOverviewSubject.title}
+                    </h1>
+                    <p style={{ margin: 0, color: "var(--text-muted)", maxWidth: "720px", lineHeight: "1.6" }}>
+                      {currentOverviewSubject.description}
+                    </p>
+                  </div>
 
-            {/* ACTIVE CAREER TRACK BANNER */}
-            <div className="active-track-banner">
-              <div className="track-banner-info">
-                <div className="track-banner-icon">{currentCareer.icon}</div>
-                <div className="track-banner-text">
-                  <div className="track-banner-tag">{currentDegreeProgram.shortName} Track</div>
-                  <h3>{currentCareer.title}</h3>
-                  <p>{currentCareer.tagline}</p>
-                </div>
-              </div>
-
-              <div className="track-progress-block">
-                <div className="progress-labels">
-                  <span>Curriculum Progress</span>
-                  <strong>{degreeProgress}%</strong>
-                </div>
-                <div className="progress-bar-track">
-                  <div
-                    className="progress-bar-fill"
-                    style={{ width: `${degreeProgress}%` }}
-                  />
-                </div>
-              </div>
-
-              <button
-                className="notes-add-button"
-                onClick={() => openPage("Study Hub")}
-              >
-                Continue Curriculum ↗
-              </button>
-            </div>
-
-            {/* FEATURED SPECIALIZED EXPERIENTIAL LAB BANNER */}
-            <div className="overview-lab-banner">
-              <div className="lab-banner-info">
-                <div className="lab-banner-icon">{activeLabConfig.icon}</div>
-                <div className="lab-banner-text">
-                  <div className="lab-banner-tag">{currentDegreeProgram.shortName} EXPERIENTIAL SUITE</div>
-                  <h3>{activeLabConfig.title}</h3>
-                  <p>{activeLabConfig.tagline}</p>
-                </div>
-              </div>
-              <button
-                type="button"
-                className="lab-launch-btn"
-                onClick={() => openPage("Specialized Lab")}
-              >
-                Launch {activeLabConfig.navName} ↗
-              </button>
-            </div>
-
-            {/* RECOMMENDED SUBJECTS FOR ACTIVE CAREER */}
-            <div className="section-header">
-              <div>
-                <h2>Core Subjects in {currentDegreeProgram.shortName}</h2>
-                <p>Showing foundational & specialized subjects for your {currentDegreeProgram.title} program.</p>
-              </div>
-              <button
-                className="view-all-link"
-                onClick={() => openPage("Study Hub")}
-              >
-                Browse all {degreeSubjects.length} subjects ↗
-              </button>
-            </div>
-
-            <div className="subjects-grid">
-              {degreeSubjects
-                .slice(0, 3)
-                .map((subject) => {
-                  const completedInSubject = subject.modules.filter((m) =>
-                    student.completedModules.includes(m.id)
-                  ).length;
-                  return (
-                    <article
-                      key={subject.id}
-                      className="subject-card"
-                      onClick={() => openSubjectDetail(subject.id)}
+                  <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
+                    <button
+                      type="button"
+                      className="notes-add-button"
+                      onClick={() => {
+                        sendMessage(`Give me a high-yield academic study breakdown of "${currentOverviewSubject.title}" covering key principles, exam pitfalls, and clinical/technical scenarios.`);
+                        setIsFloatingAssistantOpen(true);
+                      }}
                     >
-                      <div className="subject-card-top">
-                        <span className="subject-icon">{subject.icon}</span>
-                        <span className="subject-category-badge">
-                          {subject.category}
-                        </span>
-                      </div>
-                      <h3>{subject.title}</h3>
-                      <p className="subject-desc">{subject.description}</p>
-                      <div className="subject-card-footer">
-                        <span>
-                          {completedInSubject}/{subject.modules.length} Modules Done
-                        </span>
-                        <span className="subject-action-arrow">Study ↗</span>
-                      </div>
-                    </article>
-                  );
-                })}
-            </div>
+                      Ask AI Overview ↗
+                    </button>
+                  </div>
+                </div>
+
+                {/* Tabs */}
+                <div className="subject-tabs">
+                  <button
+                    type="button"
+                    className={`subject-tab ${
+                      overviewActiveTab === "modules" ? "active" : ""
+                    }`}
+                    onClick={() => setOverviewActiveTab("modules")}
+                  >
+                    Curriculum Modules ({currentOverviewSubject.modules.length})
+                  </button>
+                  <button
+                    type="button"
+                    className={`subject-tab ${
+                      overviewActiveTab === "quiz" ? "active" : ""
+                    }`}
+                    onClick={() => setOverviewActiveTab("quiz")}
+                  >
+                    Practice Assessment ({currentOverviewSubject.quiz.length})
+                  </button>
+                </div>
+
+                {/* MODULES LIST */}
+                {overviewActiveTab === "modules" && (
+                  <div className="modules-list">
+                    {currentOverviewSubject.modules.map((mod, idx) => {
+                      const isDone = student.completedModules.includes(mod.id);
+                      return (
+                        <div
+                          key={mod.id}
+                          className={`module-card ${isDone ? "completed" : ""}`}
+                        >
+                          <div className="module-card-header">
+                            <h4>
+                              {idx + 1}. {mod.title}
+                            </h4>
+                            <span className="module-duration">⏱ {mod.duration}</span>
+                          </div>
+
+                          <p className="module-summary">{mod.summary}</p>
+
+                          <div className="module-takeaways">
+                            {mod.keyConcepts.map((kc) => (
+                              <span key={kc} className="takeaway-tag">
+                                {kc}
+                              </span>
+                            ))}
+                          </div>
+
+                          <div className="module-actions">
+                            <button
+                              type="button"
+                              className={`module-complete-toggle ${
+                                isDone ? "is-done" : ""
+                              }`}
+                              onClick={() => toggleModuleCompletion(mod.id)}
+                            >
+                              {isDone ? "✓ Completed (+25 XP)" : "◯ Mark Complete"}
+                            </button>
+
+                            <div className="module-extra-actions">
+                              <button
+                                type="button"
+                                className="study-ai-btn"
+                                onClick={() => {
+                                  sendMessage(mod.samplePrompt);
+                                  setIsFloatingAssistantOpen(true);
+                                }}
+                              >
+                                Study with AI ↗
+                              </button>
+                              <button
+                                type="button"
+                                className="take-note-btn"
+                                onClick={() =>
+                                  openNewNoteEditor(
+                                    currentOverviewSubject.category,
+                                    mod.title
+                                  )
+                                }
+                              >
+                                Take Note ✎
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* SUBJECT QUIZ */}
+                {overviewActiveTab === "quiz" && (
+                  <div className="quiz-container" style={{ marginTop: "20px" }}>
+                    <div className="subject-quiz-toolbar">
+                      <button
+                        type="button"
+                        className="generate-subject-ai-quiz-btn"
+                        onClick={() => {
+                          openPage("Quiz Lab");
+                          setQuizCustomTopic(currentOverviewSubject.title);
+                          handleGenerateQuiz(currentOverviewSubject.title);
+                        }}
+                      >
+                        ⚡ Generate AI Quiz on &quot;{currentOverviewSubject.title}&quot; ↗
+                      </button>
+                    </div>
+
+                    {currentOverviewSubject.quiz.map((q, qIndex) => {
+                      const qKey = `overview-${currentOverviewSubject.id}-${qIndex}`;
+                      const chosen = quizAnswers[qKey];
+                      return (
+                        <div key={qKey} className="quiz-card">
+                          <div className="quiz-question-header">
+                            Question {qIndex + 1} of {currentOverviewSubject.quiz.length}
+                          </div>
+                          <h3>{q.question}</h3>
+
+                          <div className="quiz-options">
+                            {q.options.map((opt, optIndex) => {
+                              let optClass = "";
+                              if (chosen !== undefined) {
+                                if (optIndex === q.correctIndex) {
+                                  optClass = "correct";
+                                } else if (chosen === optIndex) {
+                                  optClass = "incorrect";
+                                }
+                              }
+                              return (
+                                <button
+                                  key={optIndex}
+                                  type="button"
+                                  className={`quiz-option ${optClass}`}
+                                  disabled={chosen !== undefined}
+                                  onClick={() =>
+                                    handleSelectQuizAnswer(
+                                      qKey,
+                                      optIndex,
+                                      q.correctIndex
+                                    )
+                                  }
+                                >
+                                  <span style={{ opacity: 0.6 }}>
+                                    {["A", "B", "C", "D"][optIndex]}.
+                                  </span>{" "}
+                                  {opt}
+                                </button>
+                              );
+                            })}
+                          </div>
+
+                          {chosen !== undefined && (
+                            <div className="quiz-explanation">
+                              <strong>
+                                {chosen === q.correctIndex
+                                  ? "✓ Correct (+50 XP)!"
+                                  : "Incorrect."}
+                              </strong>{" "}
+                              {q.explanation}
+                              <div style={{ marginTop: "10px" }}>
+                                <button
+                                  type="button"
+                                  className="quiz-explain-btn"
+                                  onClick={() => {
+                                    sendMessage(
+                                      `In ${currentOverviewSubject.title}, please explain why the correct answer to "${q.question}" is "${q.options[q.correctIndex]}". Detail key takeaways and high-yield insights.`
+                                    );
+                                    setIsFloatingAssistantOpen(true);
+                                  }}
+                                >
+                                  Ask AI for In-Depth Explanation ↗
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
+            ) : (
+              /* SUBJECTS & STUDY MATERIALS GRID */
+              <section className="overview-study-materials-grid-section">
+                {/* STAGE FILTERS */}
+                {currentDegreeProgram.stages && currentDegreeProgram.stages.length > 0 && (
+                  <div className="overview-stages-bar">
+                    <span className="overview-stages-label">Filter by Stage / Year:</span>
+                    <div className="overview-stages-pills">
+                      {currentDegreeProgram.stages.map((stg) => (
+                        <button
+                          key={stg}
+                          type="button"
+                          className={`overview-stage-pill ${
+                            overviewStageFilter === stg ? "active" : ""
+                          }`}
+                          onClick={() => setOverviewStageFilter(stg)}
+                        >
+                          {stg}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="section-header">
+                  <div>
+                    <h2>Study Material &amp; Core Subjects — {currentDegreeProgram.shortName}</h2>
+                    <p>Click any subject card below to view its syllabus modules, key concepts, study notes, and AI breakdowns.</p>
+                  </div>
+                  <span className="study-material-count-pill">
+                    {overviewFilteredSubjects.length} of {degreeSubjects.length} Subjects
+                  </span>
+                </div>
+
+                <div className="subjects-grid">
+                  {overviewFilteredSubjects.map((subject) => {
+                    const completedInSubject = subject.modules.filter((m) =>
+                      student.completedModules.includes(m.id)
+                    ).length;
+                    const progressPct = Math.round(
+                      (completedInSubject / subject.modules.length) * 100
+                    );
+                    return (
+                      <article
+                        key={subject.id}
+                        className="subject-card"
+                        onClick={() => {
+                          setOverviewSubjectId(subject.id);
+                          setOverviewActiveTab("modules");
+                        }}
+                      >
+                        <div className="subject-card-top">
+                          <span className="subject-icon">{subject.icon}</span>
+                          <div className="subject-badges">
+                            <span className="subject-category-badge">
+                              {subject.category}
+                            </span>
+                            {subject.stage && (
+                              <span className="subject-stage-badge">
+                                {subject.stage}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <h3>{subject.title}</h3>
+                        <p className="subject-desc">{subject.description}</p>
+
+                        <div className="subject-mini-progress">
+                          <div className="subject-mini-labels">
+                            <span>Curriculum Modules</span>
+                            <strong>
+                              {completedInSubject}/{subject.modules.length} Done ({progressPct}%)
+                            </strong>
+                          </div>
+                          <div className="subject-mini-bar">
+                            <div
+                              className="subject-mini-fill"
+                              style={{ width: `${progressPct}%` }}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="subject-card-footer">
+                          <span>
+                            ◎ {subject.quiz.length} Quiz (+50 XP)
+                          </span>
+                          <span className="subject-action-arrow">Open Study Material ↗</span>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
           </div>
         )}
 
