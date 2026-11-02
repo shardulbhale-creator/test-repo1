@@ -7824,3 +7824,254 @@
   margin: 0;
 }
 
+/* ==========================================================================
+   COMPREHENSIVE DOSSIER SUBNAV & TEXTBOOK MODULE STYLES
+   ========================================================================== */
+.dossier-subnav-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding: 6px;
+  background: #090c14;
+  border: 1px solid #1c2338;
+  border-radius: var(--radius-md);
+}
+
+.dossier-subnav-pill {
+  padding: 7px 14px;
+  background: #111522;
+  border: 1px solid #20273c;
+  border-radius: var(--radius-sm);
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.dossier-subnav-pill:hover {
+  background: rgba(220, 38, 38, 0.15);
+  border-color: rgba(220, 38, 38, 0.4);
+  color: #ffffff;
+}
+
+.dossier-subnav-pill.active {
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.4) 0%, rgba(153, 27, 27, 0.6) 100%);
+  border-color: #ef4444;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(220, 38, 38, 0.35);
+}
+
+.dossier-expanded-section {
+  background: #0a0d18;
+  border: 1px solid #1b2339;
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+  margin-bottom: 18px;
+}
+
+.section-title-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #1a2236;
+}
+
+.section-icon {
+  font-size: 16px;
+}
+
+.section-title-strip h3 {
+  font-size: 15px;
+  font-weight: 800;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.architecture-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.arch-meta-card {
+  background: #06080e;
+  border: 1px solid #182033;
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+
+.arch-meta-title {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #38bdf8;
+  margin-bottom: 4px;
+}
+
+.arch-meta-card p {
+  font-size: 12.5px;
+  color: #cbd5e1;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.neuro-breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.neuro-card {
+  background: #06080e;
+  border: 1px solid #1c253d;
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.neuro-label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #f59e0b;
+  margin-bottom: 6px;
+}
+
+.neuro-card p {
+  font-size: 13px;
+  color: #e2e8f0;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ==========================================================================
+   HEADS BREAKDOWN, BEDSIDE EXAM & VIVA VOCE STYLES
+   ========================================================================== */
+.spotlight-heads-container {
+  margin-bottom: 16px;
+  background: #070910;
+  border: 1px solid #192033;
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.heads-title {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #f59e0b;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.heads-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.head-card {
+  background: #0d111d;
+  border: 1px solid #202942;
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.head-name {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.head-detail {
+  font-size: 11.5px;
+  color: #94a3b8;
+  line-height: 1.45;
+  margin-bottom: 3px;
+}
+
+.head-detail strong {
+  color: #e2e8f0;
+}
+
+.spotlight-functional-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.functional-col {
+  background: #07090e;
+  border: 1px solid #1a2032;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+.functional-col strong {
+  color: #38bdf8;
+}
+
+.spotlight-bedside-box {
+  background: rgba(16, 185, 129, 0.08);
+  border-left: 3px solid #10b981;
+  padding: 13px 18px;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 12px;
+}
+
+.bedside-badge {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #34d399;
+  margin-bottom: 4px;
+}
+
+.spotlight-bedside-box p {
+  font-size: 12.5px;
+  color: #d1fae5;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.spotlight-viva-box {
+  background: rgba(245, 158, 11, 0.08);
+  border-left: 3px solid #f59e0b;
+  padding: 13px 18px;
+  border-radius: 0 6px 6px 0;
+  margin-top: 12px;
+}
+
+.viva-badge {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #fbbf24;
+  margin-bottom: 6px;
+}
+
+.viva-question {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #fef08a;
+  margin-bottom: 4px;
+  line-height: 1.45;
+}
+
+.viva-answer {
+  font-size: 12.5px;
+  color: #fde68a;
+  line-height: 1.55;
+}
+
+

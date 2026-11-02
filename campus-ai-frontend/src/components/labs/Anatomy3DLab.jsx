@@ -2,25 +2,54 @@ import { useState } from "react";
 
 // ============================================================================
 // HIGH-YIELD MUSCLES DIRECTORY: ORIGIN, INSERTION, ACTION & INNERVATION (O.I.A.I.)
-// Core medical school & board exam reference database (USMLE / NEET-PG / PLAB)
+// Exhaustive medical school & board exam reference database (USMLE / NEET-PG / PLAB)
 // ============================================================================
 const HIGH_YIELD_MUSCLES_DIRECTORY = [
   {
     id: "trapezius-muscle",
     name: "Trapezius (Ascending, Middle & Descending)",
-    region: "Posterior Neck & Back",
+    region: "Posterior Neck & Upper Back",
     latin: "Musculus trapezius",
     fmaId: "FMA:9626",
+    heads: [
+      {
+        name: "Ascending (Inferior) Fibers",
+        origin: "Spinous processes of T4–T12 vertebrae and supraspinous ligaments.",
+        insertion: "Smooth triangular tubercle on the apex of the spine of the scapula.",
+        action: "Depresses scapula and assists upward rotation of glenoid during overhead arm elevation.",
+      },
+      {
+        name: "Middle (Transverse) Fibers",
+        origin: "Spinous processes of C7–T3 vertebrae and supraspinous ligaments.",
+        insertion: "Medial margin of the acromion and superior lip of the crest of the scapular spine.",
+        action: "Retracts (adducts) scapula toward midline; stabilizes scapula against thoracic cage.",
+      },
+      {
+        name: "Descending (Superior) Fibers",
+        origin: "External occipital protuberance, medial 1/3 of superior nuchal line, ligamentum nuchae, C7 spine.",
+        insertion: "Posterior border of the lateral 1/3 of the clavicle.",
+        action: "Elevates pectoral girdle; upwardly rotates scapula; extends and laterally flexes neck.",
+      },
+    ],
     origin:
-      "External occipital protuberance, medial 1/3 of superior nuchal line, ligamentum nuchae, and spinous processes of C7–T12 vertebrae (Ascending part: T4–T12 spines).",
+      "External occipital protuberance, medial third of superior nuchal line, ligamentum nuchae, and spinous processes of C7–T12 vertebrae (Ascending part: T4–T12 spines).",
     insertion:
-      "Ascending (inferior) part: tubercle at apex of scapular spine. Middle part: medial acromion and superior lip of spine. Descending part: posterior border of lateral 1/3 of clavicle.",
+      "Lateral third of posterior border of clavicle, medial margin of acromion, and superior lip of spine of scapula to apex tubercle.",
     action:
-      "Ascending part: depresses scapula and assists upward rotation. Descending part: elevates scapula. Middle part: retracts scapula. Together: upwardly rotates glenoid cavity for arm abduction >90°.",
-    innervation: "Motor: Spinal Accessory Nerve (CN XI). Sensory / Proprioception: Ventral rami of C3 and C4 cervical nerves.",
-    bloodSupply: "Transverse Cervical Artery (superficial branch), Dorsal Scapular Artery, Posterior Intercostal Arteries.",
+      "Ascending fibers depress scapula; Descending fibers elevate scapula; Middle fibers retract scapula; Upper + lower fibers act as a force couple with Serratus Anterior to rotate glenoid cavity superiorly for abduction >90°.",
+    synergists: "Serratus Anterior (upward rotation), Levator Scapulae (elevation), Rhomboid major & minor (retraction).",
+    antagonists: "Pectoralis Minor & Serratus Anterior (protraction vs retraction), Latissimus Dorsi (depression vs elevation), Rhomboids (downward rotation vs upward rotation).",
+    innervation: "Motor: Spinal Accessory Nerve (Cranial Nerve XI). Sensory / Proprioception: Ventral rami of C3 and C4 cervical spinal nerves.",
+    bloodSupply: "Superficial branch of Transverse Cervical Artery (cervicodorsal trunk), Dorsal Scapular Artery, Posterior Intercostal Arteries.",
+    lymphatics: "Drains into Superficial Cervical and Supraclavicular lymph node chains.",
+    bedsideTest:
+      "1. Superior fibers: Ask patient to shrug shoulders upward against examiner's downward manual resistance. 2. Middle fibers: Ask patient to pull shoulders backward ('brace chest') against anterior resistance. 3. Inferior fibers: Patient abducts arm to 130° and presses downward against upward resistance.",
     clinicalPearl:
-      "Spinal Accessory Nerve (CN XI) is vulnerable to iatrogenic transection during posterior cervical triangle lymph node biopsy. Damage causes Shoulder Droop, weakness in shrugging against resistance, and impaired abduction above 90° with lateral scapular winging.",
+      "Spinal Accessory Nerve (CN XI) is vulnerable to iatrogenic injury during posterior cervical triangle lymph node biopsy. Laceration causes Shoulder Droop, inability to abduct the arm above 90°, and Lateral Scapular Winging (scapula shifts downward and laterally).",
+    vivaQuestion: {
+      q: "Why is the Spinal Accessory Nerve uniquely vulnerable in the neck, and how does Trapezius winging differ from Serratus Anterior winging?",
+      a: "CN XI runs superficially in the roof of the posterior cervical triangle just beneath the investing layer of deep cervical fascia with no muscular roof. Trapezius paralysis produces Lateral Winging (scapular spine shifts down and away from midline), whereas Serratus Anterior paralysis (Long Thoracic Nerve) produces Medial Winging (vertebral border lifts posteriorly toward midline).",
+    },
   },
   {
     id: "deltoid-muscle",
@@ -28,15 +57,44 @@ const HIGH_YIELD_MUSCLES_DIRECTORY = [
     region: "Shoulder",
     latin: "Musculus deltoideus",
     fmaId: "FMA:9622",
+    heads: [
+      {
+        name: "Anterior (Clavicular) Head",
+        origin: "Anterior border and superior surface of lateral 1/3 of clavicle.",
+        insertion: "Deltoid tuberosity on lateral middle humerus shaft.",
+        action: "Flexes and medially (internally) rotates the humerus at the glenohumeral joint.",
+      },
+      {
+        name: "Middle (Acromial) Head (Multipennate)",
+        origin: "Lateral margin and superior surface of acromion of scapula.",
+        insertion: "Deltoid tuberosity of humerus.",
+        action: "Chief powerful abductor of the arm from 15° to 90°.",
+      },
+      {
+        name: "Posterior (Spinal) Head",
+        origin: "Inferior lip of the posterior border of the crest of the scapular spine.",
+        insertion: "Deltoid tuberosity of humerus.",
+        action: "Extends and laterally (externally) rotates the humerus.",
+      },
+    ],
     origin:
-      "Anterior fibers: lateral 1/3 of clavicle. Middle fibers: lateral acromion. Posterior fibers: lower lip of spine of scapula.",
-    insertion: "Deltoid tuberosity on the lateral aspect of middle humerus shaft.",
+      "Anterior: lateral 1/3 of clavicle. Middle: lateral border of acromion. Posterior: lower lip of crest of spine of scapula.",
+    insertion: "Deltoid tuberosity on the lateral aspect of the middle shaft of humerus.",
     action:
-      "Middle fibers: primary powerful arm abductor from 15° to 90°. Anterior fibers: flexes and medially rotates humerus. Posterior fibers: extends and laterally rotates humerus.",
-    innervation: "Axillary Nerve (C5, C6) from posterior cord of brachial plexus.",
-    bloodSupply: "Posterior Circumflex Humeral Artery, deltoid branch of thoracoacromial artery.",
+      "Middle head: powerful arm abduction between 15° and 90° (multipennate architecture). Anterior head: flexion and medial rotation. Posterior head: extension and lateral rotation.",
+    synergists: "Supraspinatus (initiates first 0°–15° abduction), Pectoralis major (anterior head flexion), Latissimus dorsi (posterior head extension).",
+    antagonists: "Pectoralis Major, Latissimus Dorsi, Teres Major (adduction).",
+    innervation: "Axillary Nerve (C5, C6) originating from the posterior cord of the brachial plexus.",
+    bloodSupply: "Posterior Circumflex Humeral Artery (passes through quadrangular space), Deltoid branch of Thoracoacromial Artery.",
+    lymphatics: "Drains to Subscapular and Central Axillary lymph nodes.",
+    bedsideTest:
+      "Patient abducts arm to 90° in the scapular plane with elbow flexed; examiner applies downward force on distal humerus while palpating middle deltoid contraction.",
     clinicalPearl:
-      "Surgical neck fracture of humerus or anterior shoulder dislocation injures the Axillary Nerve, producing deltoid atrophy, loss of abduction (15°–90°), and anesthesia over the lateral shoulder ('regimental badge area').",
+      "Fracture of the surgical neck of the humerus or anterior shoulder dislocation damages the Axillary Nerve, causing deltoid muscle paralysis, loss of arm abduction (15°–90°), and cutaneous sensory anesthesia over the 'regimental badge area' (lateral shoulder).",
+    vivaQuestion: {
+      q: "What anatomical boundary structures define the Quadrangular Space, and what vital structures pass through it?",
+      a: "Boundaries: Superior: Teres minor; Inferior: Teres major; Medial: Long head of triceps; Lateral: Surgical neck of humerus. Contents: Axillary nerve and Posterior Circumflex Humeral Artery and veins.",
+    },
   },
   {
     id: "biceps-muscle",
@@ -44,15 +102,38 @@ const HIGH_YIELD_MUSCLES_DIRECTORY = [
     region: "Anterior Arm",
     latin: "Musculus biceps brachii",
     fmaId: "FMA:37670",
+    heads: [
+      {
+        name: "Long Head (Intracapsular)",
+        origin: "Supraglenoid tubercle of scapula and superior glenoid labrum.",
+        insertion: "Radial tuberosity and bicipital aponeurosis.",
+        action: "Weak shoulder flexion; stabilizes humeral head in glenoid during arm motion.",
+      },
+      {
+        name: "Short Head",
+        origin: "Tip of the coracoid process of the scapula (conjoint tendon with coracobrachialis).",
+        insertion: "Radial tuberosity of radius and deep fascia of medial forearm.",
+        action: "Elbow flexion and powerful forearm supination; accessory shoulder flexion and adduction.",
+      },
+    ],
     origin:
-      "Long head: supraglenoid tubercle of scapula (crosses through shoulder joint capsule). Short head: tip of coracoid process of scapula.",
-    insertion: "Radial tuberosity of radius and bicipital aponeurosis into deep fascia of medial forearm.",
+      "Long head: supraglenoid tubercle of scapula (crosses intracapsularly over humeral head, through bicipital groove). Short head: tip of coracoid process of scapula.",
+    insertion: "Radial tuberosity of radius and bicipital aponeurosis (lacertus fibrosus) into deep medial forearm fascia.",
     action:
-      "Chief powerful supinator of the flexed forearm; flexor of the elbow joint; weak accessory flexor of the shoulder joint.",
-    innervation: "Musculocutaneous Nerve (C5, C6).",
-    bloodSupply: "Muscular branches of Brachial Artery.",
+      "Most powerful supinator of the flexed forearm (screwing/corkscrew motion); powerful flexor of elbow joint; weak accessory flexor of shoulder joint.",
+    synergists: "Brachialis (pure elbow flexor in all forearm positions), Supinator (pure supination), Brachioradialis.",
+    antagonists: "Triceps Brachii (elbow extension), Pronator Teres and Pronator Quadratus (forearm pronation).",
+    innervation: "Musculocutaneous Nerve (C5, C6) from the lateral cord of the brachial plexus; terminates as Lateral Antebrachial Cutaneous Nerve.",
+    bloodSupply: "Muscular branches of the Brachial Artery.",
+    lymphatics: "Drains into Brachial (Lateral) and Central Axillary lymph node groups.",
+    bedsideTest:
+      "1. Supination test: Patient flexes elbow to 90° with forearm fully pronated; patient forcefully supinates against examiner's resistance. 2. Biceps tendon reflex (evaluates C5–C6 spinal roots).",
     clinicalPearl:
-      "Biceps tendon reflex evaluates C5–C6 spinal cord integrity. Rupture of the long head tendon causes a prominent distal muscle bulge ('Popeye muscle deformity').",
+      "Rupture of the long head of the biceps tendon (often at proximal bicipital groove) produces the classic 'Popeye Muscle Deformity'—a prominent bulging muscle belly in the distal anterior arm with proximal ecchymosis.",
+    vivaQuestion: {
+      q: "Why is the Biceps Brachii a more powerful supinator when the elbow is flexed at 90° compared to when fully extended?",
+      a: "When the elbow is flexed at 90°, the radial tuberosity is oriented so the biceps tendon pulls at a perpendicular (90°) mechanical angle to the axis of rotation of the radius, generating maximum torque.",
+    },
   },
   {
     id: "triceps-muscle",
@@ -60,14 +141,43 @@ const HIGH_YIELD_MUSCLES_DIRECTORY = [
     region: "Posterior Arm",
     latin: "Musculus triceps brachii",
     fmaId: "FMA:37688",
+    heads: [
+      {
+        name: "Long Head",
+        origin: "Infraglenoid tubercle of scapula.",
+        insertion: "Olecranon process of ulna.",
+        action: "Elbow extension; adducts humerus; stabilizes abducted glenohumeral joint.",
+      },
+      {
+        name: "Lateral Head",
+        origin: "Posterior surface of humerus superior to the radial (spiral) groove and lateral intermuscular septum.",
+        insertion: "Olecranon process of ulna.",
+        action: "Powerful elbow extension against high load.",
+      },
+      {
+        name: "Medial Head (Deep 'Workhorse')",
+        origin: "Posterior surface of humerus inferior to the radial groove and medial intermuscular septum.",
+        insertion: "Olecranon process of ulna.",
+        action: "Active in all forms of forearm extension, even against minimal resistance.",
+      },
+    ],
     origin:
       "Long head: infraglenoid tubercle of scapula. Lateral head: posterior humerus above radial groove. Medial head: posterior humerus below radial groove.",
-    insertion: "Proximal surface of olecranon process of ulna and deep fascia of forearm.",
-    action: "Chief powerful extensor of the forearm at the elbow joint; long head stabilizes abducted shoulder joint and assists extension/adduction.",
-    innervation: "Radial Nerve (C6, C7, C8).",
-    bloodSupply: "Profunda Brachii (deep brachial) Artery and superior ulnar collateral artery.",
+    insertion: "Superior posterior surface of the olecranon process of the ulna and deep fascia of forearm.",
+    action: "Chief powerful extensor of the forearm at the elbow joint; long head assists in adduction and extension of the shoulder joint.",
+    synergists: "Anconeus (assists extension and stabilizes elbow).",
+    antagonists: "Biceps Brachii, Brachialis, Brachioradialis (elbow flexors).",
+    innervation: "Radial Nerve (C6, C7, C8). Note: Branches to long and lateral heads emerge high in the axilla before entering the spiral groove.",
+    bloodSupply: "Profunda Brachii (deep brachial) Artery and Superior Ulnar Collateral Artery.",
+    lymphatics: "Drains into Lateral (Humeral) and Subscapular Axillary lymph nodes.",
+    bedsideTest:
+      "Patient flexes elbow to 90° and extends forearm against resistance applied at the distal wrist; Triceps deep tendon reflex (tests C7–C8).",
     clinicalPearl:
-      "Triceps deep tendon reflex evaluates C7–C8 nerve roots. Sparing of triceps extension in midshaft humeral fracture occurs because branches to long/lateral heads emerge proximal to the radial groove.",
+      "In mid-shaft humeral fractures injuring the Radial Nerve in the spiral groove, triceps extension is preserved because the nerve branches to long and lateral heads arise proximal to the spiral groove in the axilla. Wrist drop is present, but elbow extension remains intact.",
+    vivaQuestion: {
+      q: "Explain why elbow extension is spared in a patient with mid-shaft humeral fracture presenting with complete wrist drop.",
+      a: "The motor branches of the radial nerve to the long and lateral heads of the triceps brachii arise high in the axilla, proximal to the entrance into the radial (spiral) groove where midshaft fractures occur.",
+    },
   },
   {
     id: "pectoralis-major-muscle",
@@ -75,31 +185,78 @@ const HIGH_YIELD_MUSCLES_DIRECTORY = [
     region: "Anterior Chest Wall",
     latin: "Musculus pectoralis major",
     fmaId: "FMA:9627",
+    heads: [
+      {
+        name: "Clavicular Head",
+        origin: "Anterior surface of the medial half of the clavicle.",
+        insertion: "Lateral lip of the intertubercular (bicipital) groove of the humerus.",
+        action: "Flexes and medially rotates the humerus; horizontal adduction.",
+      },
+      {
+        name: "Sternocostal Head",
+        origin: "Anterior surface of sternum, superior 6 costal cartilages, and aponeurosis of external abdominal oblique.",
+        insertion: "Lateral lip of bicipital groove of humerus (bilaminar tendon).",
+        action: "Adducts and medially rotates humerus; extends flexed arm back to anatomical neutral.",
+      },
+    ],
     origin:
-      "Clavicular head: anterior surface of medial half of clavicle. Sternocostal head: anterior sternum, superior 6 costal cartilages, and aponeurosis of external oblique.",
-    insertion: "Lateral lip of intertubercular (bicipital) groove of humerus.",
+      "Clavicular head: anterior medial half of clavicle. Sternocostal head: sternum, upper 6 costal cartilages, and external oblique aponeurosis.",
+    insertion: "Lateral lip of the intertubercular (bicipital) groove of humerus via a bilaminar, U-shaped tendon.",
     action:
-      "Adducts and medially rotates humerus; clavicular head flexes humerus; sternocostal head extends flexed humerus back to neutral.",
-    innervation: "Lateral Pectoral Nerve (C5–C7) and Medial Pectoral Nerve (C8, T1).",
-    bloodSupply: "Pectoral branch of thoracoacromial trunk, lateral thoracic artery.",
+      "Powerful adduction and medial rotation of the arm; clavicular head flexes humerus; sternocostal head extends flexed humerus; accessory muscle of inspiration in respiratory distress.",
+    synergists: "Latissimus Dorsi, Teres Major, Subscapularis (adduction & medial rotation).",
+    antagonists: "Deltoid, Infraspinatus, Teres Minor, Supraspinatus.",
+    innervation: "Lateral Pectoral Nerve (C5, C6, C7) and Medial Pectoral Nerve (C8, T1) passing through pectoralis minor.",
+    bloodSupply: "Pectoral branch of the Thoracoacromial Artery, Lateral Thoracic Artery, and anterior perforating branches of Internal Thoracic Artery.",
+    lymphatics: "Drains into Pectoral (Anterior) Axillary lymph node group and Parasternal (internal mammary) nodes.",
+    bedsideTest:
+      "1. Clavicular head: Patient flexes arm forward to 90° and horizontally adducts against resistance. 2. Sternocostal head: Patient adducts horizontally abducted arm downwards and across chest against resistance.",
     clinicalPearl:
-      "Poland syndrome is congenital absence of the sternocostal head of pectoralis major, associated with ipsilateral syndactyly (fused fingers) and hypoplasia of breast tissue.",
+      "Poland Syndrome is a congenital condition characterized by unilateral absence of the sternocostal head of the Pectoralis Major, accompanied by ipsilateral syndactyly (fused fingers) and hypoplasia of breast and nipple tissue.",
+    vivaQuestion: {
+      q: "What anatomical structures pierce the clavipectoral fascia in the deltopectoral triangle?",
+      a: "1. Cephalic vein (draining into axillary vein), 2. Thoracoacromial artery (branches), 3. Lateral pectoral nerve, 4. Lymphatic vessels from infraclavicular nodes.",
+    },
   },
   {
     id: "latissimus-dorsi-muscle",
     name: "Latissimus Dorsi",
-    region: "Posterior Trunk",
+    region: "Posterior Trunk & Lower Back",
     latin: "Musculus latissimus dorsi",
     fmaId: "FMA:9628",
+    heads: [
+      {
+        name: "Vertebral & Fascial Origin",
+        origin: "Spinous processes of T7–T12 vertebrae, thoracolumbar fascia, and posterior 1/3 of outer lip of iliac crest.",
+        insertion: "Floor of the bicipital groove of the humerus.",
+        action: "Powerful humerus extension, adduction, and internal rotation.",
+      },
+      {
+        name: "Costal & Scapular Digitations",
+        origin: "Lower 3 or 4 ribs and inferior angle of the scapula.",
+        insertion: "Floor of bicipital groove anterior to teres major.",
+        action: "Pulls trunk upward and forward during climbing and chin-ups.",
+      },
+    ],
     origin:
-      "Spinous processes T7–T12, thoracolumbar fascia, iliac crest, lower 3–4 ribs, and inferior angle of scapula.",
-    insertion: "Floor of intertubercular (bicipital) groove of humerus (lies between pectoralis major and teres major: 'Lady between two majors').",
+      "Spinous processes of T7–T12, thoracolumbar fascia, posterior third of iliac crest, lower 3–4 ribs, and inferior angle of scapula.",
+    insertion:
+      "Floor of the intertubercular (bicipital) groove of the humerus (mnemonic: 'A lady between two majors'—Latissimus lies between Pectoralis Major laterally and Teres Major medially).",
     action:
-      "Extends, adducts, and medially rotates humerus; pulls trunk superiorly during climbing ('climber's muscle'); assists in forceful expiration (coughing).",
-    innervation: "Thoracodorsal Nerve (C6, C7, C8) from posterior cord of brachial plexus.",
-    bloodSupply: "Thoracodorsal Artery (branch of subscapular artery).",
+      "Extends, adducts, and medially rotates the humerus; pulls trunk superiorly during climbing ('climber's muscle'); acts as an expulsive coughing muscle by compressing lower ribs.",
+    synergists: "Teres Major (shares identical movements), Pectoralis Major (sternal head), Triceps (long head).",
+    antagonists: "Deltoid (middle & anterior), Supraspinatus.",
+    innervation: "Thoracodorsal Nerve (C6, C7, C8) arising from the posterior cord of the brachial plexus.",
+    bloodSupply: "Thoracodorsal Artery (terminal branch of the subscapular artery from the 3rd part of axillary artery).",
+    lymphatics: "Drains into Posterior (Subscapular) Axillary lymph node group.",
+    bedsideTest:
+      "1. Ask patient to cough forcefully while examiner palpates the posterior axillary fold for muscle belly contraction. 2. Patient adducts abducted arm against upward resistance.",
     clinicalPearl:
-      "Frequently utilized as a pedicled or free myocutaneous flap in reconstructive breast and chest wall surgeries due to reliable axial blood supply.",
+      "Latissimus Dorsi myocutaneous flap is commonly used in plastic and reconstructive surgery for autologous breast reconstruction and thoracic wall defects due to its robust single neurovascular pedicle (thoracodorsal vessels).",
+    vivaQuestion: {
+      q: "What are the anatomical boundaries of the Triangle of Auscultation, and why is it clinically significant?",
+      a: "Boundaries: Medial: Lateral border of Trapezius; Inferior: Superior horizontal border of Latissimus Dorsi; Lateral: Medial border of Scapula. Floor: 6th and 7th intercostal spaces. It is a region devoid of thick muscle coverage where respiratory sounds of the lung's lower lobe are heard clearly.",
+    },
   },
   {
     id: "serratus-anterior-muscle",
@@ -107,148 +264,409 @@ const HIGH_YIELD_MUSCLES_DIRECTORY = [
     region: "Lateral Thoracic Wall",
     latin: "Musculus serratus anterior",
     fmaId: "FMA:13397",
-    origin: "Outer surfaces and superior borders of upper 8 to 9 ribs.",
-    insertion: "Costal (anterior) surface of the entire medial border of the scapula.",
+    heads: [
+      {
+        name: "Upper Digitations (1–2)",
+        origin: "Ribs 1 and 2 and intercostal fascia.",
+        insertion: "Superior angle of the costal surface of the scapula.",
+        action: "Stabilizes scapula against anterior chest wall.",
+      },
+      {
+        name: "Middle Digitations (3–4)",
+        origin: "Ribs 3 and 4.",
+        insertion: "Anterior costal surface of the medial border of the scapula.",
+        action: "Protracts (pulls forward) the scapula ('boxer's muscle').",
+      },
+      {
+        name: "Lower Digitations (5–8)",
+        origin: "Outer surfaces of ribs 5 to 8 (interdigitates with external abdominal oblique).",
+        insertion: "Large triangular area on costal surface of inferior angle of scapula.",
+        action: "Powerful upward rotator of glenoid cavity during abduction above 90°.",
+      },
+    ],
+    origin: "Outer surfaces and superior borders of the upper 8 to 9 ribs and intervening intercostal fascia.",
+    insertion: "Costal (anterior) surface of the entire medial border of the scapula from superior to inferior angle.",
     action:
-      "Protracts scapula and holds it firmly against the thoracic cage; upwardly rotates glenoid cavity during shoulder abduction above 90° ('boxer's muscle').",
-    innervation: "Long Thoracic Nerve of Bell (C5, C6, C7 - 'Wings of heaven').",
-    bloodSupply: "Lateral Thoracic Artery and thoracodorsal artery.",
+      "Protracts the scapula forward around thoracic wall ('boxer's muscle'); holds medial border firmly against the ribs; lower fibers rotate inferior angle laterally to upwardly rotate glenoid cavity for full abduction >90°.",
+    synergists: "Trapezius (upward rotation force couple), Pectoralis Minor (protraction).",
+    antagonists: "Rhomboid Major and Minor, Middle Trapezius (retraction).",
+    innervation: "Long Thoracic Nerve of Bell (C5, C6, C7 roots from roots of brachial plexus; 'C5, 6, 7 raise your arms to heaven').",
+    bloodSupply: "Lateral Thoracic Artery and Thoracodorsal Artery.",
+    lymphatics: "Drains into Anterior (Pectoral) and Central Axillary lymph nodes.",
+    bedsideTest:
+      "Wall Push-Up Test: Ask patient to stand facing a wall with arms outstretched at shoulder height and push firmly against the wall; observe for medial winging of the scapula.",
     clinicalPearl:
-      "Damage to the long thoracic nerve during mastectomy with axillary lymph node dissection produces Medial Winged Scapula (scapula lifts off thoracic wall when pushing forward against resistance).",
+      "Injury to the Long Thoracic Nerve during mastectomy, axillary lymph node dissection, or chest tube placement results in Medial Winged Scapula—the vertebral border of the scapula lifts prominently off the thoracic cage when pushing forward.",
+    vivaQuestion: {
+      q: "Why is the Long Thoracic Nerve particularly prone to injury during surgical procedures in the axilla?",
+      a: "Unlike most motor nerves that run deep to the muscle they innervate, the Long Thoracic Nerve courses superficially on the outer surface of the Serratus Anterior within the superficial fascia of the lateral chest wall.",
+    },
   },
   {
     id: "supraspinatus-muscle",
     name: "Supraspinatus (Rotator Cuff)",
-    region: "Shoulder / Rotator Cuff",
+    region: "Posterior Shoulder / Rotator Cuff",
     latin: "Musculus supraspinatus",
     fmaId: "FMA:9629",
-    origin: "Supraspinous fossa of scapula and overlying supraspinous fascia.",
-    insertion: "Superior facet of greater tubercle of humerus and joint capsule.",
-    action: "Initiates first 0° to 15° of glenohumeral abduction; stabilizes humeral head firmly in glenoid fossa.",
-    innervation: "Suprascapular Nerve (C5, C6) passing through suprascapular notch beneath superior transverse scapular ligament.",
-    bloodSupply: "Suprascapular Artery and dorsal scapular artery.",
+    heads: [
+      {
+        name: "Fossa Belly & Tendon",
+        origin: "Medial 2/3 of the supraspinous fossa of scapula and deep supraspinatus fascia.",
+        insertion: "Superior facet of the greater tubercle of humerus and glenohumeral fibrous capsule.",
+        action: "Initiates first 15° of glenohumeral abduction; seats and compresses humeral head into glenoid fossa.",
+      },
+    ],
+    origin: "Medial two-thirds of the supraspinous fossa of the scapula and deep supraspinous fascia.",
+    insertion: "Superior facet of the greater tubercle of the humerus and capsule of the glenohumeral joint.",
+    action:
+      "Initiates the first 0° to 15° of glenohumeral abduction before Deltoid takes over; dynamically stabilizes the glenohumeral joint by seating the humeral head firmly against the glenoid cavity.",
+    synergists: "Deltoid (middle fibers act synergistically beyond 15°).",
+    antagonists: "Pectoralis Major, Latissimus Dorsi, Teres Major (adduction).",
+    innervation: "Suprascapular Nerve (C5, C6) from the superior trunk of the brachial plexus (passes through suprascapular notch beneath superior transverse scapular ligament).",
+    bloodSupply: "Suprascapular Artery (passes OVER the superior transverse scapular ligament; 'Navy under the bridge, Army over the bridge') and Dorsal Scapular Artery.",
+    lymphatics: "Drains into Subscapular and Apical Axillary lymph nodes.",
+    bedsideTest:
+      "Empty Can (Jobe's) Test: Arms abducted to 90° in scapular plane (30° anterior to coronal), fully internally rotated with thumbs pointing toward the floor; patient resists downward pressure.",
     clinicalPearl:
-      "Most commonly injured rotator cuff tendon due to impingement under the acromion. Diagnosed using 'Empty Can' (Jobe) test: pain and weakness during abduction with thumb pointing downward.",
+      "Supraspinatus is the most commonly torn rotator cuff tendon due to repeated subacromial impingement against the coracoacromial arch and poor vascularity at Codman's critical hypovascular zone near its insertion.",
+    vivaQuestion: {
+      q: "Explain the anatomical relationship of the Suprascapular Nerve and Artery at the suprascapular notch.",
+      a: "The Suprascapular Nerve passes UNDER the superior transverse scapular ligament through the notch, while the Suprascapular Artery passes OVER the ligament ('Army over the bridge, Navy under the bridge').",
+    },
   },
   {
     id: "infraspinatus-muscle",
     name: "Infraspinatus (Rotator Cuff)",
-    region: "Shoulder / Rotator Cuff",
+    region: "Posterior Shoulder / Rotator Cuff",
     latin: "Musculus infraspinatus",
     fmaId: "FMA:9630",
-    origin: "Infraspinous fossa of scapula and overlying fascia.",
-    insertion: "Middle facet of greater tubercle of humerus.",
-    action: "Chief lateral (external) rotator of the humerus; stabilizes glenohumeral joint posteriorly.",
-    innervation: "Suprascapular Nerve (C5, C6).",
-    bloodSupply: "Suprascapular Artery and circumflex scapular artery.",
+    heads: [
+      {
+        name: "Infraspinous Belly",
+        origin: "Infraspinous fossa of the scapula and overlying infraspinous fascia.",
+        insertion: "Middle facet of the greater tubercle of the humerus.",
+        action: "Chief external (lateral) rotator of the arm; posterior dynamic stabilizer of shoulder.",
+      },
+    ],
+    origin: "Medial two-thirds of the infraspinous fossa of the scapula and thick infraspinous fascia.",
+    insertion: "Middle facet of the greater tubercle of the humerus and posterior glenohumeral joint capsule.",
+    action: "Chief lateral (external) rotator of the humerus at the glenohumeral joint; prevents anterior dislocation of humeral head.",
+    synergists: "Teres Minor, Posterior Deltoid.",
+    antagonists: "Subscapularis, Pectoralis Major, Latissimus Dorsi, Teres Major, Anterior Deltoid (internal rotators).",
+    innervation: "Suprascapular Nerve (C5, C6) passing around the spinoglenoid notch beneath inferior transverse scapular ligament.",
+    bloodSupply: "Suprascapular Artery and Circumflex Scapular Artery (branch of subscapular artery forming scapular anastomosis).",
+    lymphatics: "Drains into Subscapular Axillary nodes.",
+    bedsideTest:
+      "External Rotation Lag Sign: Patient seated with elbow flexed at 90° and held against waist; patient externally rotates against examiner's medial resistance.",
     clinicalPearl:
-      "Evaluated clinically by having patient perform external rotation against resistance with arm adducted by side. Weakness indicates infraspinatus tear or suprascapular neuropathy.",
+      "Ganglion cysts in the spinoglenoid notch can selectively compress the inferior branch of the suprascapular nerve, causing isolated Infraspinatus atrophy without affecting Supraspinatus.",
+    vivaQuestion: {
+      q: "What vascular anastomosis around the scapula ensures collateral blood flow if the 1st or 2nd part of the Axillary Artery is ligated?",
+      a: "The Scapular Anastomosis between the Suprascapular Artery (from thyrocervical trunk), Deep branch of Transverse Cervical / Dorsal Scapular Artery, and Circumflex Scapular Artery (from subscapular artery of 3rd part of axillary).",
+    },
   },
   {
     id: "subscapularis-muscle",
     name: "Subscapularis (Rotator Cuff)",
-    region: "Shoulder / Rotator Cuff",
+    region: "Anterior Shoulder / Rotator Cuff",
     latin: "Musculus subscapularis",
     fmaId: "FMA:9632",
-    origin: "Subscapular fossa on the anterior (costal) surface of scapula.",
-    insertion: "Lesser tubercle of humerus and anterior joint capsule.",
-    action: "Chief medial (internal) rotator of the arm; prevents anterior displacement of humeral head.",
-    innervation: "Upper and Lower Subscapular Nerves (C5, C6).",
-    bloodSupply: "Subscapular Artery.",
+    heads: [
+      {
+        name: "Costal Fossa Belly",
+        origin: "Medial two-thirds of the subscapular fossa on the anterior (costal) surface of the scapula.",
+        insertion: "Lesser tubercle of the humerus and anterior joint capsule.",
+        action: "Chief internal (medial) rotator of the arm; anterior dynamic stabilizer of the glenohumeral joint.",
+      },
+    ],
+    origin: "Medial two-thirds of the subscapular fossa on the costal (anterior) surface of the scapula.",
+    insertion: "Lesser tubercle of the humerus and anterior fibrous capsule of the glenohumeral joint.",
+    action: "Chief medial (internal) rotator of the humerus; holds head of humerus in glenoid cavity to prevent anterior dislocation.",
+    synergists: "Pectoralis Major, Latissimus Dorsi, Teres Major, Anterior Deltoid.",
+    antagonists: "Infraspinatus, Teres Minor, Posterior Deltoid (external rotators).",
+    innervation: "Upper and Lower Subscapular Nerves (C5, C6) originating from the posterior cord of the brachial plexus.",
+    bloodSupply: "Subscapular Artery (largest branch of axillary artery) and lateral thoracic artery.",
+    lymphatics: "Drains into Subscapular and Central Axillary lymph nodes.",
+    bedsideTest:
+      "Gerber's Lift-Off Test: Patient places dorsum of hand against mid-lumbar spine; patient actively lifts hand backward away from spine against examiner's resistance (or Belly-Press / Napoleon test).",
     clinicalPearl:
-      "Evaluated with 'Lift-Off' (Gerber) test: patient places hand on lumbar back and attempts to push backward away from spine against examiner's resistance.",
+      "Subscapularis tendon rupture permits medial dislocation or subluxation of the long head of the biceps tendon from the intertubercular groove because subscapularis fibers form the medial roof of the bicipital groove.",
+    vivaQuestion: {
+      q: "Name the 4 muscles comprising the Rotator Cuff ('SITS') and state which one inserts on the lesser tubercle.",
+      a: "Supraspinatus, Infraspinatus, Teres minor (all insert on the greater tubercle facets), and Subscapularis (the only one inserting on the lesser tubercle).",
+    },
   },
   {
-    id: "sternocleidomastoid-muscle",
-    name: "Sternocleidomastoid (SCM)",
-    region: "Anterior Neck",
-    latin: "Musculus sternocleidomastoideus",
-    fmaId: "FMA:13407",
-    origin: "Sternal head: anterior surface of manubrium sterni. Clavicular head: superior surface of medial third of clavicle.",
-    insertion: "Lateral surface of mastoid process of temporal bone and lateral half of superior nuchal line.",
+    id: "rectus-abdominis-muscle",
+    name: "Rectus Abdominis",
+    region: "Anterior Abdominal Wall",
+    latin: "Musculus rectus abdominis",
+    fmaId: "FMA:9625",
+    heads: [
+      {
+        name: "Medial & Lateral Tendinous Slips",
+        origin: "Pubic crest, pubic tubercle, and anterior surface of pubic symphysis.",
+        insertion: "Costal cartilages of 5th, 6th, and 7th ribs and xiphoid process.",
+        action: "Flexes lumbar vertebral column; compresses abdominal viscera; increases intra-abdominal pressure.",
+      },
+    ],
+    origin: "Pubic crest, pubic tubercle, and anterior surface of pubic symphysis.",
+    insertion: "Costal cartilages of the 5th, 6th, and 7th ribs and the xiphoid process of the sternum.",
     action:
-      "Unilateral: tilts head to same side and rotates chin to opposite side. Bilateral: flexes cervical vertebral column; accessory muscle of inspiration.",
-    innervation: "Motor: Spinal Accessory Nerve (CN XI). Sensory / Proprioception: Ventral rami of C2 and C3.",
-    bloodSupply: "Branches of Superior Thyroid Artery, Occipital Artery, and Posterior Auricular Artery.",
+      "Flexes the lumbar vertebral column (curling movement); compresses abdominal contents during micturition, defecation, and parturition; posterior pelvic tilt to maintain lumbar lordosis.",
+    synergists: "External Oblique, Internal Oblique, Transversus Abdominis.",
+    antagonists: "Erector Spinae, Transversospinales, Quadratus Lumborum.",
+    innervation: "Thoracoabdominal Nerves (anterior primary rami of T7 to T11 spinal nerves) and Subcostal Nerve (T12).",
+    bloodSupply: "Superior Epigastric Artery (terminal branch of internal thoracic) and Inferior Epigastric Artery (branch of external iliac) anastomosing within the rectus sheath.",
+    lymphatics: "Superior to umbilicus: drains to Axillary (pectoral) nodes; Inferior to umbilicus: drains to Superficial Inguinal nodes.",
+    bedsideTest:
+      "Carnett's Test: Patient lies supine and lifts head and shoulders off the examination bed while examiner palpates tender abdominal point; increased or unchanged pain indicates abdominal wall source (e.g. rectus sheath hematoma) rather than intra-abdominal pathology.",
     clinicalPearl:
-      "Congenital Torticollis (Wryneck): Fibrous tumor or contracture of SCM leads to ipsilateral head tilt and contralateral face rotation. Often treated with stretching or surgical tenotomy.",
+      "Rectus Sheath Hematoma results from rupture of the Inferior Epigastric Artery during violent coughing, trauma, or anticoagulation therapy. Confirmed clinically by Fothergill's Sign: the abdominal mass does not cross the midline and remains palpable and tender when the rectus muscles contract.",
+    vivaQuestion: {
+      q: "Describe the composition of the Rectus Sheath below the Arcuate Line (line of Douglas).",
+      a: "Below the arcuate line, all three aponeuroses (External Oblique, Internal Oblique, Transversus Abdominis) pass entirely ANTERIOR to the Rectus Abdominis. Posteriorly, the muscle is in direct contact with only the transversalis fascia and parietal peritoneum.",
+    },
   },
   {
-    id: "diaphragm-muscle",
-    name: "Diaphragm (Thoracic Diaphragm)",
-    region: "Thoracoabdominal Junction",
-    latin: "Diaphragma",
-    fmaId: "FMA:13295",
+    id: "gluteus-maximus-muscle",
+    name: "Gluteus Maximus",
+    region: "Gluteal Region / Buttock",
+    latin: "Musculus gluteus maximus",
+    fmaId: "FMA:22314",
+    heads: [
+      {
+        name: "Superficial (Upper 3/4) Fibers",
+        origin: "Posterior gluteal line of ilium, dorsal sacrum and coccyx, and sacrotuberous ligament.",
+        insertion: "Iliotibial tract (cranial insertion).",
+        action: "Steadies femur on articular surface of tibia during standing; abduction and lateral rotation.",
+      },
+      {
+        name: "Deep (Lower 1/4) Fibers",
+        origin: "Sacrotuberous ligament and lateral coccyx.",
+        insertion: "Gluteal tuberosity of the upper posterior femur.",
+        action: "Most powerful extensor of the hip joint against heavy resistance.",
+      },
+    ],
     origin:
-      "Sternal part: posterior xiphoid process. Costal part: inner surfaces of lower 6 ribs/costal cartilages. Lumbar part: right crus (L1–L3), left crus (L1–L2), medial and lateral arcuate ligaments.",
-    insertion: "Central tendon of diaphragm (trifoliate aponeurosis with no bony attachments).",
-    action: "Chief muscle of respiration; contraction draws central tendon inferiorly, expanding thoracic volume and generating negative intrathoracic pressure.",
-    innervation: "Phrenic Nerve (C3, C4, C5 - 'C3, 4, 5 keeps the diaphragm alive').",
-    bloodSupply: "Superior & Inferior Phrenic Arteries, Musculophrenic Artery, and Pericardiacophrenic Artery.",
+      "Posterior gluteal line of ilium, posterior dorsal surface of sacrum and coccyx, sacrotuberous ligament, and thoracolumbar fascia.",
+    insertion:
+      "Upper three-quarters insert into the Iliotibial Tract (IT band) of tensor fasciae latae; lower one-quarter inserts into the Gluteal Tuberosity of femur.",
+    action:
+      "Chief powerful extensor of the thigh at hip joint (standing up from seated position, climbing stairs, running, jumping); powerful lateral rotator of hip.",
+    synergists: "Hamstrings (Biceps Femoris long head, Semitendinosus, Semimembranosus), Adductor Magnus (posterior head).",
+    antagonists: "Iliopsoas, Rectus Femoris, Tensor Fasciae Latae (hip flexors).",
+    innervation: "Inferior Gluteal Nerve (L5, S1, S2) exiting the pelvis below piriformis through the greater sciatic foramen.",
+    bloodSupply: "Superior and Inferior Gluteal Arteries (branches of internal iliac artery); cruciate anastomosis of thigh.",
+    lymphatics: "Drains into Internal Iliac and Superficial Inguinal lymph nodes.",
+    bedsideTest:
+      "Patient in prone position with knee flexed to 90° (to isolate gluteus maximus from hamstrings); patient extends hip upward toward ceiling against downward resistance on posterior thigh.",
     clinicalPearl:
-      "Diaphragmatic apertures: Caval opening (IVC) at T8; Esophageal hiatus (with vagal trunks) at T10; Aortic hiatus (with thoracic duct & azygos vein) at T12 ('I 8 10 Eggs At 12').",
+      "Inferior Gluteal Nerve injury causes 'Gluteus Maximus Lurch': at heel-strike during walking, the patient thrusts the trunk backwards to keep the center of gravity behind the hip joint axis and prevent falling forward.",
+    vivaQuestion: {
+      q: "Where is the safe quadrant for intramuscular (IM) injections in the buttock, and what nerves/vessels are avoided?",
+      a: "The safe zone is the Upper Outer Quadrant (specifically Von Hochstetter's triangle of the anterolateral gluteal area). This avoids the Sciatic Nerve, Inferior Gluteal Nerve/vessels, and Superior Gluteal Nerve/vessels.",
+    },
   },
   {
-    id: "rectus-femoris-muscle",
-    name: "Rectus Femoris (Quadriceps)",
-    region: "Anterior Thigh",
-    latin: "Musculus rectus femoris",
-    fmaId: "FMA:22428",
-    origin: "Straight head: anterior inferior iliac spine (AIIS). Reflected head: groove superior to acetabulum.",
-    insertion: "Base of patella and via patellar ligament into tibial tuberosity.",
-    action: "Extends leg at knee joint; flexes thigh at hip joint ('kicking muscle').",
-    innervation: "Femoral Nerve (L2, L3, L4).",
-    bloodSupply: "Lateral Circumflex Femoral Artery.",
+    id: "gluteus-medius-muscle",
+    name: "Gluteus Medius",
+    region: "Lateral Gluteal Region",
+    latin: "Musculus gluteus medius",
+    fmaId: "FMA:22315",
+    heads: [
+      {
+        name: "Anterior Fibers",
+        origin: "Outer iliac surface between anterior and middle gluteal lines.",
+        insertion: "Lateral surface of greater trochanter of femur.",
+        action: "Medially rotates and flexes hip joint.",
+      },
+      {
+        name: "Posterior Fibers",
+        origin: "Posterior outer surface of ilium.",
+        insertion: "Lateral surface of greater trochanter of femur.",
+        action: "Abducts thigh and stabilizes pelvis in the coronal plane during single-leg stance.",
+      },
+    ],
+    origin: "Gluteal (outer) surface of the ilium between the anterior and posterior gluteal lines.",
+    insertion: "Lateral and superoposterior surface of the Greater Trochanter of the femur.",
+    action:
+      "Chief abductor of the thigh at the hip joint; anterior fibers medially rotate thigh; critically prevents tilting of the pelvis to the unsupported side during walking (single-limb stance phase).",
+    synergists: "Gluteus Minimus, Tensor Fasciae Latae.",
+    antagonists: "Adductor Longus, Adductor Brevis, Adductor Magnus, Gracilis (adductors).",
+    innervation: "Superior Gluteal Nerve (L4, L5, S1) exiting above piriformis through the greater sciatic foramen.",
+    bloodSupply: "Deep branch of Superior Gluteal Artery and Trochanteric Anastomosis.",
+    lymphatics: "Drains into Internal Iliac and Common Iliac lymph node chains.",
+    bedsideTest:
+      "Trendelenburg Test: Patient stands on one leg; normally the abductors contract to keep the unsupported pelvis horizontal or slightly elevated. In gluteus medius weakness, the pelvis drops on the opposite unsupported side (Positive Trendelenburg Sign).",
     clinicalPearl:
-      "Knee jerk reflex tests L3–L4 spinal segments via Femoral Nerve. Sudden eccentric contraction in sprinters/soccer players can cause AIIS avulsion fracture.",
+      "Superior Gluteal Nerve lesion produces a positive Trendelenburg Sign and classic 'Waddling Gait' (bilateral lesions) or 'Gluteal Gait' (unilateral lesion) with compensatory trunk lean toward the affected side.",
+    vivaQuestion: {
+      q: "In a patient standing on the right leg, the left side of the pelvis drops. Which nerve and muscle are defective?",
+      a: "The RIGHT Superior Gluteal Nerve or RIGHT Gluteus Medius/Minimus muscle (the weight-bearing side is paralyzed).",
+    },
+  },
+  {
+    id: "quadriceps-muscle",
+    name: "Quadriceps Femoris (Rectus Femoris & Vasti)",
+    region: "Anterior Compartment of Thigh",
+    latin: "Musculus quadriceps femoris",
+    fmaId: "FMA:22428",
+    heads: [
+      {
+        name: "Rectus Femoris (Biaricular)",
+        origin: "Straight head: Anterior Inferior Iliac Spine (AIIS); Reflected head: groove above acetabular rim.",
+        insertion: "Base of patella and tibial tuberosity via patellar ligament.",
+        action: "Flexes hip joint and extends knee joint.",
+      },
+      {
+        name: "Vastus Lateralis (Largest)",
+        origin: "Greater trochanter, intertrochanteric line, lateral lip of linea aspera of femur.",
+        insertion: "Lateral base and border of patella.",
+        action: "Extends knee joint.",
+      },
+      {
+        name: "Vastus Medialis & VMO",
+        origin: "Intertrochanteric line, spiral line, medial lip of linea aspera.",
+        insertion: "Medial border of patella and medial tibial condyle.",
+        action: "Extends knee; Vastus Medialis Oblique (VMO) stabilizes patella against lateral subluxation.",
+      },
+      {
+        name: "Vastus Intermedius",
+        origin: "Anterior and lateral surfaces of the upper two-thirds of femoral shaft.",
+        insertion: "Deep surface of quadriceps tendon and patellar base.",
+        action: "Pure knee joint extensor.",
+      },
+    ],
+    origin:
+      "Rectus Femoris: AIIS and acetabular margin. Vastus Lateralis: greater trochanter and linea aspera. Vastus Medialis: intertrochanteric line and medial supracondylar line. Vastus Intermedius: anterior femoral shaft.",
+    insertion: "Patella via common Quadriceps Tendon, continuing as the Patellar Ligament into the Tibial Tuberosity.",
+    action: "Chief powerful extensor of the leg at the knee joint; Rectus femoris also assists in flexing the thigh at the hip joint.",
+    synergists: "Tensor Fasciae Latae (assists knee extension when knee is extended).",
+    antagonists: "Hamstrings (Biceps Femoris, Semitendinosus, Semimembranosus), Gracilis, Sartorius.",
+    innervation: "Femoral Nerve (L2, L3, L4 posterior division) in the femoral triangle.",
+    bloodSupply: "Lateral Circumflex Femoral Artery, Medial Circumflex Femoral Artery, and Deep Femoral (Profunda Femoris) Artery.",
+    lymphatics: "Drains into Deep and Superficial Inguinal lymph nodes.",
+    bedsideTest:
+      "1. Knee extension test: Seated patient extends knee against downward resistance applied at the ankle. 2. Patellar Tendon Reflex (Knee Jerk Reflex) evaluating L3–L4 spinal segments.",
+    clinicalPearl:
+      "Weakness of the Vastus Medialis Oblique (VMO) fibers leads to lateral patellar maltracking, causing Patellofemoral Pain Syndrome (runner's knee). Violent sprinting in adolescents can cause avulsion fracture of the AIIS at the rectus femoris origin.",
+    vivaQuestion: {
+      q: "What are the spinal cord root segments tested by the Knee Jerk (Patellar Tendon) reflex?",
+      a: "L3 and L4 nerve roots via the Femoral Nerve.",
+    },
   },
   {
     id: "biceps-femoris-muscle",
     name: "Biceps Femoris (Hamstring)",
-    region: "Posterior Thigh",
+    region: "Posterior Compartment of Thigh",
     latin: "Musculus biceps femoris",
     fmaId: "FMA:22356",
-    origin: "Long head: ischial tuberosity. Short head: lateral lip of linea aspera and lateral supracondylar line of femur.",
-    insertion: "Lateral aspect of head of fibula.",
-    action: "Flexes leg at knee joint and rotates it laterally when knee is flexed; long head extends thigh at hip joint.",
-    innervation: "Long head: Tibial division of Sciatic Nerve (L5, S1, S2). Short head: Common Fibular division of Sciatic Nerve (L5, S1).",
-    bloodSupply: "Perforating branches of profunda femoris artery and inferior gluteal artery.",
+    heads: [
+      {
+        name: "Long Head (True Hamstring)",
+        origin: "Inferomedial impression of the ischial tuberosity (conjoint tendon with semitendinosus).",
+        insertion: "Head of the fibula (embraces lateral fibular collateral ligament).",
+        action: "Extends hip joint and flexes knee joint; laterally rotates flexed leg.",
+      },
+      {
+        name: "Short Head",
+        origin: "Lateral lip of the linea aspera and lateral supracondylar line of the femur.",
+        insertion: "Head of the fibula and lateral tibial condyle.",
+        action: "Flexes knee joint and laterally rotates flexed leg.",
+      },
+    ],
+    origin: "Long head: ischial tuberosity and sacrotuberous ligament. Short head: lateral lip of linea aspera and lateral supracondylar ridge.",
+    insertion: "Lateral aspect of the head of the fibula (surrounds the fibular collateral ligament of the knee).",
+    action: "Flexes the leg at the knee joint and laterally rotates flexed knee; long head extends thigh at the hip joint.",
+    synergists: "Semitendinosus, Semimembranosus, Gastrocnemius, Popliteus.",
+    antagonists: "Quadriceps Femoris (Rectus Femoris, Vasti).",
+    innervation: "Long head: Tibial division of Sciatic Nerve (L5, S1, S2). Short head: Common Fibular (Peroneal) division of Sciatic Nerve (L5, S1).",
+    bloodSupply: "Perforating branches of the Profunda Femoris (deep femoral) Artery, Inferior Gluteal Artery, and Popliteal Artery.",
+    lymphatics: "Drains into Deep Inguinal and Popliteal lymph nodes.",
+    bedsideTest:
+      "Patient prone with knee flexed to 45° and leg externally rotated; patient resists examiner's effort to pull knee into extension.",
     clinicalPearl:
-      "Hamstring strain commonly tears proximal tendon attachment at the ischial tuberosity during deceleration phase of high-velocity running.",
+      "Hamstring strains (pulled hamstring) most frequently tear the proximal musculotendinous junction of the Biceps Femoris long head during the terminal deceleration swing phase of high-velocity sprinting.",
+    vivaQuestion: {
+      q: "Why is the Short Head of Biceps Femoris not considered a 'true' hamstring muscle?",
+      a: "Because it does NOT arise from the ischial tuberosity, does NOT cross the hip joint (cannot extend the hip), and is innervated by the Common Fibular nerve instead of the Tibial division.",
+    },
   },
   {
     id: "gastrocnemius-muscle",
     name: "Gastrocnemius (Triceps Surae)",
-    region: "Posterior Leg / Calf",
+    region: "Superficial Posterior Leg / Calf",
     latin: "Musculus gastrocnemius",
     fmaId: "FMA:22541",
-    origin: "Lateral head: lateral condyle of femur. Medial head: popliteal surface of femur superior to medial condyle.",
-    insertion: "Posterior surface of calcaneus via Calcaneal (Achilles) tendon.",
-    action: "Plantarflexes foot at ankle joint; flexes leg at knee joint.",
-    innervation: "Tibial Nerve (S1, S2).",
-    bloodSupply: "Sural Arteries (branches of Popliteal Artery).",
+    heads: [
+      {
+        name: "Medial Head (Larger)",
+        origin: "Popliteal surface of femur superior to medial condyle and adductor tubercle.",
+        insertion: "Posterior surface of calcaneus via Achilles (calcaneal) tendon.",
+        action: "Plantarflexes foot at ankle joint; flexes knee joint.",
+      },
+      {
+        name: "Lateral Head",
+        origin: "Lateral aspect of lateral condyle of femur and lateral supracondylar line.",
+        insertion: "Posterior calcaneus via Achilles tendon.",
+        action: "Plantarflexes foot during propulsion (jumping, running).",
+      },
+    ],
+    origin: "Medial head: popliteal surface of femur above medial condyle. Lateral head: posterolateral aspect of lateral condyle of femur.",
+    insertion: "Middle posterior surface of the calcaneus via the common Calcaneal (Achilles) Tendon (strongest tendon in the human body).",
+    action: "Powerful plantarflexion of the foot at the ankle joint (propulsion in walking, running, jumping); assists in knee flexion.",
+    synergists: "Soleus (together form Triceps Surae), Plantaris, Tibialis Posterior, Flexor Hallucis Longus.",
+    antagonists: "Tibialis Anterior, Extensor Digitorum Longus (dorsiflexors).",
+    innervation: "Tibial Nerve (S1, S2) within the popliteal fossa.",
+    bloodSupply: "Sural Arteries (terminal branches of the Popliteal Artery supplying each head).",
+    lymphatics: "Drains into Popliteal and Deep Inguinal lymph nodes.",
+    bedsideTest:
+      "1. Achilles Tendon Reflex (Ankle Jerk Reflex) evaluating S1–S2 nerve roots. 2. Single-leg heel raise test (patient raises body weight onto toes on one foot).",
     clinicalPearl:
-      "Achilles tendon rupture presents with sudden audible 'pop', sharp pain, and positive Thompson squeeze test (squeezing calf fails to elicit passive plantarflexion).",
+      "Achilles Tendon Rupture presents with a sudden audible 'pop' or sensation of being kicked in the calf, severe pain, inability to plantarflex against resistance, and a Positive Thompson (Simmonds) Test: squeezing the calf fails to produce passive plantarflexion.",
+    vivaQuestion: {
+      q: "Explain Thompson's (Simmonds) Squeeze Test and its diagnostic significance.",
+      a: "With the patient prone and feet hanging off the examination couch, the examiner squeezes the calf muscle belly. A normal calf produces involuntary plantarflexion. If the Achilles tendon is ruptured, the foot remains immobile (Positive Thompson Test).",
+    },
   },
   {
     id: "tibialis-anterior-muscle",
     name: "Tibialis Anterior",
-    region: "Anterior Leg",
+    region: "Anterior Compartment of Leg",
     latin: "Musculus tibialis anterior",
     fmaId: "FMA:22532",
-    origin: "Lateral condyle and upper half of lateral surface of tibia, and interosseous membrane.",
-    insertion: "Medial and inferior surfaces of medial cuneiform and base of 1st metatarsal.",
-    action: "Chief dorsiflexor of foot at ankle joint; inverts foot at subtalar joint.",
-    innervation: "Deep Fibular (Peroneal) Nerve (L4, L5).",
-    bloodSupply: "Anterior Tibial Artery.",
+    heads: [
+      {
+        name: "Tibia & Interosseous Belly",
+        origin: "Lateral condyle and upper 2/3 of lateral surface of tibia, and anterior surface of interosseous membrane.",
+        insertion: "Medial and inferior surfaces of the medial cuneiform and base of 1st metatarsal bone.",
+        action: "Chief dorsiflexor of foot at ankle joint; inverts foot at subtalar joint; maintains medial longitudinal arch.",
+      },
+    ],
+    origin: "Lateral condyle and upper half to two-thirds of lateral shaft of tibia, deep fascia of leg, and interosseous membrane.",
+    insertion: "Medial and plantar surfaces of the medial cuneiform bone and base of the 1st metatarsal bone.",
+    action: "Chief dorsiflexor of the foot at the talocrural (ankle) joint; inverts the foot at subtalar and transverse tarsal joints; dynamically supports the medial longitudinal arch.",
+    synergists: "Extensor Hallucis Longus, Extensor Digitorum Longus, Peroneus Tertius.",
+    antagonists: "Gastrocnemius, Soleus (plantarflexors), Fibularis Longus & Brevis (everters).",
+    innervation: "Deep Fibular (Peroneal) Nerve (L4, L5) in the anterior leg compartment.",
+    bloodSupply: "Anterior Tibial Artery (accompanied by venae comitantes and deep fibular nerve).",
+    lymphatics: "Drains into Anterior Tibial and Popliteal lymph nodes.",
+    bedsideTest:
+      "Ask patient to heel-walk or dorsiflex and invert the foot against examiner's plantarflexion and eversion resistance; palpate the prominent tendon anterior to the medial malleolus.",
     clinicalPearl:
-      "Deep fibular nerve palsy leads to Foot Drop (high-steppage gait, inability to dorsiflex or heel-walk) and sensory deficit in the 1st dorsal interdigital web space.",
+      "Compression or laceration of the Deep Fibular Nerve or Common Fibular Nerve around the fibular neck produces Foot Drop. The patient cannot dorsiflex the foot, resulting in a 'High-Steppage Gait' (compensatory hip and knee flexion) and tripping over toes.",
+    vivaQuestion: {
+      q: "What symptoms and signs distinguish Common Fibular Nerve palsy from isolated Deep Fibular Nerve palsy?",
+      a: "Common Fibular palsy causes loss of both dorsiflexion AND eversion (foot drop with inverted foot) PLUS sensory loss over the lateral leg and entire dorsum of foot. Isolated Deep Fibular palsy causes foot drop but leaves eversion intact (superficial fibular spared) and sensory loss is restricted to only the 1st interdigital web space.",
+    },
   },
 ];
 
 // ============================================================================
 // COGNI ANATOMY 3D PRESETS & CLINICAL SELF-STUDY COMPANION DATABASE
 // Mapped directly to official Cogni Anatomy 3D Viewer Presets: cogni.cards/anatomy
+// Comprehensive, exhaustive textbook-level depth for MBBS, USMLE Step 1 & NEET-PG
 // ============================================================================
 const COGNI_PRESETS = [
   // --- 1. FULL BODY & MAJOR SYSTEMS ---
@@ -293,7 +711,7 @@ const COGNI_PRESETS = [
     latin: "Musculus trapezius",
     fmaId: "FMA:9626",
     summary:
-      "Large superficial trapezoidal extrinsic back muscle. Connects the skull and vertebral spine to the shoulder girdle. Crucial for scapular posture, elevation, retraction, depression, and upward rotation during arm abduction above 90°.",
+      "Large superficial trapezoidal extrinsic back muscle. Connects the skull and vertebral spine to the pectoral girdle. Crucial for scapular posture, elevation, retraction, depression, and upward rotation during arm abduction above 90°.",
     origin:
       "External occipital protuberance, medial 1/3 of superior nuchal line, ligamentum nuchae, and spinous processes of C7–T12 vertebrae (Ascending part arises specifically from T4–T12 spines).",
     insertion:
@@ -599,52 +1017,52 @@ const COGNI_PRESETS = [
         a: "The Right Main Bronchus is wider, shorter, and descends more vertically in line with the trachea than the left.",
       },
       {
-        q: "What is the immediate emergency management for a Tension Pneumothorax?",
-        a: "Immediate needle decompression (large-bore needle in the 2nd intercostal space midclavicular line or 5th intercostal space midaxillary line) followed by tube thoracostomy.",
+        q: "Where is emergency needle decompression performed for a tension pneumothorax?",
+        a: "2nd intercostal space in the midclavicular line, or 5th intercostal space in the midaxillary line, inserting the needle directly OVER the superior border of the rib to avoid the subcostal neurovascular bundle.",
       },
     ],
   },
 
-  // --- 4. ABDOMEN, DIGESTIVE & URINARY ---
+  // --- 4. ABDOMEN, PELVIS & VISCERA ---
   {
-    id: "digestive-system",
-    label: "🍔 Digestive (Liver, Stomach & Gut)",
+    id: "digestive-gi",
+    label: "🍏 Digestive Tract (Stomach, Liver & Intestines)",
     system: "Digestive",
-    region: "Abdomen & Pelvis",
-    icon: "🍔",
-    structuresCount: "Stomach, Liver, Pancreas & Intestines",
-    latin: "Apparatus Digestorius (Hepar et Gaster)",
-    fmaId: "FMA:7115",
+    region: "Abdomen",
+    icon: "🍏",
+    structuresCount: "GI Organs & Mesentery",
+    latin: "Apparatus Digestorius",
+    fmaId: "FMA:7152",
     summary:
-      "Visceral gastrointestinal tract. Includes Esophagus, J-shaped Stomach, C-loop Duodenum with Pancreas, Liver with Gallbladder, Jejunum, Ileum, and framed Large Colon (Cecum, Ascending, Transverse, Descending, Sigmoid, Rectum).",
-    origin: "Embryonic primitive gut endoderm divided into Foregut, Midgut, and Hindgut.",
-    insertion: "Anal canal at the pectinate line transitioning from endoderm to ectoderm.",
-    action: "Mechanical churning, chemical enzymatic digestion, nutrient/fluid absorption, and biliary excretion.",
-    innervation: "Enteric Nervous System (Myenteric Auerbach's & Submucosal Meissner's plexuses); Vagus nerve (parasympathetic) and Splanchnic nerves (sympathetic)",
-    bloodSupply: "Three ventral branches of Abdominal Aorta: 1. Celiac Trunk (Foregut), 2. Superior Mesenteric Artery (Midgut), 3. Inferior Mesenteric Artery (Hindgut)",
+      "Gastrointestinal tract extending from esophagus to rectum. Divided into Foregut (celiac trunk), Midgut (superior mesenteric artery), and Hindgut (inferior mesenteric artery). Features liver, gallbladder, pancreas, stomach, small bowel, and colon.",
+    origin: "Embryonic endodermal gut tube (Foregut, Midgut, Hindgut) suspended by dorsal and ventral mesenteries.",
+    insertion: "Anocutaneous line (pectinate line) in the anal canal.",
+    action: "Mechanical ingestion, enzymatic digestion, nutrient absorption, endocrine incretin release, and waste elimination.",
+    innervation: "Enteric Nervous System (Auerbach/myenteric and Meissner/submucosal plexuses) modulated by Vagus CN X and Sympathetics (T5-L2)",
+    bloodSupply: "Foregut: Celiac Trunk; Midgut: Superior Mesenteric Artery (SMA); Hindgut: Inferior Mesenteric Artery (IMA)",
     clinicalHighYield:
-      "Portal Hypertension in cirrhosis causes portosystemic collateral shunting: Esophageal varices (fatal rupture; left gastric vein to azygos), Caput medusae (paraumbilical to epigastric veins), and Internal Hemorrhoids (superior to middle/inferior rectal veins).",
-    mnemonic: "Foregut = Celiac Trunk; Midgut = SMA; Hindgut = IMA. Portosystemic shunts = 'Gut, Butt, and Caput'.",
-    examTip: "Pringle Maneuver: Clamping the hepatoduodenal ligament compresses the Portal Triad (Portal Vein, Proper Hepatic Artery, Common Bile Duct) to arrest liver hemorrhage.",
+      "Appendicitis: Luminal obstruction (fecalith in adults, lymphoid hyperplasia in children) causes periumbilical visceral pain (T10 dermatome via sympathetics) that later migrates to McBurney's point (somatic peritoneal irritation, 1/3 distance from ASIS to umbilicus).",
+    mnemonic: "Foregut = Celiac (T12); Midgut = SMA (L1); Hindgut = IMA (L3).",
+    examTip: "Internal hemorrhoids (above pectinate line) are painless (visceral innervation via inferior hypogastric plexus); External hemorrhoids (below pectinate line) are excruciatingly painful (somatic innervation via inferior rectal nerve).",
     flashcards: [
       {
-        q: "What are the 3 major vascular territories of the gut and their supplying arteries?",
-        a: "1. Foregut (pharynx to 2nd part duodenum): Celiac Trunk.\n2. Midgut (3rd part duodenum to proximal 2/3 transverse colon): Superior Mesenteric Artery (SMA).\n3. Hindgut (distal 1/3 transverse colon to upper anal canal): Inferior Mesenteric Artery (IMA).",
+        q: "What landmark defines McBurney's point, and what pathology does it indicate?",
+        a: "Located 1/3 of the distance from the Right Anterior Superior Iliac Spine (ASIS) to the umbilicus. Tenderness here indicates Acute Appendicitis.",
       },
       {
-        q: "What anatomical structure is clamped in a Pringle maneuver, and what does it contain?",
-        a: "The Hepatoduodenal ligament is clamped. It contains the Portal Triad: 1. Common Bile Duct, 2. Proper Hepatic Artery, 3. Hepatic Portal Vein.",
+        q: "What embryonic divisions of the gut correspond to the Celiac Trunk, SMA, and IMA?",
+        a: "Celiac Trunk: Foregut (esophagus to 2nd part of duodenum).\nSMA: Midgut (3rd part of duodenum to proximal 2/3 of transverse colon).\nIMA: Hindgut (distal 1/3 of transverse colon to upper anal canal).",
       },
     ],
   },
   {
-    id: "kidney",
-    label: "💧 Urinary System & Kidneys",
+    id: "urinary-kidneys",
+    label: "💧 Kidneys & Urinary Tract",
     system: "Urinary",
     region: "Abdomen & Pelvis",
     icon: "💧",
     structuresCount: "Kidneys, Ureters & Bladder",
-    latin: "Apparatus Urinarius (Renes et Ureteres)",
+    latin: "Organa Urinaria",
     fmaId: "FMA:7159",
     summary:
       "Retroperitoneal filtration and urinary excretion system. Left kidney sits at T12-L3; Right kidney sits slightly lower due to the liver. Renal arteries arise directly from the abdominal aorta at L1-L2.",
@@ -772,6 +1190,9 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
   // Viewport display mode: 'cogni-live' (Official live 3D Atlas) vs 'flashcards' (Active Recall)
   const [activeTab, setActiveTab] = useState("cogni-live");
 
+  // Clinical Dossier Sub-Tab: 'all' (Complete Textbook Mode), 'oiai', 'relations', 'neurovascular', 'clinical', 'viva'
+  const [dossierTab, setDossierTab] = useState("all");
+
   // Viewer height: 'normal' (880px) or 'imax' (980px)
   const [viewerHeight, setViewerHeight] = useState("normal");
 
@@ -878,23 +1299,28 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
             type="button"
             className={`lab-nav-pill ${viewerHeight === "imax" ? "active" : ""}`}
             onClick={() => setViewerHeight(viewerHeight === "imax" ? "normal" : "imax")}
-            title="Toggle IMAX 980px vertical height"
+            title="Toggle full screen IMAX height mode"
           >
-            {viewerHeight === "imax" ? "📐 Normal Height (880px)" : "📺 Height: IMAX (980px)"}
+            {viewerHeight === "imax" ? "📱 Normal Height" : "🖥️ Expand IMAX Height (980px)"}
           </button>
         </div>
       </div>
 
       {/* =========================================================================
-          COGNI ANATOMY REGIONAL PRESET CHIPS BAR (ONE-CLICK QUICK JUMP)
+          PRESET SELECTOR BAR (MATCHED DIRECTLY TO COGNI PRESETS)
           ========================================================================= */}
       <div className="cogni-presets-bar">
         <div className="presets-bar-header">
-          <span className="toolbar-lbl">Cogni 3D Presets:</span>
+          <div className="current-preset-badge">
+            <span>Current 3D Specimen:</span>
+            <strong>{activePreset.label}</strong>
+            <span className="preset-structures-pill">{activePreset.structuresCount}</span>
+          </div>
+
           <div className="presets-search-mini">
             <input
               type="text"
-              placeholder="Filter regions (e.g. Trapezius, Muscles, Heart, Skull)..."
+              placeholder="Search 3D preset or organ (e.g. Trapezius, Heart)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -1043,31 +1469,70 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                   onClick={() => {
                     if (onSaveNote) {
                       const oiaiContent = activePreset.origin
-                        ? `\n\n#### 🦴 Muscle Origin, Insertion & Action (O.I.A.I.)\n- **Origin (Proximal)**: ${activePreset.origin}\n- **Insertion (Distal)**: ${activePreset.insertion}\n- **Action / Function**: ${activePreset.action}`
+                        ? `\n\n#### 🦴 Muscle Origin, Insertion & Action (O.I.A.I.)\n- **Origin (Proximal)**: ${activePreset.origin}\n- **Insertion (Distal)**: ${activePreset.insertion}\n- **Action / Biomechanics**: ${activePreset.action}`
                         : "";
                       onSaveNote(
-                        `Cogni Anatomy: ${activePreset.label}`,
-                        `### 🧬 Cogni 3D Anatomy Study Notes: ${activePreset.label}\n\n**Latin**: *${activePreset.latin}* | **FMA**: \`${activePreset.fmaId}\`\n\n#### 📖 Overview\n${activePreset.summary}${oiaiContent}\n\n- **Innervation**: ${activePreset.innervation}\n- **Blood Supply**: ${activePreset.bloodSupply}\n\n#### 🩺 Clinical Pathology\n${activePreset.clinicalHighYield}\n\n#### 💡 Board Exam Mnemonic\n> ${activePreset.mnemonic}\n\n#### 🎯 Exam Tip\n${activePreset.examTip}`,
+                        `Cogni Anatomy Comprehensive: ${activePreset.label}`,
+                        `### 🧬 Comprehensive 3D Anatomy Study Dossier: ${activePreset.label}\n\n**Latin**: *${activePreset.latin}* | **FMA ID**: \`${activePreset.fmaId}\` | **Region**: ${activePreset.region}\n\n#### 📖 Structural Architecture & Overview\n${activePreset.summary}${oiaiContent}\n\n#### ⚡ Innervation & Blood Supply\n- **Innervation**: ${activePreset.innervation}\n- **Blood Supply**: ${activePreset.bloodSupply}\n\n#### 🩺 High-Yield Clinical Pathology & Surgical Anatomy\n${activePreset.clinicalHighYield}\n\n#### 💡 Board Exam Mnemonic\n> "${activePreset.mnemonic}"\n\n#### 🎯 Board Exam Flashpoint\n${activePreset.examTip}`,
                         "Medicine (MBBS)"
                       );
                     }
                   }}
                 >
-                  💾 Save to Study Notes (+20 XP)
+                  📝 Save Complete Textbook Notes (+35 XP)
                 </button>
               </div>
             </div>
 
-            {/* DEDICATED HIGHLIGHT CARD: MUSCLE ORIGIN, INSERTION & ACTION (O.I.A.I.) */}
-            {(activePreset.origin || activePreset.insertion || activePreset.action) && (
+            {/* DOSSIER SUBNAV NAVIGATION BAR (STUDENTS CAN CHOOSE SPECIFIC TAB OR VIEW ALL) */}
+            <div className="dossier-subnav-strip">
+              <button
+                type="button"
+                className={`dossier-subnav-pill ${dossierTab === "all" ? "active" : ""}`}
+                onClick={() => setDossierTab("all")}
+              >
+                📚 All Sections (Textbook Mode)
+              </button>
+              <button
+                type="button"
+                className={`dossier-subnav-pill ${dossierTab === "oiai" ? "active" : ""}`}
+                onClick={() => setDossierTab("oiai")}
+              >
+                🎯 O.I.A.I. & Biomechanics
+              </button>
+              <button
+                type="button"
+                className={`dossier-subnav-pill ${dossierTab === "architecture" ? "active" : ""}`}
+                onClick={() => setDossierTab("architecture")}
+              >
+                📖 Architecture & Relations
+              </button>
+              <button
+                type="button"
+                className={`dossier-subnav-pill ${dossierTab === "neuro" ? "active" : ""}`}
+                onClick={() => setDossierTab("neuro")}
+              >
+                ⚡ Neurovascular & Blood
+              </button>
+              <button
+                type="button"
+                className={`dossier-subnav-pill ${dossierTab === "clinical" ? "active" : ""}`}
+                onClick={() => setDossierTab("clinical")}
+              >
+                🩺 Clinical Pearls & Exams
+              </button>
+            </div>
+
+            {/* SECTION 1: DEDICATED O.I.A.I. SPECIFICATION CARD */}
+            {(dossierTab === "all" || dossierTab === "oiai") && (activePreset.origin || activePreset.insertion || activePreset.action) && (
               <div className="dossier-oiai-box">
                 <div className="oiai-header">
                   <div className="oiai-title-badge">
                     <span className="oiai-icon">🎯</span>
                     <strong>O.I.A.I. MEDICAL EXAM SPECIFICATION</strong>
-                    <span className="oiai-subtitle">Origin · Insertion · Action · Innervation</span>
+                    <span className="oiai-subtitle">Origin · Insertion · Action · Biomechanics</span>
                   </div>
-                  <span className="oiai-status-pill">High-Yield Clinical Anatomy</span>
+                  <span className="oiai-status-pill">High-Yield Medical Core</span>
                 </div>
 
                 <div className="oiai-breakdown-grid">
@@ -1098,37 +1563,70 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
               </div>
             )}
 
-            {/* MULTI-CARD CLINICAL DASHBOARD GRID */}
-            <div className="cogni-dossier-grid">
-              {/* CARD 1: ARCHITECTURE & INNERVATION */}
-              <div className="dossier-section">
-                <h4>📖 Anatomical Architecture & Innervation</h4>
-                <p className="dossier-summary-text">{activePreset.summary}</p>
-                <div className="dossier-meta-item" style={{ marginTop: "12px" }}>
-                  <strong>Nerve Supply (Innervation):</strong> {activePreset.innervation}
+            {/* SECTION 2: ARCHITECTURE & RELATIONS */}
+            {(dossierTab === "all" || dossierTab === "architecture") && (
+              <div className="dossier-expanded-section">
+                <div className="section-title-strip">
+                  <span className="section-icon">📖</span>
+                  <h3>Anatomical Architecture & 3D Spatial Relations</h3>
                 </div>
-                <div className="dossier-meta-item">
-                  <strong>Arterial Blood Supply:</strong> {activePreset.bloodSupply}
-                </div>
-              </div>
-
-              {/* CARD 2: CLINICAL PATHOLOGY & SURGICAL PEARLS */}
-              <div className="dossier-section highlight-red">
-                <h4>🩺 Clinical Pathology & Surgical Correlations</h4>
-                <p>{activePreset.clinicalHighYield}</p>
-              </div>
-
-              {/* CARD 3: USMLE / NEET-PG MNEMONICS & FLASHPOINTS */}
-              <div className="dossier-section mnemonic-box">
-                <h4>💡 High-Yield Board Exam Mnemonic</h4>
-                <div className="mnemonic-text">"{activePreset.mnemonic}"</div>
-
-                <h4 style={{ marginTop: "14px" }}>🎯 High-Yield Exam Flashpoint</h4>
-                <p style={{ color: "#fde68a", fontSize: "12.5px", lineHeight: "1.5", margin: 0 }}>
-                  {activePreset.examTip}
+                <p className="dossier-summary-text" style={{ fontSize: "14px", lineHeight: "1.7" }}>
+                  {activePreset.summary}
                 </p>
+                <div className="architecture-meta-grid">
+                  <div className="arch-meta-card">
+                    <span className="arch-meta-title">🏛️ Regional Classification</span>
+                    <p><strong>Region:</strong> {activePreset.region} · <strong>System:</strong> {activePreset.system}</p>
+                  </div>
+                  <div className="arch-meta-card">
+                    <span className="arch-meta-title">🏷️ Scientific Nomenclature</span>
+                    <p><strong>Latin:</strong> <em>{activePreset.latin}</em> · <strong>Ontology:</strong> <code>{activePreset.fmaId}</code></p>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* SECTION 3: NEUROVASCULAR & BLOOD SUPPLY */}
+            {(dossierTab === "all" || dossierTab === "neuro") && (
+              <div className="dossier-expanded-section">
+                <div className="section-title-strip">
+                  <span className="section-icon">⚡</span>
+                  <h3>Neurovascular Innervation, Arterial & Venous Drainage</h3>
+                </div>
+                <div className="neuro-breakdown-grid">
+                  <div className="neuro-card">
+                    <span className="neuro-label">⚡ Nerve Supply (Innervation)</span>
+                    <p>{activePreset.innervation}</p>
+                  </div>
+                  <div className="neuro-card">
+                    <span className="neuro-label">🩸 Arterial Blood Supply</span>
+                    <p>{activePreset.bloodSupply}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SECTION 4: CLINICAL CORRELATIONS & BOARD FLASHPOINTS */}
+            {(dossierTab === "all" || dossierTab === "clinical") && (
+              <div className="cogni-dossier-grid" style={{ marginTop: "16px" }}>
+                {/* CARD 1: CLINICAL PATHOLOGY & SURGICAL PEARLS */}
+                <div className="dossier-section highlight-red">
+                  <h4>🩺 Clinical Pathology & Surgical Correlations</h4>
+                  <p>{activePreset.clinicalHighYield}</p>
+                </div>
+
+                {/* CARD 2: USMLE / NEET-PG MNEMONICS & FLASHPOINTS */}
+                <div className="dossier-section mnemonic-box">
+                  <h4>💡 High-Yield Board Exam Mnemonic</h4>
+                  <div className="mnemonic-text">"{activePreset.mnemonic}"</div>
+
+                  <h4 style={{ marginTop: "14px" }}>🎯 High-Yield Exam Flashpoint</h4>
+                  <p style={{ color: "#fde68a", fontSize: "12.5px", lineHeight: "1.5", margin: 0 }}>
+                    {activePreset.examTip}
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* =====================================================================
                 INTERACTIVE HIGH-YIELD MUSCLE DIRECTORY (O.I.A.I. RAPID LOOKUP)
@@ -1197,7 +1695,7 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                         if (onSaveNote) {
                           onSaveNote(
                             `Muscle O.I.A.I.: ${selectedMuscle.name}`,
-                            `### 🦾 Muscle O.I.A.I. Study Notes: ${selectedMuscle.name}\n\n**Latin**: *${selectedMuscle.latin}* | **FMA**: \`${selectedMuscle.fmaId}\` | **Region**: ${selectedMuscle.region}\n\n#### 📍 Origin (Proximal Attachment)\n${selectedMuscle.origin}\n\n#### 📌 Insertion (Distal Attachment)\n${selectedMuscle.insertion}\n\n#### ⚙️ Action & Biomechanical Motion\n${selectedMuscle.action}\n\n#### ⚡ Innervation & Nerve Supply\n${selectedMuscle.innervation}\n\n#### 🩸 Arterial Blood Supply\n${selectedMuscle.bloodSupply}\n\n#### 🩺 High-Yield Clinical Pearl\n${selectedMuscle.clinicalPearl}`,
+                            `### 🦾 Muscle O.I.A.I. Study Notes: ${selectedMuscle.name}\n\n**Latin**: *${selectedMuscle.latin}* | **FMA**: \`${selectedMuscle.fmaId}\` | **Region**: ${selectedMuscle.region}\n\n#### 📍 Origin (Proximal Attachment)\n${selectedMuscle.origin}\n\n#### 📌 Insertion (Distal Attachment)\n${selectedMuscle.insertion}\n\n#### ⚙️ Action & Biomechanical Motion\n${selectedMuscle.action}\n\n#### ⚡ Innervation & Nerve Supply\n${selectedMuscle.innervation}\n\n#### 🩸 Arterial Blood Supply & Lymphatics\n${selectedMuscle.bloodSupply} (${selectedMuscle.lymphatics})\n\n#### 🩺 High-Yield Clinical Pearl\n${selectedMuscle.clinicalPearl}\n\n#### 🎓 Bedside Test\n${selectedMuscle.bedsideTest}`,
                             "Medicine (MBBS)"
                           );
                         }
@@ -1206,6 +1704,23 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                       💾 Save Muscle to Notes (+20 XP)
                     </button>
                   </div>
+
+                  {/* ANATOMICAL HEADS / FIBERS BREAKDOWN IF PRESENT */}
+                  {selectedMuscle.heads && selectedMuscle.heads.length > 0 && (
+                    <div className="spotlight-heads-container">
+                      <span className="heads-title">🔬 Functional Heads & Fiber Sub-Divisions:</span>
+                      <div className="heads-grid">
+                        {selectedMuscle.heads.map((head, hIdx) => (
+                          <div key={hIdx} className="head-card">
+                            <span className="head-name">{head.name}</span>
+                            <div className="head-detail"><strong>Origin:</strong> {head.origin}</div>
+                            <div className="head-detail"><strong>Insertion:</strong> {head.insertion}</div>
+                            <div className="head-detail"><strong>Action:</strong> {head.action}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   <div className="spotlight-grid">
                     <div className="spotlight-col origin">
@@ -1224,6 +1739,22 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                     </div>
                   </div>
 
+                  {/* SYNERGISTS & ANTAGONISTS */}
+                  {(selectedMuscle.synergists || selectedMuscle.antagonists) && (
+                    <div className="spotlight-functional-strip">
+                      {selectedMuscle.synergists && (
+                        <div className="functional-col">
+                          <strong>🤝 Synergist Muscles:</strong> {selectedMuscle.synergists}
+                        </div>
+                      )}
+                      {selectedMuscle.antagonists && (
+                        <div className="functional-col">
+                          <strong>⚔️ Antagonist Muscles:</strong> {selectedMuscle.antagonists}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   <div className="spotlight-meta-strip">
                     <div className="meta-block">
                       <strong>⚡ Nerve Supply:</strong> {selectedMuscle.innervation}
@@ -1231,12 +1762,35 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                     <div className="meta-block">
                       <strong>🩸 Arterial Supply:</strong> {selectedMuscle.bloodSupply}
                     </div>
+                    {selectedMuscle.lymphatics && (
+                      <div className="meta-block">
+                        <strong>🛡️ Lymphatics:</strong> {selectedMuscle.lymphatics}
+                      </div>
+                    )}
                   </div>
 
+                  {/* BEDSIDE PHYSICAL EXAM TEST */}
+                  {selectedMuscle.bedsideTest && (
+                    <div className="spotlight-bedside-box">
+                      <span className="bedside-badge">🩺 Step-by-Step Bedside Physical Exam Procedure</span>
+                      <p>{selectedMuscle.bedsideTest}</p>
+                    </div>
+                  )}
+
+                  {/* CLINICAL PEARL */}
                   <div className="spotlight-clinical-box">
                     <span className="clinical-badge">🩺 Clinical & Board Exam Pearl</span>
                     <p>{selectedMuscle.clinicalPearl}</p>
                   </div>
+
+                  {/* VIVA VOCE QUESTION & ANSWER */}
+                  {selectedMuscle.vivaQuestion && (
+                    <div className="spotlight-viva-box">
+                      <span className="viva-badge">🎓 Professor's Viva Voce Table Question</span>
+                      <div className="viva-question"><strong>Q:</strong> {selectedMuscle.vivaQuestion.q}</div>
+                      <div className="viva-answer"><strong>Model Answer:</strong> {selectedMuscle.vivaQuestion.a}</div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
