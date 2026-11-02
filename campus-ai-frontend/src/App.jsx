@@ -14,6 +14,8 @@ import FinanceLab from "./components/labs/FinanceLab";
 import PsychologyLab from "./components/labs/PsychologyLab";
 import AuthAccountModal from "./components/modals/AuthAccountModal";
 import { pushCloudData } from "./services/cloudSyncService";
+import TopRightProfileMenu from "./components/navigation/TopRightProfileMenu";
+import FloatingAIAssistant from "./components/assistant/FloatingAIAssistant";
 
 function App() {
   // Navigation State
@@ -117,6 +119,7 @@ function App() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [profileForm, setProfileForm] = useState(student);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isFloatingAssistantOpen, setIsFloatingAssistantOpen] = useState(false);
   const [syncStatus, setSyncStatus] = useState("synced"); // "synced" | "syncing" | "offline"
   const [lastSyncedAt, setLastSyncedAt] = useState(() => {
     try {
@@ -536,7 +539,7 @@ function App() {
     const userQuestion = text.trim();
     if (!userQuestion || loading) return;
 
-    setActive("AI Assistant");
+    setIsFloatingAssistantOpen(true);
     setQuestion("");
 
     setMessages((prev) => [
@@ -1050,7 +1053,11 @@ function App() {
               icon: activeLabConfig.icon,
               page: "Specialized Lab",
             },
-            { name: "AI Assistant", icon: "✳" },
+            {
+              name: "AI Assistant",
+              icon: "✳",
+              action: () => setIsFloatingAssistantOpen((prev) => !prev),
+            },
             { name: "My Notes", icon: "▤" },
             { name: "Quiz Lab", icon: "◎" },
           ].map((item) => {
@@ -1060,10 +1067,19 @@ function App() {
               <button
                 key={item.name}
                 className={`nav-item ${isItemActive ? "active" : ""}`}
-                onClick={() => openPage(item.page || item.name)}
+                onClick={() => {
+                  if (item.action) {
+                    item.action();
+                  } else {
+                    openPage(item.page || item.name);
+                  }
+                }}
               >
                 <span className="nav-icon">{item.icon}</span>
                 {item.name}
+                {item.name === "AI Assistant" && isFloatingAssistantOpen && (
+                  <span className="nav-assistant-pill">Open</span>
+                )}
                 {isItemActive && <span className="active-dot" />}
               </button>
             );
@@ -1093,22 +1109,6 @@ function App() {
             <div className="sidebar-course-stats">
               <span>{degreeCompletedCount}/{degreeModuleIds.length} Modules</span>
               <strong>{degreeProgress}%</strong>
-            </div>
-          </div>
-
-          {/* Student Profile Card (Cloud Synced) */}
-          <div
-            className="profile-card"
-            onClick={() => setIsAuthModalOpen(true)}
-            title="Click to view cloud profile, switch demo scholars, or sync data"
-          >
-            <div className="profile-avatar">{student.avatar}</div>
-            <div className="profile-info">
-              <div className="profile-name-row">
-                <strong>{student.name}</strong>
-                <span className="profile-cloud-dot" title="Cloud Synced 24/7" />
-              </div>
-              <span>Class of {student.gradYear} · {currentDegreeProgram.shortName}</span>
             </div>
           </div>
         </div>
@@ -1195,17 +1195,16 @@ function App() {
               </span>
             </button>
 
-            {/* Authenticated Student Account Pill */}
-            <button
-              type="button"
-              className="topbar-account-pill"
-              onClick={() => setIsAuthModalOpen(true)}
-              title="Student Account & Cloud Profile Settings"
-            >
-              <span className="account-avatar">{student.avatar}</span>
-              <span className="account-name">{student.name}</span>
-              <span className="account-chevron">▾</span>
-            </button>
+            {/* UPPER RIGHT CORNER: DEDICATED STUDENT PROFILE DROPDOWN */}
+            <TopRightProfileMenu
+              student={student}
+              notes={notes}
+              currentDegreeProgram={currentDegreeProgram}
+              onOpenAuthModal={() => setIsAuthModalOpen(true)}
+              syncStatus={syncStatus}
+              lastSyncedAt={lastSyncedAt}
+              onAccountUpdate={handleAccountUpdate}
+            />
           </div>
         </header>
 
@@ -2892,6 +2891,33 @@ function App() {
         onAccountUpdate={handleAccountUpdate}
         syncStatus={syncStatus}
         lastSyncedAt={lastSyncedAt}
+      />
+
+      {/* =========================================================================
+          FLOATING AI ASSISTANT IN LOWER RIGHT CORNER
+          ========================================================================= */}
+      <FloatingAIAssistant
+        isOpen={isFloatingAssistantOpen}
+        onToggle={() => setIsFloatingAssistantOpen((prev) => !prev)}
+        student={student}
+        currentDegreeProgram={currentDegreeProgram}
+        currentCareer={currentCareer}
+        messages={messages}
+        onSendMessage={sendMessage}
+        loading={loading}
+        onSaveToNotes={saveContentToNotes}
+        onNewChat={() =>
+          setMessages([
+            {
+              role: "assistant",
+              text: `New session started! I am your **Campus AI Tutor**, calibrated for **${currentCareer.title}** (${currentDegreeProgram.shortName}). How can I help you today?`,
+            },
+          ])
+        }
+        onOpenFullPage={() => {
+          setIsFloatingAssistantOpen(false);
+          openPage("AI Assistant");
+        }}
       />
     </div>
   );
