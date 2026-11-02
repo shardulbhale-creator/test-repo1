@@ -1,6 +1,187 @@
 import { useState } from "react";
 
 // ============================================================================
+// ANATOMICAL PARTS LIBRARY (MATCHED TO COGNI ANATOMY STRUCTURES & ATTACHMENTS)
+// Supports interactive Left Systems Navigator & Right Structure Inspector
+// ============================================================================
+const ANATOMICAL_PARTS_LIBRARY = [
+  {
+    id: "right-clavicle",
+    name: "Right Clavicle",
+    category: "Skeleton",
+    region: "Upper limb",
+    system: "Skeletal",
+    presetId: "arm-bones",
+    description:
+      "Bones form the supporting framework of the body, protect organs, and provide attachment points for muscles. Their internal tissue also stores minerals and produces blood cells.",
+    origin: "Medial two-thirds curves convexly anteriorly; sternal end articulates with manubrium sterni at sternoclavicular joint.",
+    insertion: "Lateral third curves concavely anteriorly; acromial end articulates with acromion of scapula at acromioclavicular joint.",
+    action: "Acts as a rigid strut transmitting mechanical forces from upper limb to axial skeleton and maximizing arm reach.",
+    innervation: "Supraclavicular Nerves (C3, C4) and Nerve to Subclavius (C5, C6).",
+    bloodSupply: "Suprascapular Artery, Thoracoacromial Artery, and Internal Thoracic Artery.",
+    clinicalPearl:
+      "Most frequently fractured bone in the human body (typically at junction of middle and lateral thirds). Medial fragment elevates due to sternocleidomastoid; lateral fragment drops due to weight of the upper limb.",
+  },
+  {
+    id: "ascending-trapezius",
+    name: "Ascending Part Of Right Trapezius",
+    category: "Muscles",
+    region: "Head",
+    system: "Musculoskeletal",
+    presetId: "trapezius",
+    muscleId: "trapezius-muscle",
+    description:
+      "Skeletal muscles generate movement by pulling on their attachments. Together with tendons, they move joints, stabilize posture, and produce heat.",
+    origin: "Spinous processes and supraspinous ligaments of thoracic vertebrae T4 through T12.",
+    insertion: "Apex of the spine of the scapula at a smooth triangular tubercle near medial border.",
+    action: "Depresses the scapula and upwardly rotates the glenoid cavity during overhead abduction (>90°).",
+    innervation: "Motor: Spinal Accessory Nerve (CN XI). Sensory / Proprioception: Ventral rami of C3–C4.",
+    bloodSupply: "Superficial branch of Transverse Cervical Artery and Dorsal Scapular Artery.",
+    clinicalPearl:
+      "Weakness impairs overhead reaching and causes lateral scapular winging. Tested by depressing abducted arm against resistance.",
+  },
+  {
+    id: "right-third-rib",
+    name: "Right Third Rib",
+    category: "Skeleton",
+    region: "Trunk",
+    system: "Skeletal",
+    presetId: "skeleton",
+    description:
+      "True vertebrosternal rib articulating with T3 thoracic vertebra posteriorly and sternum anteriorly via costal cartilage. Protects thoracic organs.",
+    origin: "Head has 2 articular facets for bodies of T2 and T3 vertebrae; tubercle articulates with T3 transverse process.",
+    insertion: "Anterior costal end joins the 3rd costal cartilage to insert into lateral sternal border.",
+    action: "Expands thoracic volume during inspiration (bucket-handle and pump-handle movements).",
+    innervation: "3rd Intercostal Nerve (anterior ramus of T3 spinal nerve).",
+    bloodSupply: "3rd Posterior Intercostal Artery (from thoracic aorta) and Anterior Intercostal Arteries (from internal thoracic).",
+    clinicalPearl:
+      "Costal groove on lower internal border carries the Intercostal Vein, Artery, and Nerve (VAN from superior to inferior). Thoracentesis must always be performed along the SUPERIOR rib border.",
+  },
+  {
+    id: "deltoid-part",
+    name: "Deltoid Muscle",
+    category: "Muscles",
+    region: "Upper limb",
+    system: "Musculoskeletal",
+    presetId: "muscles",
+    muscleId: "deltoid-muscle",
+    description:
+      "Major multipennate abductor of the glenohumeral joint covering the shoulder with anterior, middle, and posterior heads.",
+    origin: "Lateral 1/3 of clavicle, lateral acromion, and lower lip of crest of scapular spine.",
+    insertion: "Deltoid tuberosity on lateral middle shaft of humerus.",
+    action: "Abducts arm from 15° to 90° (middle fibers); anterior fibers flex and medially rotate; posterior fibers extend and laterally rotate.",
+    innervation: "Axillary Nerve (C5, C6) from posterior cord of brachial plexus.",
+    bloodSupply: "Posterior Circumflex Humeral Artery and Deltoid branch of Thoracoacromial trunk.",
+    clinicalPearl:
+      "Injured in surgical neck humerus fractures or anterior shoulder dislocation, producing lateral shoulder anesthesia ('regimental badge area').",
+  },
+  {
+    id: "biceps-brachii-part",
+    name: "Biceps Brachii",
+    category: "Muscles",
+    region: "Upper limb",
+    system: "Musculoskeletal",
+    presetId: "muscles",
+    muscleId: "biceps-muscle",
+    description:
+      "Two-headed flexor and supinator muscle of the anterior arm acting across both shoulder and elbow joints.",
+    origin: "Long head: supraglenoid tubercle of scapula; Short head: tip of coracoid process.",
+    insertion: "Radial tuberosity of radius and bicipital aponeurosis.",
+    action: "Chief powerful supinator of the flexed forearm and elbow flexor.",
+    innervation: "Musculocutaneous Nerve (C5, C6).",
+    bloodSupply: "Muscular branches of Brachial Artery.",
+    clinicalPearl:
+      "Tendon rupture of long head creates 'Popeye muscle' deformity. Biceps reflex evaluates C5–C6 spinal roots.",
+  },
+  {
+    id: "femur-part",
+    name: "Femur (Right Thigh Bone)",
+    category: "Skeleton",
+    region: "Lower limb",
+    system: "Skeletal",
+    presetId: "leg-bones",
+    description:
+      "Longest and strongest tubular bone in the human body, transmitting weight from the acetabular pelvis to the tibia.",
+    origin: "Proximal head fits into acetabulum; greater and lesser trochanters anchor hip rotators and iliopsoas.",
+    insertion: "Distal medial and lateral condyles articulate with tibia and patella.",
+    action: "Forms hip and knee joints; provides structural lever for bipedal locomotion.",
+    innervation: "Periosteal nerves from Femoral, Obturator, and Sciatic branches.",
+    bloodSupply: "Profunda Femoris, Medial & Lateral Circumflex Femoral Arteries, and Nutrient Artery.",
+    clinicalPearl:
+      "Femoral neck fractures tear retinacular arteries, causing avascular necrosis of the femoral head in elderly patients.",
+  },
+  {
+    id: "heart-structure",
+    name: "Heart (Myocardium & Chambers)",
+    category: "Circulatory",
+    region: "Trunk",
+    system: "Circulatory",
+    presetId: "heart-detailed",
+    description:
+      "Four-chambered muscular double pump enclosed in the fibrous and serous pericardium inside the middle mediastinum.",
+    origin: "Primitive embryonic heart tube; right atrium receives SVC, IVC, and coronary sinus.",
+    insertion: "Pumps blood out through Pulmonary Trunk (right ventricle) and Aorta (left ventricle).",
+    action: "Rhythmic electrical contraction (systole) and relaxation (diastole) to perfuse body tissues.",
+    innervation: "Cardiac Plexus: Sympathetics (T1-T5) increase rate/force; Parasympathetics (Vagus CN X) slow heart rate.",
+    bloodSupply: "Right and Left Coronary Arteries arising from the aortic sinuses of Valsalva.",
+    clinicalPearl:
+      "LAD artery occlusion causes massive anterior wall myocardial infarction ('Widowmaker').",
+  },
+  {
+    id: "lungs-structure",
+    name: "Lungs & Tracheobronchial Tree",
+    category: "Respiratory",
+    region: "Trunk",
+    system: "Respiratory",
+    presetId: "respiratory-system",
+    description:
+      "Essential respiratory organs where venous blood is oxygenated and carbon dioxide is excreted across alveolar membranes.",
+    origin: "Trachea bifurcates at carina (T4/T5) into right and left primary bronchi.",
+    insertion: "Extends down to 300 million alveoli with capillary networks.",
+    action: "Pulmonary ventilation, gas exchange, and acid-base blood buffering.",
+    innervation: "Pulmonary Plexus: Vagus CN X (bronchoconstriction) and Sympathetics T2-T5 (bronchodilation).",
+    bloodSupply: "Bronchial Arteries (nutritive) and Pulmonary Arteries (gas exchange).",
+    clinicalPearl:
+      "Aspirated foreign objects lodge in Right Main Bronchus due to its wider, shorter, and more vertical path.",
+  },
+  {
+    id: "brain-structure",
+    name: "Brain (Cerebrum & Cerebellum)",
+    category: "Nervous",
+    region: "Head",
+    system: "Nervous",
+    presetId: "brain",
+    description:
+      "Cerebral hemispheres, basal ganglia, brainstem, and cerebellum managing higher executive cognition, motor control, and sensory integration.",
+    origin: "Neural tube derivatives (Telencephalon, Diencephalon, Mesencephalon, Rhombencephalon).",
+    insertion: "Corticospinal tracts and 12 pairs of cranial nerves.",
+    action: "Cognition, memory, voluntary locomotion, sensory reception, and autonomic vegetative control.",
+    innervation: "Central nervous system origin of cranial nerves CN I through CN XII.",
+    bloodSupply: "Circle of Willis supplied by Internal Carotid and Vertebral/Basilar arterial systems.",
+    clinicalPearl:
+      "Rupture of saccular Berry aneurysm in Circle of Willis produces thunderclap Subarachnoid Hemorrhage.",
+  },
+  {
+    id: "quadriceps-part",
+    name: "Quadriceps Femoris",
+    category: "Muscles",
+    region: "Lower limb",
+    system: "Musculoskeletal",
+    presetId: "muscles",
+    muscleId: "quadriceps-muscle",
+    description:
+      "Four-headed anterior thigh muscle extending the knee and stabilizing patellar tracking during walking and running.",
+    origin: "Rectus femoris (AIIS), Vastus lateralis, Vastus medialis, and Vastus intermedius.",
+    insertion: "Patella via common quadriceps tendon, continuing as patellar ligament into tibial tuberosity.",
+    action: "Extends leg at knee joint; Rectus femoris also flexes thigh at hip joint.",
+    innervation: "Femoral Nerve (L2, L3, L4).",
+    bloodSupply: "Lateral Circumflex Femoral Artery and Deep Femoral Artery.",
+    clinicalPearl:
+      "Patellar tendon reflex tests L3–L4 spinal nerve roots. VMO weakness causes patellar maltracking.",
+  },
+];
+
+// ============================================================================
 // HIGH-YIELD MUSCLES DIRECTORY: ORIGIN, INSERTION, ACTION & INNERVATION (O.I.A.I.)
 // Exhaustive medical school & board exam reference database (USMLE / NEET-PG / PLAB)
 // ============================================================================
@@ -1199,6 +1380,20 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
   // Search filter for presets & structures
   const [searchQuery, setSearchQuery] = useState("");
 
+  // =========================================================================
+  // FLOATING HUD OVERLAYS STATE (MATCHING USER IMAGES 1 & 2 WITH MINIMIZE)
+  // =========================================================================
+  const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
+  const [leftPanelTab, setLeftPanelTab] = useState("systems"); // 'systems' | 'opacity' | 'contents'
+  const [regionFilter, setRegionFilter] = useState("all"); // 'all' | 'Whole body' | 'Head' | 'Trunk' | 'Upper limb' | 'Lower limb'
+  const [rightPanelTab, setRightPanelTab] = useState("structure"); // 'view' | 'structure' | 'settings'
+  const [selectedStructure, setSelectedStructure] = useState(ANATOMICAL_PARTS_LIBRARY[0]); // Default Right Clavicle
+  const [isOverviewOpen, setIsOverviewOpen] = useState(true);
+  const [isStructureHidden, setIsStructureHidden] = useState(false);
+  const [isSeeThrough, setIsSeeThrough] = useState(false);
+  const [isIsolated, setIsIsolated] = useState(false);
+
   // Selected High-Yield Muscle from O.I.A.I. Directory
   const [selectedMuscle, setSelectedMuscle] = useState(HIGH_YIELD_MUSCLES_DIRECTORY[0]); // Default Trapezius
 
@@ -1225,6 +1420,12 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
     );
   });
 
+  // Filter parts library for left panel
+  const filteredParts = ANATOMICAL_PARTS_LIBRARY.filter((part) => {
+    if (regionFilter === "all" || regionFilter === "Whole body") return true;
+    return part.region.toLowerCase() === regionFilter.toLowerCase();
+  });
+
   // Filter muscle directory based on search
   const filteredMuscles = HIGH_YIELD_MUSCLES_DIRECTORY.filter((m) => {
     if (!muscleDirectorySearch.trim()) return true;
@@ -1239,10 +1440,35 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
     );
   });
 
+  // Handle structure selection from left panel or chips
+  // REQUIREMENT: When user selects any part, keep the right info interface open!
+  function handleSelectStructure(structure) {
+    setSelectedStructure(structure);
+    setIsRightPanelOpen(true);
+    setIsStructureHidden(false);
+    setIsSeeThrough(false);
+    setIsIsolated(false);
+
+    if (structure.presetId) {
+      const matchPreset = COGNI_PRESETS.find((p) => p.id === structure.presetId);
+      if (matchPreset) setActivePreset(matchPreset);
+    }
+    if (structure.muscleId) {
+      const matchMuscle = HIGH_YIELD_MUSCLES_DIRECTORY.find((m) => m.id === structure.muscleId);
+      if (matchMuscle) setSelectedMuscle(matchMuscle);
+    }
+    if (onAwardXp) onAwardXp(10);
+  }
+
   function handleSelectPreset(preset) {
     setActivePreset(preset);
     setFlippedCards({});
-    // If selecting trapezius or muscles, sync selectedMuscle
+
+    const matchingStruct = ANATOMICAL_PARTS_LIBRARY.find((s) => s.presetId === preset.id);
+    if (matchingStruct) {
+      setSelectedStructure(matchingStruct);
+      setIsRightPanelOpen(true);
+    }
     if (preset.id === "trapezius") {
       setSelectedMuscle(HIGH_YIELD_MUSCLES_DIRECTORY[0]);
     }
@@ -1356,13 +1582,31 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
       <div className="cogni-workspace-stacked">
         {/* TOP SECTION: 100% FULL-WIDTH 3D HUMAN BODY VIEWPORT */}
         <section className="cogni-canvas-column full-width">
-          {/* VIEWPORT CONTROLS BAR */}
+          {/* VIEWPORT CONTROLS BAR WITH INTERFACE MINIMIZE / RESTORE TOGGLES */}
           <div className="canvas-header-strip">
             <div className="canvas-hud-toolbar">
               <span className="current-preset-badge">
                 {activePreset.icon} <strong>{activePreset.label}</strong>
               </span>
-              <span className="preset-structures-pill">{activePreset.structuresCount}</span>
+
+              {/* TOGGLE BUTTONS FOR LEFT & RIGHT INTERFACES */}
+              <button
+                type="button"
+                className={`canvas-hud-btn ${isLeftPanelOpen ? "active" : ""}`}
+                onClick={() => setIsLeftPanelOpen(!isLeftPanelOpen)}
+                title="Toggle Left Anatomy Systems Interface"
+              >
+                {isLeftPanelOpen ? "📂 Left Panel (Open)" : "📁 Open Anatomy (Left)"}
+              </button>
+
+              <button
+                type="button"
+                className={`canvas-hud-btn ${isRightPanelOpen ? "active" : ""}`}
+                onClick={() => setIsRightPanelOpen(!isRightPanelOpen)}
+                title="Toggle Right Structure Info Interface"
+              >
+                {isRightPanelOpen ? "ℹ️ Structure Info (Open)" : "ℹ️ Open Info (Right)"}
+              </button>
 
               <button
                 type="button"
@@ -1380,18 +1624,18 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                 className="canvas-hud-btn"
                 title="Open in external browser window"
               >
-                ↗ Open in Full Tab
+                ↗ Full Tab
               </a>
             </div>
 
             <div className="canvas-hud-badges">
-              <span className="hud-badge-info">🖱️ Left Click + Drag: Rotate 360°</span>
-              <span className="hud-badge-info">📜 Scroll: Zoom In/Out</span>
-              <span className="hud-badge-info">💥 Use Explode Slider in Viewer</span>
+              <span className="hud-badge-info">🖱️ Left Drag: Rotate</span>
+              <span className="hud-badge-info">📜 Scroll: Zoom</span>
+              <span className="hud-badge-info">💥 Explode in Viewer</span>
             </div>
           </div>
 
-          {/* TAB 1: OFFICIAL COGNI ANATOMY 3D LIVE IFRAME VIEWER */}
+          {/* TAB 1: OFFICIAL COGNI ANATOMY 3D LIVE IFRAME VIEWER WITH FLOATING HUD OVERLAYS */}
           {activeTab === "cogni-live" && (
             <div className={`cogni-live-container ${viewerHeight}`}>
               <iframe
@@ -1402,6 +1646,288 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                 loading="eager"
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
               />
+
+              {/* =================================================================
+                  FLOATING HUD INTERFACE 1: LEFT ANATOMY SYSTEMS & CONTENTS NAVIGATOR
+                  Matched directly to User Image 1 with MINIMIZE option
+                  ================================================================= */}
+              {isLeftPanelOpen ? (
+                <div className="hud-floating-panel left">
+                  {/* PANEL HEADER WITH MINIMIZE BUTTON */}
+                  <div className="hud-panel-header">
+                    <div className="hud-title-with-badge">
+                      <span className="hud-panel-title">Anatomy</span>
+                      <span className="hud-count-badge">
+                        {filteredParts.length}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      className="hud-minimize-btn"
+                      onClick={() => setIsLeftPanelOpen(false)}
+                      title="Minimize Anatomy Interface"
+                    >
+                      −
+                    </button>
+                  </div>
+
+                  {/* TOP 3 TABS: Systems | Opacity | Contents */}
+                  <div className="hud-tab-strip">
+                    <button
+                      type="button"
+                      className={`hud-tab-pill ${leftPanelTab === "systems" ? "active" : ""}`}
+                      onClick={() => setLeftPanelTab("systems")}
+                    >
+                      Systems
+                    </button>
+                    <button
+                      type="button"
+                      className={`hud-tab-pill ${leftPanelTab === "opacity" ? "active" : ""}`}
+                      onClick={() => setLeftPanelTab("opacity")}
+                    >
+                      Opacity
+                    </button>
+                    <button
+                      type="button"
+                      className={`hud-tab-pill ${leftPanelTab === "contents" ? "active" : ""}`}
+                      onClick={() => setLeftPanelTab("contents")}
+                    >
+                      Contents
+                    </button>
+                  </div>
+
+                  {/* REGION FILTER CHIPS */}
+                  <div className="hud-region-pills">
+                    {["all", "Head", "Trunk", "Upper limb", "Lower limb"].map((reg) => (
+                      <button
+                        key={reg}
+                        type="button"
+                        className={`hud-region-chip ${regionFilter === reg ? "active" : ""}`}
+                        onClick={() => setRegionFilter(reg)}
+                      >
+                        {reg === "all" ? "Whole body" : reg}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* SYSTEMS LIST & CARDS */}
+                  <div className="hud-panel-body">
+                    <div className="hud-section-label">Musculoskeletal system</div>
+                    <div className="hud-structure-cards-list">
+                      {filteredParts.map((part) => {
+                        const isSelected = selectedStructure.id === part.id;
+                        return (
+                          <div
+                            key={part.id}
+                            className={`hud-structure-card ${isSelected ? "active" : ""}`}
+                            onClick={() => handleSelectStructure(part)}
+                          >
+                            <div className="hud-card-icon">
+                              {part.category === "Skeleton" ? "🦴" : part.category === "Muscles" ? "🦾" : "🫀"}
+                            </div>
+                            <div className="hud-card-info">
+                              <strong>{part.name}</strong>
+                              <span>{part.category} · {part.region}</span>
+                            </div>
+                            {isSelected && <span className="hud-selected-dot">•</span>}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                /* MINIMIZED FLOATING PILL AT TOP-LEFT */
+                <button
+                  type="button"
+                  className="hud-mini-pill left"
+                  onClick={() => setIsLeftPanelOpen(true)}
+                  title="Expand Anatomy Interface"
+                >
+                  <span>📂</span>
+                  <strong>Anatomy</strong>
+                  <span className="mini-badge">{filteredParts.length}</span>
+                  <span className="expand-arrow">▾</span>
+                </button>
+              )}
+
+              {/* =================================================================
+                  FLOATING HUD INTERFACE 2: RIGHT STRUCTURE INFO & INSPECTOR
+                  Matched directly to User Image 2 with MINIMIZE option
+                  Auto-opens when user selects any structure!
+                  ================================================================= */}
+              {isRightPanelOpen ? (
+                <div className="hud-floating-panel right">
+                  {/* PANEL HEADER WITH TABS & MINIMIZE BUTTON */}
+                  <div className="hud-panel-header right-header">
+                    <div className="hud-inspector-tabs">
+                      <button
+                        type="button"
+                        className={`hud-insp-tab ${rightPanelTab === "view" ? "active" : ""}`}
+                        onClick={() => setRightPanelTab("view")}
+                      >
+                        View & tools
+                      </button>
+                      <button
+                        type="button"
+                        className={`hud-insp-tab ${rightPanelTab === "structure" ? "active" : ""}`}
+                        onClick={() => setRightPanelTab("structure")}
+                      >
+                        Structure •
+                      </button>
+                      <button
+                        type="button"
+                        className={`hud-insp-tab ${rightPanelTab === "settings" ? "active" : ""}`}
+                        onClick={() => setRightPanelTab("settings")}
+                      >
+                        Settings
+                      </button>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="hud-minimize-btn"
+                      onClick={() => setIsRightPanelOpen(false)}
+                      title="Minimize Structure Info Interface"
+                    >
+                      −
+                    </button>
+                  </div>
+
+                  {/* STRUCTURE DETAILS BODY MATCHING COGNI PHOTO 2 */}
+                  <div className="hud-inspector-body">
+                    <div className={`structure-category-tag ${selectedStructure.category?.toLowerCase()}`}>
+                      <span className="cat-bar" />
+                      <span>{selectedStructure.category || "Structure"}</span>
+                    </div>
+
+                    <h3 className="structure-title">{selectedStructure.name}</h3>
+
+                    <p className="structure-description">
+                      {selectedStructure.description}
+                    </p>
+
+                    {/* SYSTEM OVERVIEW ACCORDION */}
+                    <div className="hud-accordion-box">
+                      <button
+                        type="button"
+                        className="hud-accordion-toggle"
+                        onClick={() => setIsOverviewOpen(!isOverviewOpen)}
+                      >
+                        <span>System overview · structure identified from</span>
+                        <span>{isOverviewOpen ? "▴" : "▾"}</span>
+                      </button>
+
+                      {isOverviewOpen && (
+                        <div className="hud-accordion-content">
+                          {selectedStructure.origin && (
+                            <div className="accordion-item">
+                              <strong>📍 Origin:</strong> {selectedStructure.origin}
+                            </div>
+                          )}
+                          {selectedStructure.insertion && (
+                            <div className="accordion-item">
+                              <strong>📌 Insertion:</strong> {selectedStructure.insertion}
+                            </div>
+                          )}
+                          {selectedStructure.action && (
+                            <div className="accordion-item">
+                              <strong>⚙️ Action:</strong> {selectedStructure.action}
+                            </div>
+                          )}
+                          {selectedStructure.innervation && (
+                            <div className="accordion-item">
+                              <strong>⚡ Nerve:</strong> {selectedStructure.innervation}
+                            </div>
+                          )}
+                          {selectedStructure.clinicalPearl && (
+                            <div className="accordion-item" style={{ color: "#fca5a5" }}>
+                              <strong>🩺 Clinical:</strong> {selectedStructure.clinicalPearl}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 2X2 ACTION BUTTONS GRID */}
+                    <div className="hud-action-grid">
+                      <button
+                        type="button"
+                        className={`hud-action-btn ${isStructureHidden ? "active" : ""}`}
+                        onClick={() => setIsStructureHidden(!isStructureHidden)}
+                      >
+                        <span>{isStructureHidden ? "👁️‍🗨️" : "👁️"}</span>
+                        <span>{isStructureHidden ? "Unhide" : "Hide"}</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        className={`hud-action-btn ${isSeeThrough ? "active" : ""}`}
+                        onClick={() => setIsSeeThrough(!isSeeThrough)}
+                      >
+                        <span>👻</span>
+                        <span>{isSeeThrough ? "Solid" : "See-through"}</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        className="hud-action-btn"
+                        onClick={() => setIframeKey((k) => k + 1)}
+                      >
+                        <span>🎯</span>
+                        <span>Center</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        className="hud-action-btn"
+                        onClick={() => {
+                          setIsStructureHidden(false);
+                          setIsSeeThrough(false);
+                          setIsIsolated(false);
+                        }}
+                      >
+                        <span>↩️</span>
+                        <span>Undo</span>
+                      </button>
+                    </div>
+
+                    {/* PRIMARY ACTION BUTTON */}
+                    <button
+                      type="button"
+                      className={`hud-isolate-btn ${isIsolated ? "active" : ""}`}
+                      onClick={() => setIsIsolated(!isIsolated)}
+                    >
+                      <span>🔍</span>
+                      <span>{isIsolated ? "Show surrounding anatomy" : "Isolate structure"}</span>
+                      <span>›</span>
+                    </button>
+
+                    {/* CLEAR SELECTION LINK */}
+                    <button
+                      type="button"
+                      className="hud-clear-btn"
+                      onClick={() => {
+                        setSelectedStructure(ANATOMICAL_PARTS_LIBRARY[0]);
+                      }}
+                    >
+                      Clear selection
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                /* MINIMIZED FLOATING PILL AT TOP-RIGHT */
+                <button
+                  type="button"
+                  className="hud-mini-pill right"
+                  onClick={() => setIsRightPanelOpen(true)}
+                  title="Expand Structure Info Interface"
+                >
+                  <span>ℹ️</span>
+                  <strong>{selectedStructure.name}</strong>
+                  <span className="expand-arrow">▾</span>
+                </button>
+              )}
             </div>
           )}
 
@@ -1667,7 +2193,27 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                       key={muscle.id}
                       type="button"
                       className={`muscle-chip-btn ${isSelected ? "active" : ""}`}
-                      onClick={() => setSelectedMuscle(muscle)}
+                      onClick={() => {
+                        setSelectedMuscle(muscle);
+                        // Also sync selectedStructure & auto-open right inspector!
+                        const struct = ANATOMICAL_PARTS_LIBRARY.find((s) => s.muscleId === muscle.id) || {
+                          id: muscle.id,
+                          name: muscle.name,
+                          category: "Muscles",
+                          region: muscle.region,
+                          system: "Musculoskeletal",
+                          description:
+                            "Skeletal muscles generate movement by pulling on their attachments. Together with tendons, they move joints, stabilize posture, and produce heat.",
+                          origin: muscle.origin,
+                          insertion: muscle.insertion,
+                          action: muscle.action,
+                          innervation: muscle.innervation,
+                          bloodSupply: muscle.bloodSupply,
+                          clinicalPearl: muscle.clinicalPearl,
+                        };
+                        setSelectedStructure(struct);
+                        setIsRightPanelOpen(true);
+                      }}
                     >
                       <span className="muscle-chip-region">{muscle.region}</span>
                       <strong>{muscle.name}</strong>

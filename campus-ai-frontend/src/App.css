@@ -8074,4 +8074,480 @@
   line-height: 1.55;
 }
 
+/* ==========================================================================
+   FLOATING HUD OVERLAYS: LEFT ANATOMY NAVIGATOR & RIGHT STRUCTURE INSPECTOR
+   Matched directly to Cogni Anatomy reference (User Images 1 & 2)
+   Includes Minimize / Restore Floating Pills
+   ========================================================================== */
+.hud-floating-panel {
+  position: absolute;
+  z-index: 20;
+  background: rgba(12, 16, 28, 0.94);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: fadeIn 0.18s ease-out;
+}
+
+.hud-floating-panel.left {
+  top: 14px;
+  left: 14px;
+  width: 300px;
+  max-height: calc(100% - 28px);
+}
+
+.hud-floating-panel.right {
+  top: 14px;
+  right: 14px;
+  width: 330px;
+  max-height: calc(100% - 28px);
+}
+
+@media (max-width: 900px) {
+  .hud-floating-panel.left,
+  .hud-floating-panel.right {
+    position: static;
+    width: 100%;
+    max-height: none;
+    margin-bottom: 12px;
+  }
+}
+
+.hud-mini-pill {
+  position: absolute;
+  z-index: 22;
+  background: rgba(11, 15, 26, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(220, 38, 38, 0.55);
+  border-radius: 20px;
+  padding: 6px 14px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+  transition: all 0.18s ease;
+}
+
+.hud-mini-pill.left {
+  top: 14px;
+  left: 14px;
+}
+
+.hud-mini-pill.right {
+  top: 14px;
+  right: 14px;
+}
+
+.hud-mini-pill:hover {
+  background: rgba(220, 38, 38, 0.25);
+  border-color: #ef4444;
+  box-shadow: 0 0 16px rgba(220, 38, 38, 0.45);
+}
+
+.hud-mini-pill .mini-badge {
+  font-size: 10px;
+  font-weight: 800;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.hud-mini-pill .expand-arrow {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.hud-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hud-title-with-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-panel-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.hud-count-badge {
+  font-size: 10px;
+  font-weight: 800;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+
+.hud-minimize-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #cbd5e1;
+  font-size: 15px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.hud-minimize-btn:hover {
+  background: rgba(220, 38, 38, 0.35);
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+.hud-tab-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 8px 12px 4px;
+}
+
+.hud-tab-pill {
+  padding: 5px 8px;
+  background: #0f1322;
+  border: 1px solid #1a223a;
+  border-radius: 6px;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.hud-tab-pill:hover {
+  color: #ffffff;
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.hud-tab-pill.active {
+  background: #192138;
+  border-color: #38bdf8;
+  color: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
+}
+
+.hud-region-pills {
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  padding: 6px 12px 8px;
+  scrollbar-width: none;
+}
+
+.hud-region-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.hud-region-chip {
+  padding: 4px 9px;
+  background: #0a0d18;
+  border: 1px solid #182035;
+  border-radius: 4px;
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.hud-region-chip:hover {
+  color: #ffffff;
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.hud-region-chip.active {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+.hud-panel-body {
+  padding: 4px 0 10px;
+  overflow-y: auto;
+  max-height: 440px;
+}
+
+.hud-section-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 4px 14px 6px;
+}
+
+.hud-structure-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0 10px;
+}
+
+.hud-structure-card {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  background: #090c16;
+  border: 1px solid #161e33;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.hud-structure-card:hover {
+  border-color: rgba(220, 38, 38, 0.4);
+  background: #0e1322;
+}
+
+.hud-structure-card.active {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);
+}
+
+.hud-card-icon {
+  font-size: 15px;
+}
+
+.hud-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.hud-card-info strong {
+  font-size: 11.5px;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hud-card-info span {
+  font-size: 9.5px;
+  color: #64748b;
+}
+
+.hud-selected-dot {
+  color: #38bdf8;
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* RIGHT STRUCTURE INSPECTOR HUD */
+.hud-inspector-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.hud-insp-tab {
+  padding: 4px 8px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.hud-insp-tab:hover {
+  color: #ffffff;
+}
+
+.hud-insp-tab.active {
+  color: #ffffff;
+  border-bottom: 2px solid #38bdf8;
+}
+
+.hud-inspector-body {
+  padding: 12px 14px;
+  overflow-y: auto;
+  max-height: 520px;
+}
+
+.structure-category-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  color: #94a3b8;
+}
+
+.cat-bar {
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.structure-category-tag.muscles .cat-bar { background: #ef4444; }
+.structure-category-tag.skeleton .cat-bar { background: #38bdf8; }
+.structure-category-tag.circulatory .cat-bar { background: #f43f5e; }
+.structure-category-tag.respiratory .cat-bar { background: #06b6d4; }
+.structure-category-tag.nervous .cat-bar { background: #a855f7; }
+
+.structure-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+
+.structure-description {
+  font-size: 12px;
+  color: #cbd5e1;
+  line-height: 1.55;
+  margin: 0 0 12px;
+}
+
+.hud-accordion-box {
+  background: #090c16;
+  border: 1px solid #182138;
+  border-radius: 7px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.hud-accordion-toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 10px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.hud-accordion-toggle:hover {
+  color: #ffffff;
+}
+
+.hud-accordion-content {
+  padding: 8px 10px 10px;
+  border-top: 1px solid #141c2e;
+  font-size: 11.5px;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+.accordion-item {
+  margin-bottom: 5px;
+}
+
+.accordion-item strong {
+  color: #e2e8f0;
+}
+
+.hud-action-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.hud-action-btn {
+  padding: 7px 10px;
+  background: #0a0d18;
+  border: 1px solid #1a2238;
+  border-radius: 6px;
+  color: #cbd5e1;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.hud-action-btn:hover {
+  border-color: #38bdf8;
+  color: #ffffff;
+  background: #11172a;
+}
+
+.hud-action-btn.active {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+.hud-isolate-btn {
+  width: 100%;
+  padding: 9px 14px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border: none;
+  border-radius: 7px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  transition: all 0.15s ease;
+}
+
+.hud-isolate-btn:hover {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 0 14px rgba(37, 99, 235, 0.4);
+}
+
+.hud-clear-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 11px;
+  text-decoration: underline;
+  cursor: pointer;
+  text-align: center;
+  padding: 3px 0 6px;
+}
+
+.hud-clear-btn:hover {
+  color: #ffffff;
+}
+
+
 
