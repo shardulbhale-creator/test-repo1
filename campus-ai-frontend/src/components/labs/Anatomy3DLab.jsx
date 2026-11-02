@@ -2,7 +2,7 @@ import { useState } from "react";
 
 // ============================================================================
 // ANATOMICAL PARTS LIBRARY (MATCHED TO COGNI ANATOMY STRUCTURES & ATTACHMENTS)
-// Supports interactive Left Systems Navigator & Right Structure Inspector
+// Comprehensive V.A.N. (Vein · Artery · Nerve) Triad for Bone Relations
 // ============================================================================
 const ANATOMICAL_PARTS_LIBRARY = [
   {
@@ -17,10 +17,162 @@ const ANATOMICAL_PARTS_LIBRARY = [
     origin: "Medial two-thirds curves convexly anteriorly; sternal end articulates with manubrium sterni at sternoclavicular joint.",
     insertion: "Lateral third curves concavely anteriorly; acromial end articulates with acromion of scapula at acromioclavicular joint.",
     action: "Acts as a rigid strut transmitting mechanical forces from upper limb to axial skeleton and maximizing arm reach.",
-    innervation: "Supraclavicular Nerves (C3, C4) and Nerve to Subclavius (C5, C6).",
-    bloodSupply: "Suprascapular Artery, Thoracoacromial Artery, and Internal Thoracic Artery.",
+    // V.A.N. TRIAD (VEIN · ARTERY · NERVE) FOR BONE RELATIONS
+    arteries:
+      "1. Subclavian Artery (passes directly posteroinferior to medial 1/3 between clavicle and 1st rib); 2. Suprascapular Artery (courses posterior to clavicle); 3. Clavicular branch of Thoracoacromial Artery; 4. Internal Thoracic Artery. Nutrient Artery enters middle 1/3 directed laterally.",
+    veins:
+      "1. Subclavian Vein (courses posteroinferior to medial third, anterior to scalenus anterior; vulnerable in fracture or central line placement); 2. External Jugular Vein (crosses superficial to middle third of clavicle to pierce deep fascia); 3. Cephalic Vein (courses in deltopectoral groove immediately inferior to clavicle).",
+    nerves:
+      "1. Supraclavicular Nerves (medial, intermediate, and lateral branches from C3–C4 cervical plexus) crossing superficial to bone under platysma; 2. Nerve to Subclavius (C5, C6); 3. Trunks and cords of Brachial Plexus passing posteroinferior to middle third.",
+    fractureDanger:
+      "Midshaft clavicle fractures (80% of all fractures) risk lacerating the Subclavian Vein and Subclavian Artery, or compressing Brachial Plexus trunks. Sternocleidomastoid pulls medial fragment upward; Deltoid & arm gravity pull lateral fragment downward and medially.",
+    nutrientForamen: "Situated in the middle third on the inferior surface, directed laterally toward the acromial end.",
     clinicalPearl:
-      "Most frequently fractured bone in the human body (typically at junction of middle and lateral thirds). Medial fragment elevates due to sternocleidomastoid; lateral fragment drops due to weight of the upper limb.",
+      "Most frequently fractured bone in the human body. Subclavian vein puncture for central lines is performed 1 cm inferior to clavicle junction of medial and middle thirds.",
+  },
+  {
+    id: "humerus-bone",
+    name: "Right Humerus (Arm Bone)",
+    category: "Skeleton",
+    region: "Upper limb",
+    system: "Skeletal",
+    presetId: "arm-bones",
+    description:
+      "Long bone of the upper arm articulating proximally with the glenoid cavity of the scapula and distally with the radius and ulna at the elbow.",
+    origin: "Greater tubercle, lesser tubercle, intertubercular groove, and deltoid tuberosity.",
+    insertion: "Medial and lateral epicondyles, trochlea, and capitulum at distal elbow articulation.",
+    action: "Mechanical arm lever for reaching, pushing, pulling, and overhead throwing motions.",
+    arteries:
+      "1. Surgical neck: Anterior and Posterior Circumflex Humeral Arteries (from 3rd part of axillary artery); 2. Shaft / Spiral groove: Profunda Brachii (Deep Brachial) Artery; 3. Distal supracondylar: Brachial Artery and Superior/Inferior Ulnar Collateral Arteries.",
+    veins:
+      "Paired Brachial Veins (venae comitantes running with brachial artery), Basilic Vein (medial arm), Cephalic Vein (anterolateral arm), and Circumflex Humeral Veins.",
+    nerves:
+      "1. Surgical neck: Axillary Nerve (C5, C6); 2. Spiral groove: Radial Nerve (C5–T1); 3. Distal supracondylar: Median Nerve (C5–T1); 4. Medial epicondyle groove: Ulnar Nerve (C8, T1; 'funny bone').",
+    fractureDanger:
+      "Surgical neck fracture injures Axillary Nerve & Posterior Circumflex Humeral Artery (deltoid paralysis). Midshaft fracture lacerates Radial Nerve & Profunda Brachii in spiral groove (Wrist Drop). Supracondylar fracture in children lacerates Brachial Artery and Median Nerve (Volkmann's Ischemic Contracture). Medial epicondyle fracture injures Ulnar Nerve (Claw Hand).",
+    nutrientForamen: "Enters near the midshaft on the anteromedial border, directed DOWNWARD toward the elbow ('To the elbow I go').",
+    clinicalPearl:
+      "Mnemonic ARM for humeral fracture nerve relations: Axillary (surgical neck), Radial (midshaft), Median (supracondylar), Ulnar (medial epicondyle).",
+  },
+  {
+    id: "scapula-bone",
+    name: "Scapula (Shoulder Blade)",
+    category: "Skeleton",
+    region: "Upper limb",
+    system: "Skeletal",
+    presetId: "arm-bones",
+    description:
+      "Flat triangular bone of the pectoral girdle lying on posterolateral chest wall across ribs 2 to 7. Anchors 17 distinct muscle attachments.",
+    origin: "Supraspinous fossa, infraspinous fossa, subscapular fossa, spine, acromion, and coracoid process.",
+    insertion: "Glenoid cavity articulates with humeral head to form multiaxial glenohumeral joint.",
+    action: "Provides mobile platform for arm elevation, protraction, retraction, and upward rotation.",
+    arteries:
+      "Scapular Anastomosis: 1. Suprascapular Artery (from thyrocervical trunk, passes over transverse scapular ligament); 2. Dorsal Scapular Artery (deep branch of transverse cervical); 3. Circumflex Scapular Artery (from subscapular branch of 3rd part of axillary). Ensures collateral circulation if axillary artery is occluded.",
+    veins:
+      "Suprascapular Veins, Circumflex Scapular Veins, and Subscapular Veins draining into the Axillary Vein.",
+    nerves:
+      "1. Suprascapular Nerve (C5, C6; passes under transverse scapular ligament through notch); 2. Dorsal Scapular Nerve (C5); 3. Axillary Nerve (passes close to inferior joint capsule); 4. Long Thoracic Nerve (courses across serratus anterior).",
+    fractureDanger:
+      "Fracture of scapular neck threatens Suprascapular Nerve and Artery. Scapular body fractures result from high-energy impact and have a high association with rib fractures, pneumothorax, and pulmonary contusion.",
+    nutrientForamen: "Located on the costal surface in the subscapular fossa and near the infraspinous crest.",
+    clinicalPearl:
+      "Scapular anastomosis is an essential medical exam topic: connects 1st part of subclavian artery with 3rd part of axillary artery.",
+  },
+  {
+    id: "right-third-rib",
+    name: "Right Third Rib",
+    category: "Skeleton",
+    region: "Trunk",
+    system: "Skeletal",
+    presetId: "skeleton",
+    description:
+      "True vertebrosternal rib articulating with T3 thoracic vertebra posteriorly and sternum anteriorly via costal cartilage. Protects thoracic organs.",
+    origin: "Head has 2 articular facets for bodies of T2 and T3 vertebrae; tubercle articulates with T3 transverse process.",
+    insertion: "Anterior costal end joins the 3rd costal cartilage to insert into lateral sternal border.",
+    action: "Expands thoracic volume during inspiration (bucket-handle and pump-handle movements).",
+    arteries:
+      "3rd Posterior Intercostal Artery (arises directly from thoracic aorta) and Anterior Intercostal Arteries (branches of Internal Thoracic Artery) running in the subcostal groove.",
+    veins:
+      "3rd Posterior Intercostal Vein (drains into Azygos Vein on right) and Anterior Intercostal Veins (drain into Internal Thoracic Vein). The intercostal vein is the HIGHEST structure in the costal groove: V.A.N. (Vein, Artery, Nerve from top to bottom).",
+    nerves:
+      "3rd Intercostal Nerve (anterior primary ramus of T3 spinal nerve). Runs inferior to the intercostal artery, closest to the lower rib margin, making it most vulnerable during procedures.",
+    fractureDanger:
+      "Displaced rib fractures lacerate the high-pressure Posterior Intercostal Artery and Vein, causing massive Hemothorax. Inward displacement punctures parietal and visceral pleura, causing Tension Pneumothorax.",
+    nutrientForamen: "Located in the costal groove near the angle of the rib, directed towards the anterior end.",
+    clinicalPearl:
+      "Thoracentesis (pleural fluid aspiration) and chest tube placement must ALWAYS be performed directly OVER the superior border of the lower rib to avoid the subcostal V.A.N. bundle.",
+  },
+  {
+    id: "femur-part",
+    name: "Femur (Right Thigh Bone)",
+    category: "Skeleton",
+    region: "Lower limb",
+    system: "Skeletal",
+    presetId: "leg-bones",
+    description:
+      "Longest and strongest tubular bone in the human body, transmitting weight from the acetabular pelvis to the tibia.",
+    origin: "Head fits into acetabulum; greater and lesser trochanters anchor hip rotators and iliopsoas.",
+    insertion: "Distal medial and lateral condyles articulate with tibia and patella.",
+    action: "Forms hip and knee joints; provides structural lever for bipedal locomotion.",
+    arteries:
+      "1. Head & Neck: Retinacular branches of Medial Circumflex Femoral Artery and Lateral Circumflex Femoral Artery; Artery of ligamentum teres (from obturator). 2. Shaft: 4 Perforating branches of Profunda Femoris Artery. 3. Distal: Popliteal and Genicular Arteries.",
+    veins:
+      "Femoral Vein (courses through adductor canal and femoral triangle), Profunda Femoris Vein, Great Saphenous Vein (drains into femoral vein at fossa ovalis), and Popliteal Vein.",
+    nerves:
+      "Femoral Nerve (L2–L4 anterior relations in femoral triangle), Sciatic Nerve (L4–S3 posterior relations in deep gluteal/posterior thigh), and Obturator Nerve (L2–L4 medial relations).",
+    fractureDanger:
+      "1. Intracapsular Femoral Neck fracture: tears retinacular branches of Medial Circumflex Femoral Artery, inevitably causing Avascular Necrosis (AVN) of the femoral head. 2. Midshaft femur fracture: causes 1 to 2 Liters of concealed internal hemorrhage from torn perforating vessels. 3. Supracondylar distal fracture: distal fragment tilts posteriorly by gastrocnemius pull, lacerating Popliteal Artery and Tibial Nerve.",
+    nutrientForamen: "Enters along the linea aspera, directed UPWARD away from the knee joint ('From the knee I flee').",
+    clinicalPearl:
+      "Femoral neck fractures in elderly present with shortened and externally rotated lower limb due to psoas major and gluteal pull.",
+  },
+  {
+    id: "tibia-fibula-bone",
+    name: "Tibia & Fibula (Leg Bones)",
+    category: "Skeleton",
+    region: "Lower limb",
+    system: "Skeletal",
+    presetId: "leg-bones",
+    description:
+      "Bones of the lower leg. Tibia is the major weight-bearing bone; Fibula provides lateral stability and muscle attachments.",
+    origin: "Tibial plateau condyles articulate with femoral condyles; fibular head articulates with lateral tibial condyle.",
+    insertion: "Medial malleolus (tibia) and lateral malleolus (fibula) form the mortise of the talocrural ankle joint.",
+    action: "Weight transmission, ankle stability, and attachment for leg anterior, lateral, and posterior muscles.",
+    arteries:
+      "Anterior Tibial Artery (passes through interosseous hiatus to anterior compartment, becomes Dorsalis Pedis), Posterior Tibial Artery (runs in deep posterior compartment, branches to medial/lateral plantar), and Fibular (Peroneal) Artery.",
+    veins:
+      "Anterior and Posterior Tibial Veins (paired venae comitantes), Fibular Veins, Great Saphenous Vein (passes anterior to medial malleolus), and Small Saphenous Vein (passes posterior to lateral malleolus).",
+    nerves:
+      "Common Fibular (Peroneal) Nerve (winds around subcutaneous neck of fibula), Deep Fibular Nerve (anterior compartment), Superficial Fibular Nerve (lateral compartment), and Tibial Nerve (posterior compartment).",
+    fractureDanger:
+      "Fibular neck fracture or tight plaster cast crushes Common Fibular Nerve against fibular bone, producing complete Foot Drop (loss of dorsiflexion and eversion). Tibial shaft fractures frequently cause Acute Compartment Syndrome, occluding anterior tibial artery and causing ischemic necrosis.",
+    nutrientForamen: "Tibia has the largest nutrient foramen in the human skeleton, located on posterior surface below soleal line, pointing downward away from knee.",
+    clinicalPearl:
+      "Great saphenous vein cutdown is safely performed 2.5 cm anterior and superior to the medial malleolus.",
+  },
+  {
+    id: "spine-vertebrae-bone",
+    name: "Vertebral Column & Spine",
+    category: "Skeleton",
+    region: "Trunk",
+    system: "Skeletal",
+    presetId: "spine",
+    description:
+      "Flexible axial pillar of 33 vertebrae (7 cervical, 12 thoracic, 5 lumbar, 5 sacral, 4 coccygeal) housing the spinal cord.",
+    origin: "Vertebral bodies, pedicles, laminae, transverse and spinous processes.",
+    insertion: "Intervertebral discs (annulus fibrosus & nucleus pulposus) and facet (zygapophyseal) joints.",
+    action: "Protects spinal cord, bears axial body weight, and facilitates multidirectional trunk movements.",
+    arteries:
+      "Anterior Spinal Artery (supplies anterior 2/3 of spinal cord), paired Posterior Spinal Arteries, Segmental Medullary Arteries, and the Artery of Adamkiewicz (great anterior radiculomedullary artery, usually T9–L2 left side).",
+    veins:
+      "Internal and External Vertebral Venous Plexuses (Batson's Plexus)—a vast network of VALVELESS veins connecting pelvic and abdominal veins directly to spinal and intracranial veins, explaining how prostate and pelvic cancers metastasize to the spine and brain without lung filtering!",
+    nerves:
+      "31 pairs of Spinal Nerves (C1–C8, T1–T12, L1–L5, S1–S5, Co1) exiting via intervertebral foramina; Sinuvertebral Nerves (recurrent meningeal nerves) innervating outer disc and posterior longitudinal ligament.",
+    fractureDanger:
+      "Burst fractures of vertebral bodies retropulse fragments into the spinal canal, lacerating spinal arteries and compressing the spinal cord or cauda equina, producing paraplegia, sensory loss, and neurogenic bladder.",
+    nutrientForamen: "Basivertebral foramina on the posterior and anterior surfaces of vertebral bodies.",
+    clinicalPearl:
+      "Batson's valveless venous plexus is the premier USMLE / NEET-PG board question explaining spinal metastases from prostate and breast carcinomas.",
   },
   {
     id: "ascending-trapezius",
@@ -35,27 +187,16 @@ const ANATOMICAL_PARTS_LIBRARY = [
     origin: "Spinous processes and supraspinous ligaments of thoracic vertebrae T4 through T12.",
     insertion: "Apex of the spine of the scapula at a smooth triangular tubercle near medial border.",
     action: "Depresses the scapula and upwardly rotates the glenoid cavity during overhead abduction (>90°).",
-    innervation: "Motor: Spinal Accessory Nerve (CN XI). Sensory / Proprioception: Ventral rami of C3–C4.",
-    bloodSupply: "Superficial branch of Transverse Cervical Artery and Dorsal Scapular Artery.",
+    arteries:
+      "Superficial branch of Transverse Cervical Artery (cervicodorsal trunk), Dorsal Scapular Artery, and Posterior Intercostal Arteries.",
+    veins:
+      "Transverse Cervical Vein and External Jugular tributaries draining into Subclavian Vein.",
+    nerves:
+      "Motor: Spinal Accessory Nerve (Cranial Nerve XI) passing through posterior cervical triangle. Sensory/Proprioception: Ventral rami of C3–C4 cervical spinal nerves.",
+    fractureDanger:
+      "Scapular spine or upper thoracic spine trauma can avulse the insertion tubercle. Posterior triangle lymph node biopsy lacerates CN XI, producing Shoulder Droop.",
     clinicalPearl:
-      "Weakness impairs overhead reaching and causes lateral scapular winging. Tested by depressing abducted arm against resistance.",
-  },
-  {
-    id: "right-third-rib",
-    name: "Right Third Rib",
-    category: "Skeleton",
-    region: "Trunk",
-    system: "Skeletal",
-    presetId: "skeleton",
-    description:
-      "True vertebrosternal rib articulating with T3 thoracic vertebra posteriorly and sternum anteriorly via costal cartilage. Protects thoracic organs.",
-    origin: "Head has 2 articular facets for bodies of T2 and T3 vertebrae; tubercle articulates with T3 transverse process.",
-    insertion: "Anterior costal end joins the 3rd costal cartilage to insert into lateral sternal border.",
-    action: "Expands thoracic volume during inspiration (bucket-handle and pump-handle movements).",
-    innervation: "3rd Intercostal Nerve (anterior ramus of T3 spinal nerve).",
-    bloodSupply: "3rd Posterior Intercostal Artery (from thoracic aorta) and Anterior Intercostal Arteries (from internal thoracic).",
-    clinicalPearl:
-      "Costal groove on lower internal border carries the Intercostal Vein, Artery, and Nerve (VAN from superior to inferior). Thoracentesis must always be performed along the SUPERIOR rib border.",
+      "Works with lower fibers of Serratus Anterior as a vital force couple to rotate the glenoid cavity upward for abduction >90°.",
   },
   {
     id: "deltoid-part",
@@ -70,10 +211,16 @@ const ANATOMICAL_PARTS_LIBRARY = [
     origin: "Lateral 1/3 of clavicle, lateral acromion, and lower lip of crest of scapular spine.",
     insertion: "Deltoid tuberosity on lateral middle shaft of humerus.",
     action: "Abducts arm from 15° to 90° (middle fibers); anterior fibers flex and medially rotate; posterior fibers extend and laterally rotate.",
-    innervation: "Axillary Nerve (C5, C6) from posterior cord of brachial plexus.",
-    bloodSupply: "Posterior Circumflex Humeral Artery and Deltoid branch of Thoracoacromial trunk.",
+    arteries:
+      "Posterior Circumflex Humeral Artery (passes through quadrangular space with axillary nerve) and Deltoid branch of Thoracoacromial Artery.",
+    veins:
+      "Posterior Circumflex Humeral Veins draining into Axillary Vein; Cephalic Vein running in the deltopectoral groove.",
+    nerves:
+      "Axillary Nerve (C5, C6) arising from the posterior cord of the brachial plexus.",
+    fractureDanger:
+      "Surgical neck humerus fractures or anterior shoulder dislocation compress or tear the Axillary Nerve, producing deltoid paralysis and sensory loss over the lateral shoulder.",
     clinicalPearl:
-      "Injured in surgical neck humerus fractures or anterior shoulder dislocation, producing lateral shoulder anesthesia ('regimental badge area').",
+      "Intramuscular shoulder injections are administered into the central bulky middle deltoid, 2 to 3 fingerbreadths below the acromion to avoid the axillary nerve.",
   },
   {
     id: "biceps-brachii-part",
@@ -88,27 +235,16 @@ const ANATOMICAL_PARTS_LIBRARY = [
     origin: "Long head: supraglenoid tubercle of scapula; Short head: tip of coracoid process.",
     insertion: "Radial tuberosity of radius and bicipital aponeurosis.",
     action: "Chief powerful supinator of the flexed forearm and elbow flexor.",
-    innervation: "Musculocutaneous Nerve (C5, C6).",
-    bloodSupply: "Muscular branches of Brachial Artery.",
+    arteries:
+      "Muscular branches of the Brachial Artery and Anterior Circumflex Humeral Artery.",
+    veins:
+      "Brachial Veins (venae comitantes), Basilic Vein, and Median Cubital Vein (passing superficial to bicipital aponeurosis).",
+    nerves:
+      "Musculocutaneous Nerve (C5, C6) passing between biceps and brachialis; terminates as Lateral Antebrachial Cutaneous Nerve.",
+    fractureDanger:
+      "Bicipital groove fractures can lacerate the tendon or trap the anterior circumflex humeral ascending artery.",
     clinicalPearl:
-      "Tendon rupture of long head creates 'Popeye muscle' deformity. Biceps reflex evaluates C5–C6 spinal roots.",
-  },
-  {
-    id: "femur-part",
-    name: "Femur (Right Thigh Bone)",
-    category: "Skeleton",
-    region: "Lower limb",
-    system: "Skeletal",
-    presetId: "leg-bones",
-    description:
-      "Longest and strongest tubular bone in the human body, transmitting weight from the acetabular pelvis to the tibia.",
-    origin: "Proximal head fits into acetabulum; greater and lesser trochanters anchor hip rotators and iliopsoas.",
-    insertion: "Distal medial and lateral condyles articulate with tibia and patella.",
-    action: "Forms hip and knee joints; provides structural lever for bipedal locomotion.",
-    innervation: "Periosteal nerves from Femoral, Obturator, and Sciatic branches.",
-    bloodSupply: "Profunda Femoris, Medial & Lateral Circumflex Femoral Arteries, and Nutrient Artery.",
-    clinicalPearl:
-      "Femoral neck fractures tear retinacular arteries, causing avascular necrosis of the femoral head in elderly patients.",
+      "Bicipital aponeurosis protects the underlying Brachial Artery and Median Nerve from accidental puncture during cubital venipuncture.",
   },
   {
     id: "heart-structure",
@@ -122,10 +258,16 @@ const ANATOMICAL_PARTS_LIBRARY = [
     origin: "Primitive embryonic heart tube; right atrium receives SVC, IVC, and coronary sinus.",
     insertion: "Pumps blood out through Pulmonary Trunk (right ventricle) and Aorta (left ventricle).",
     action: "Rhythmic electrical contraction (systole) and relaxation (diastole) to perfuse body tissues.",
-    innervation: "Cardiac Plexus: Sympathetics (T1-T5) increase rate/force; Parasympathetics (Vagus CN X) slow heart rate.",
-    bloodSupply: "Right and Left Coronary Arteries arising from the aortic sinuses of Valsalva.",
+    arteries:
+      "Left Main Coronary (LAD + Circumflex) and Right Coronary Artery (RCA -> Posterior Descending Artery).",
+    veins:
+      "Great, Middle, and Small Cardiac Veins draining into the Coronary Sinus, emptying into the Right Atrium.",
+    nerves:
+      "Cardiac Plexus: Sympathetics (T1–T5) increase heart rate and inotropy; Parasympathetics (Vagus CN X) decrease heart rate.",
+    fractureDanger:
+      "Sternum and anterior rib fractures from steering wheel impact can cause severe Myocardial Contusion, pericardial tamponade, or traumatic rupture of the aorta at the aortic isthmus.",
     clinicalPearl:
-      "LAD artery occlusion causes massive anterior wall myocardial infarction ('Widowmaker').",
+      "Beck's Triad of cardiac tamponade: 1. Hypotension, 2. Distant/muffled heart sounds, 3. Jugular venous distension.",
   },
   {
     id: "lungs-structure",
@@ -139,10 +281,16 @@ const ANATOMICAL_PARTS_LIBRARY = [
     origin: "Trachea bifurcates at carina (T4/T5) into right and left primary bronchi.",
     insertion: "Extends down to 300 million alveoli with capillary networks.",
     action: "Pulmonary ventilation, gas exchange, and acid-base blood buffering.",
-    innervation: "Pulmonary Plexus: Vagus CN X (bronchoconstriction) and Sympathetics T2-T5 (bronchodilation).",
-    bloodSupply: "Bronchial Arteries (nutritive) and Pulmonary Arteries (gas exchange).",
+    arteries:
+      "Pulmonary Arteries (carry deoxygenated blood from right ventricle) and Bronchial Arteries (arise from thoracic aorta to provide nutritive supply to lung parenchyma).",
+    veins:
+      "Pulmonary Veins (4 veins carrying oxygenated blood to left atrium) and Bronchial Veins (drain to azygos and hemiazygos).",
+    nerves:
+      "Pulmonary Plexus: Vagus CN X (bronchoconstriction and secretomotor) and Sympathetics T2–T5 (bronchodilation via beta-2 receptors).",
+    fractureDanger:
+      "Fractured rib fragments puncturing lung parenchyma produce pneumothorax, hemothorax, or surgical subcutaneous emphysema.",
     clinicalPearl:
-      "Aspirated foreign objects lodge in Right Main Bronchus due to its wider, shorter, and more vertical path.",
+      "Aspirated foreign objects preferentially enter Right Main Bronchus due to its wider, shorter, and more vertical course.",
   },
   {
     id: "brain-structure",
@@ -156,10 +304,16 @@ const ANATOMICAL_PARTS_LIBRARY = [
     origin: "Neural tube derivatives (Telencephalon, Diencephalon, Mesencephalon, Rhombencephalon).",
     insertion: "Corticospinal tracts and 12 pairs of cranial nerves.",
     action: "Cognition, memory, voluntary locomotion, sensory reception, and autonomic vegetative control.",
-    innervation: "Central nervous system origin of cranial nerves CN I through CN XII.",
-    bloodSupply: "Circle of Willis supplied by Internal Carotid and Vertebral/Basilar arterial systems.",
+    arteries:
+      "Circle of Willis: Internal Carotid Arteries (Anterior & Middle Cerebral) and Vertebrobasilar system (Posterior Cerebral & Basilar).",
+    veins:
+      "Internal Cerebral Veins -> Great Cerebral Vein of Galen -> Straight Sinus -> Superior/Inferior Sagittal Sinuses -> Transverse & Sigmoid Sinuses -> Internal Jugular Vein.",
+    nerves:
+      "Origin of all 12 Cranial Nerves (CN I through CN XII) and central sensory/motor neuro-pathways.",
+    fractureDanger:
+      "Pterion fracture tears Middle Meningeal Artery (acute Epidural Hematoma). Skull base fracture tears internal carotid in cavernous sinus (carotid-cavernous fistula).",
     clinicalPearl:
-      "Rupture of saccular Berry aneurysm in Circle of Willis produces thunderclap Subarachnoid Hemorrhage.",
+      "Bridging veins tearing from sudden deceleration produce Subdural Hematoma (crescentic shape on non-contrast head CT).",
   },
   {
     id: "quadriceps-part",
@@ -174,10 +328,16 @@ const ANATOMICAL_PARTS_LIBRARY = [
     origin: "Rectus femoris (AIIS), Vastus lateralis, Vastus medialis, and Vastus intermedius.",
     insertion: "Patella via common quadriceps tendon, continuing as patellar ligament into tibial tuberosity.",
     action: "Extends leg at knee joint; Rectus femoris also flexes thigh at hip joint.",
-    innervation: "Femoral Nerve (L2, L3, L4).",
-    bloodSupply: "Lateral Circumflex Femoral Artery and Deep Femoral Artery.",
+    arteries:
+      "Lateral Circumflex Femoral Artery, Medial Circumflex Femoral Artery, and Deep Femoral (Profunda Femoris) Artery.",
+    veins:
+      "Profunda Femoris Vein draining into Femoral Vein.",
+    nerves:
+      "Femoral Nerve (L2, L3, L4 posterior division).",
+    fractureDanger:
+      "Patellar fracture or violent eccentric contraction ruptures patellar tendon, causing complete inability to perform straight leg raise.",
     clinicalPearl:
-      "Patellar tendon reflex tests L3–L4 spinal nerve roots. VMO weakness causes patellar maltracking.",
+      "Knee jerk reflex tests L3–L4 spinal segments via Femoral Nerve.",
   },
 ];
 
@@ -516,100 +676,6 @@ const HIGH_YIELD_MUSCLES_DIRECTORY = [
     },
   },
   {
-    id: "infraspinatus-muscle",
-    name: "Infraspinatus (Rotator Cuff)",
-    region: "Posterior Shoulder / Rotator Cuff",
-    latin: "Musculus infraspinatus",
-    fmaId: "FMA:9630",
-    heads: [
-      {
-        name: "Infraspinous Belly",
-        origin: "Infraspinous fossa of the scapula and overlying infraspinous fascia.",
-        insertion: "Middle facet of the greater tubercle of the humerus.",
-        action: "Chief external (lateral) rotator of the arm; posterior dynamic stabilizer of shoulder.",
-      },
-    ],
-    origin: "Medial two-thirds of the infraspinous fossa of the scapula and thick infraspinous fascia.",
-    insertion: "Middle facet of the greater tubercle of the humerus and posterior glenohumeral joint capsule.",
-    action: "Chief lateral (external) rotator of the humerus at the glenohumeral joint; prevents anterior dislocation of humeral head.",
-    synergists: "Teres Minor, Posterior Deltoid.",
-    antagonists: "Subscapularis, Pectoralis Major, Latissimus Dorsi, Teres Major, Anterior Deltoid (internal rotators).",
-    innervation: "Suprascapular Nerve (C5, C6) passing around the spinoglenoid notch beneath inferior transverse scapular ligament.",
-    bloodSupply: "Suprascapular Artery and Circumflex Scapular Artery (branch of subscapular artery forming scapular anastomosis).",
-    lymphatics: "Drains into Subscapular Axillary nodes.",
-    bedsideTest:
-      "External Rotation Lag Sign: Patient seated with elbow flexed at 90° and held against waist; patient externally rotates against examiner's medial resistance.",
-    clinicalPearl:
-      "Ganglion cysts in the spinoglenoid notch can selectively compress the inferior branch of the suprascapular nerve, causing isolated Infraspinatus atrophy without affecting Supraspinatus.",
-    vivaQuestion: {
-      q: "What vascular anastomosis around the scapula ensures collateral blood flow if the 1st or 2nd part of the Axillary Artery is ligated?",
-      a: "The Scapular Anastomosis between the Suprascapular Artery (from thyrocervical trunk), Deep branch of Transverse Cervical / Dorsal Scapular Artery, and Circumflex Scapular Artery (from subscapular artery of 3rd part of axillary).",
-    },
-  },
-  {
-    id: "subscapularis-muscle",
-    name: "Subscapularis (Rotator Cuff)",
-    region: "Anterior Shoulder / Rotator Cuff",
-    latin: "Musculus subscapularis",
-    fmaId: "FMA:9632",
-    heads: [
-      {
-        name: "Costal Fossa Belly",
-        origin: "Medial two-thirds of the subscapular fossa on the anterior (costal) surface of the scapula.",
-        insertion: "Lesser tubercle of the humerus and anterior joint capsule.",
-        action: "Chief internal (medial) rotator of the arm; anterior dynamic stabilizer of the glenohumeral joint.",
-      },
-    ],
-    origin: "Medial two-thirds of the subscapular fossa on the costal (anterior) surface of the scapula.",
-    insertion: "Lesser tubercle of the humerus and anterior fibrous capsule of the glenohumeral joint.",
-    action: "Chief medial (internal) rotator of the humerus; holds head of humerus in glenoid cavity to prevent anterior dislocation.",
-    synergists: "Pectoralis Major, Latissimus Dorsi, Teres Major, Anterior Deltoid.",
-    antagonists: "Infraspinatus, Teres Minor, Posterior Deltoid (external rotators).",
-    innervation: "Upper and Lower Subscapular Nerves (C5, C6) originating from the posterior cord of the brachial plexus.",
-    bloodSupply: "Subscapular Artery (largest branch of axillary artery) and lateral thoracic artery.",
-    lymphatics: "Drains into Subscapular and Central Axillary lymph nodes.",
-    bedsideTest:
-      "Gerber's Lift-Off Test: Patient places dorsum of hand against mid-lumbar spine; patient actively lifts hand backward away from spine against examiner's resistance (or Belly-Press / Napoleon test).",
-    clinicalPearl:
-      "Subscapularis tendon rupture permits medial dislocation or subluxation of the long head of the biceps tendon from the intertubercular groove because subscapularis fibers form the medial roof of the bicipital groove.",
-    vivaQuestion: {
-      q: "Name the 4 muscles comprising the Rotator Cuff ('SITS') and state which one inserts on the lesser tubercle.",
-      a: "Supraspinatus, Infraspinatus, Teres minor (all insert on the greater tubercle facets), and Subscapularis (the only one inserting on the lesser tubercle).",
-    },
-  },
-  {
-    id: "rectus-abdominis-muscle",
-    name: "Rectus Abdominis",
-    region: "Anterior Abdominal Wall",
-    latin: "Musculus rectus abdominis",
-    fmaId: "FMA:9625",
-    heads: [
-      {
-        name: "Medial & Lateral Tendinous Slips",
-        origin: "Pubic crest, pubic tubercle, and anterior surface of pubic symphysis.",
-        insertion: "Costal cartilages of 5th, 6th, and 7th ribs and xiphoid process.",
-        action: "Flexes lumbar vertebral column; compresses abdominal viscera; increases intra-abdominal pressure.",
-      },
-    ],
-    origin: "Pubic crest, pubic tubercle, and anterior surface of pubic symphysis.",
-    insertion: "Costal cartilages of the 5th, 6th, and 7th ribs and the xiphoid process of the sternum.",
-    action:
-      "Flexes the lumbar vertebral column (curling movement); compresses abdominal contents during micturition, defecation, and parturition; posterior pelvic tilt to maintain lumbar lordosis.",
-    synergists: "External Oblique, Internal Oblique, Transversus Abdominis.",
-    antagonists: "Erector Spinae, Transversospinales, Quadratus Lumborum.",
-    innervation: "Thoracoabdominal Nerves (anterior primary rami of T7 to T11 spinal nerves) and Subcostal Nerve (T12).",
-    bloodSupply: "Superior Epigastric Artery (terminal branch of internal thoracic) and Inferior Epigastric Artery (branch of external iliac) anastomosing within the rectus sheath.",
-    lymphatics: "Superior to umbilicus: drains to Axillary (pectoral) nodes; Inferior to umbilicus: drains to Superficial Inguinal nodes.",
-    bedsideTest:
-      "Carnett's Test: Patient lies supine and lifts head and shoulders off the examination bed while examiner palpates tender abdominal point; increased or unchanged pain indicates abdominal wall source (e.g. rectus sheath hematoma) rather than intra-abdominal pathology.",
-    clinicalPearl:
-      "Rectus Sheath Hematoma results from rupture of the Inferior Epigastric Artery during violent coughing, trauma, or anticoagulation therapy. Confirmed clinically by Fothergill's Sign: the abdominal mass does not cross the midline and remains palpable and tender when the rectus muscles contract.",
-    vivaQuestion: {
-      q: "Describe the composition of the Rectus Sheath below the Arcuate Line (line of Douglas).",
-      a: "Below the arcuate line, all three aponeuroses (External Oblique, Internal Oblique, Transversus Abdominis) pass entirely ANTERIOR to the Rectus Abdominis. Posteriorly, the muscle is in direct contact with only the transversalis fascia and parietal peritoneum.",
-    },
-  },
-  {
     id: "gluteus-maximus-muscle",
     name: "Gluteus Maximus",
     region: "Gluteal Region / Buttock",
@@ -685,56 +751,6 @@ const HIGH_YIELD_MUSCLES_DIRECTORY = [
     vivaQuestion: {
       q: "In a patient standing on the right leg, the left side of the pelvis drops. Which nerve and muscle are defective?",
       a: "The RIGHT Superior Gluteal Nerve or RIGHT Gluteus Medius/Minimus muscle (the weight-bearing side is paralyzed).",
-    },
-  },
-  {
-    id: "quadriceps-muscle",
-    name: "Quadriceps Femoris (Rectus Femoris & Vasti)",
-    region: "Anterior Compartment of Thigh",
-    latin: "Musculus quadriceps femoris",
-    fmaId: "FMA:22428",
-    heads: [
-      {
-        name: "Rectus Femoris (Biaricular)",
-        origin: "Straight head: Anterior Inferior Iliac Spine (AIIS); Reflected head: groove above acetabular rim.",
-        insertion: "Base of patella and tibial tuberosity via patellar ligament.",
-        action: "Flexes hip joint and extends knee joint.",
-      },
-      {
-        name: "Vastus Lateralis (Largest)",
-        origin: "Greater trochanter, intertrochanteric line, lateral lip of linea aspera of femur.",
-        insertion: "Lateral base and border of patella.",
-        action: "Extends knee joint.",
-      },
-      {
-        name: "Vastus Medialis & VMO",
-        origin: "Intertrochanteric line, spiral line, medial lip of linea aspera.",
-        insertion: "Medial border of patella and medial tibial condyle.",
-        action: "Extends knee; Vastus Medialis Oblique (VMO) stabilizes patella against lateral subluxation.",
-      },
-      {
-        name: "Vastus Intermedius",
-        origin: "Anterior and lateral surfaces of the upper two-thirds of femoral shaft.",
-        insertion: "Deep surface of quadriceps tendon and patellar base.",
-        action: "Pure knee joint extensor.",
-      },
-    ],
-    origin:
-      "Rectus Femoris: AIIS and acetabular margin. Vastus Lateralis: greater trochanter and linea aspera. Vastus Medialis: intertrochanteric line and medial supracondylar line. Vastus Intermedius: anterior femoral shaft.",
-    insertion: "Patella via common Quadriceps Tendon, continuing as the Patellar Ligament into the Tibial Tuberosity.",
-    action: "Chief powerful extensor of the leg at the knee joint; Rectus femoris also assists in flexing the thigh at the hip joint.",
-    synergists: "Tensor Fasciae Latae (assists knee extension when knee is extended).",
-    antagonists: "Hamstrings (Biceps Femoris, Semitendinosus, Semimembranosus), Gracilis, Sartorius.",
-    innervation: "Femoral Nerve (L2, L3, L4 posterior division) in the femoral triangle.",
-    bloodSupply: "Lateral Circumflex Femoral Artery, Medial Circumflex Femoral Artery, and Deep Femoral (Profunda Femoris) Artery.",
-    lymphatics: "Drains into Deep and Superficial Inguinal lymph nodes.",
-    bedsideTest:
-      "1. Knee extension test: Seated patient extends knee against downward resistance applied at the ankle. 2. Patellar Tendon Reflex (Knee Jerk Reflex) evaluating L3–L4 spinal segments.",
-    clinicalPearl:
-      "Weakness of the Vastus Medialis Oblique (VMO) fibers leads to lateral patellar maltracking, causing Patellofemoral Pain Syndrome (runner's knee). Violent sprinting in adolescents can cause avulsion fracture of the AIIS at the rectus femoris origin.",
-    vivaQuestion: {
-      q: "What are the spinal cord root segments tested by the Knee Jerk (Patellar Tendon) reflex?",
-      a: "L3 and L4 nerve roots via the Femoral Nerve.",
     },
   },
   {
@@ -866,7 +882,8 @@ const COGNI_PRESETS = [
     insertion: "Distal soft tissue, tendon, and aponeurotic insertions across 600+ muscles.",
     action: "Comprehensive biomechanical locomotion, voluntary articulation, autonomic homeostasis, and metabolic thermogenesis.",
     innervation: "Complete Somatic & Autonomic Nervous Systems (CNS + PNS, Sympathetic & Parasympathetic)",
-    bloodSupply: "Systemic arterial tree (Aorta and branches) and systemic venous return (SVC / IVC)",
+    bloodSupply: "Systemic arterial tree (Aorta and major regional branches)",
+    venousDrainage: "Superior and Inferior Vena Cava (SVC/IVC), portal venous system, and azygos venous tributary network.",
     clinicalHighYield:
       "Understanding 3D spatial relationships is the core foundation for medical diagnosis, surgical access, radiographic orientation (CT/MRI), and USMLE/NEET-PG board exams.",
     mnemonic: "Anatomical Position: Standing erect, eyes forward, palms facing anteriorly with thumbs pointed out.",
@@ -901,6 +918,7 @@ const COGNI_PRESETS = [
       "Ascending part: depresses scapula and assists upward rotation. Descending part: elevates scapula. Middle part: retracts (adducts) scapula. Together: upwardly rotates glenoid cavity during abduction >90°.",
     innervation: "Motor: Spinal Accessory Nerve (Cranial Nerve XI). Sensory / Proprioception: Ventral rami of C3 and C4 cervical spinal nerves.",
     bloodSupply: "Transverse Cervical Artery (superficial branch), Dorsal Scapular Artery, Posterior Intercostal Arteries.",
+    venousDrainage: "Transverse Cervical Vein and External Jugular tributaries draining into Subclavian Vein.",
     clinicalHighYield:
       "Spinal Accessory Nerve (CN XI) is vulnerable to iatrogenic transection during posterior cervical triangle lymph node biopsy. Damage causes Shoulder Droop, weakness in shrugging against resistance, and impaired abduction above 90° with lateral scapular winging.",
     mnemonic: "TRAP = Turns scapula upward, Retracts, Accessory nerve (CN XI), Posterior triangle vulnerable.",
@@ -936,6 +954,7 @@ const COGNI_PRESETS = [
     action: "Generates skeletal locomotion, joint stabilization, visceral sphincteric control, and metabolic heat.",
     innervation: "Somatic motor neurons releasing Acetylcholine (ACh) at the Neuromuscular Junction (NMJ)",
     bloodSupply: "Muscular branches of adjacent regional arteries forming intramuscular anastomotic beds",
+    venousDrainage: "Deep paired venae comitantes with bicuspid valves promoting venous return during skeletal muscle pump action.",
     clinicalHighYield:
       "Myasthenia Gravis: Autoantibodies against post-synaptic nicotinic ACh receptors cause progressive muscle fatigability (ptosis, diplopia, worse at end of day). Lambert-Eaton: Autoantibodies against presynaptic voltage-gated calcium channels (associated with small cell lung cancer, improves with use).",
     mnemonic: "Myasthenia Gravis = Mind to Ground (descending weakness, eyes first, worse with exertion).",
@@ -965,8 +984,9 @@ const COGNI_PRESETS = [
     origin: "Provides origin sites for over 600 skeletal muscle bellies.",
     insertion: "Provides insertion anchor points through Sharpey's fibers penetrating the bony periosteum.",
     action: "Structural support, mechanical leverage, vital organ protection, calcium homeostasis, and hematopoiesis.",
-    innervation: "Periosteal sensory nerves (extremely sensitive to trauma and fracture pain)",
+    innervation: "Periosteal sensory nerves (extremely sensitive to trauma, fractures, and bone tumors)",
     bloodSupply: "Nutrient arteries entering via nutrient foramina, periosteal arteries, and metaphyseal/epiphyseal vessels",
+    venousDrainage: "Emissary veins, cortical periosteal venules, and large sinusoidal medullary bone veins.",
     clinicalHighYield:
       "Bone marrow in flat bones (sternum, iliac crest) remains the chief site of hematopoiesis in adults. Iliac crest marrow aspiration is the gold standard for diagnosing leukemias and aplastic anemia.",
     mnemonic: "Axial = Axis of body (80 bones); Appendicular = Appendages/limbs (126 bones). Total = 206.",
@@ -983,128 +1003,66 @@ const COGNI_PRESETS = [
     ],
   },
   {
-    id: "circulatory-system",
-    label: "🩸 Circulatory System (Arteries & Veins)",
-    system: "Circulatory",
-    region: "Whole Body",
-    icon: "🫀",
-    structuresCount: "Great Vessels & Microcirculation",
-    latin: "Systema Cardiovasculare",
-    fmaId: "FMA:7161",
-    summary:
-      "Closed vascular circuit conveying oxygenated blood from the left ventricle through the systemic arterial tree to tissues, returning deoxygenated blood via the caval venous system to the right atrium and pulmonary circulation.",
-    origin: "Ascending aorta arising from aortic orifice of left ventricle.",
-    insertion: "Microvascular capillary beds draining to venules and caval systems.",
-    action: "High-pressure oxygen and nutrient perfusion; metabolic waste clearance.",
-    innervation: "Sympathetic vasoconstriction via alpha-1 receptors; parasympathetic vasodilation in specialized beds",
-    bloodSupply: "Primary conduit system supplying all organ parenchymas",
-    clinicalHighYield:
-      "Virchow's Triad for deep vein thrombosis (DVT): 1. Endothelial injury, 2. Stasis, 3. Hypercoagulability. Thrombi dislodging from lower extremity deep veins (femoral, popliteal) travel through IVC to occlude the pulmonary trunk (Pulmonary Embolism).",
-    mnemonic: "Virchow's Triad = Stasis, Endothelial Injury, Hypercoagulability = DVT risk.",
-    examTip: "Aortic baroreceptors transmit afferents via Vagus (CN X); Carotid sinus baroreceptors transmit via Glossopharyngeal (CN IX).",
-    flashcards: [
-      {
-        q: "What comprises Virchow's Triad for venous thromboembolism?",
-        a: "1. Endothelial damage\n2. Venous stasis\n3. Hypercoagulable state (e.g. Factor V Leiden, malignancy, oral contraceptives).",
-      },
-      {
-        q: "Which cranial nerves carry baroreceptor afferents from the carotid sinus and aortic arch?",
-        a: "Carotid sinus: CN IX (Glossopharyngeal nerve).\nAortic arch: CN X (Vagus nerve).",
-      },
-    ],
-  },
-  {
-    id: "nervous-system",
-    label: "🧠 Central & Peripheral Nerves",
-    system: "Nervous",
-    region: "Whole Body",
-    icon: "⚡",
-    structuresCount: "Brain, Cord & 43 Nerve Pairs",
-    latin: "Systema Nervosum",
-    fmaId: "FMA:9905",
-    summary:
-      "Composed of Central Nervous System (Brain and Spinal Cord) and Peripheral Nervous System (12 pairs of cranial nerves and 31 pairs of spinal nerves, plus autonomic ganglia).",
-    origin: "Neural tube (CNS, somatic motor nerves) and neural crest cells (PNS, sensory and autonomic ganglia).",
-    insertion: "Target neuromuscular junctions, motor endplates, sensory mechanoreceptors, and visceral organs.",
-    action: "Sensory afferent transduction, central integration, and somatic/autonomic efferent execution.",
-    innervation: "Complex neurochemical signaling across cholinergic, adrenergic, dopaminergic, and GABAergic synapses",
-    bloodSupply: "Internal Carotid and Vertebrobasilar arterial systems (Circle of Willis); Spinal arteries",
-    clinicalHighYield:
-      "Upper Motor Neuron (UMN) lesions produce spastic paralysis, hyperreflexia, and positive Babinski sign (toes fan upward). Lower Motor Neuron (LMN) lesions produce flaccid paralysis, muscle atrophy, fasciculations, and hyporeflexia.",
-    mnemonic: "UMN = Everything goes UP (Hyperreflexia, hypertonia, Babinski up). LMN = Everything goes DOWN (Atrophy, hyporeflexia, flaccid).",
-    examTip: "Lumbar puncture safely enters the subarachnoid space at the L3-L4 or L4-L5 intervertebral space (below termination of adult conus medullaris at L1-L2).",
-    flashcards: [
-      {
-        q: "What are the cardinal differences between UMN and LMN lesions?",
-        a: "UMN: Spasticity, hyperreflexia, clasp-knife tone, extensor plantar (Babinski +).\nLMN: Flaccidity, muscle atrophy, fasciculations, loss of reflexes (hyporeflexia).",
-      },
-      {
-        q: "At what vertebral level does the adult spinal cord end, and where is lumbar puncture performed?",
-        a: "Spinal cord ends at L1-L2 (conus medullaris). Lumbar puncture is performed at L3-L4 or L4-L5 (level of iliac crests).",
-      },
-    ],
-  },
-
-  // --- 2. HEAD, NECK & NEUROANATOMY ---
-  {
-    id: "skull",
-    label: "💀 Cranium & Skull (Calvaria & Face)",
+    id: "arm-bones",
+    label: "🦾 Upper Limb Bones (Clavicle, Humerus & Hand)",
     system: "Skeletal",
-    region: "Head & Neck",
-    icon: "💀",
-    structuresCount: "22 Cranial & Facial Bones",
-    latin: "Cranium et Calvaria",
-    fmaId: "FMA:46565",
+    region: "Upper Limb",
+    icon: "🦾",
+    structuresCount: "Clavicle, Scapula, Arm & Hand",
+    latin: "Ossa Membri Superioris",
+    fmaId: "FMA:71337",
     summary:
-      "Protective bony encasement for the brain and sensory organs. Divided into Neurocranium (8 bones: frontal, occipital, sphenoid, ethmoid, 2 parietal, 2 temporal) and Viscerocranium (14 facial bones: mandible, maxilla, zygomatic, nasal, etc.).",
-    origin: "Origin for muscles of mastication (temporalis, masseter) and muscles of facial expression.",
-    insertion: "Attachment for cranial sutures, tentorium cerebelli, and falx cerebri.",
-    action: "Protects intracranial neurovasculature, supports sensory organs, and facilitates mastication.",
-    innervation: "Trigeminal Nerve (CN V sensory: V1 ophthalmic, V2 maxillary, V3 mandibular); Facial Nerve (CN VII motor to facial expression)",
-    bloodSupply: "External Carotid (Maxillary, Superficial Temporal, Facial), Internal Carotid, Middle Meningeal Artery",
+      "Upper extremity bones optimized for reach, grasping, and manipulation. Includes Clavicle, Scapula, Humerus, Radius, Ulna, 8 Carpal bones, 5 Metacarpals, and 14 Phalanges.",
+    origin: "Origins for rotator cuff, biceps, triceps, brachialis, and forearm flexor/extensor compartments.",
+    insertion: "Insertions for pectoralis major, latissimus dorsi, deltoid, and hand intrinsic muscles.",
+    action: "Reaching, throwing, delicate manual grasp, and precision tool manipulation.",
+    innervation: "Brachial Plexus (C5-T1 roots -> Musculocutaneous, Axillary, Median, Radial, Ulnar nerves)",
+    bloodSupply: "Subclavian -> Axillary -> Brachial -> Radial & Ulnar Arteries -> Deep & Superficial Palmar Arches",
+    venousDrainage: "Cephalic Vein, Basilic Vein, Median Cubital Vein, and deep venae comitantes draining into Axillary and Subclavian Veins.",
     clinicalHighYield:
-      "Pterion fracture: The H-shaped junction of frontal, parietal, temporal, and sphenoid bones is the thinnest cranial point. Fractures lacerate the anterior branch of the Middle Meningeal Artery, causing an acute Epidural Hematoma (biconvex lens on CT; classic lucid interval followed by uncal herniation).",
-    mnemonic: "Middle Meningeal Artery = 'Epidural Hematoma with Lucid Interval' (Lens shape on non-contrast CT).",
-    examTip: "Le Fort fractures of the midface: Le Fort I (horizontal maxilla), Le Fort II (pyramidal nasomaxillary), Le Fort III (craniofacial disjunction).",
+      "Humeral fracture nerve injuries: 1. Surgical neck fracture = Axillary nerve (deltoid paralysis). 2. Mid-shaft fracture = Radial nerve in spiral groove (wrist drop). 3. Supracondylar fracture = Median nerve / Brachial artery. 4. Medial epicondyle fracture = Ulnar nerve (claw hand).",
+    mnemonic: "ARM: Axillary (surgical neck), Radial (mid-shaft), Median (supracondylar), Ulnar (medial epicondyle).",
+    examTip: "Scaphoid fracture: Most commonly fractured carpal bone after fall on outstretched hand (FOOSH); tenderness in anatomical snuffbox; high risk of Avascular Necrosis (AVN) due to retrograde blood supply.",
     flashcards: [
       {
-        q: "What critical artery runs directly beneath the Pterion on the lateral skull?",
-        a: "The anterior branch of the Middle Meningeal Artery (branch of the maxillary artery). Laceration causes acute Epidural Hematoma.",
+        q: "Which nerve is injured in a mid-shaft fracture of the humerus, and what clinical deformity results?",
+        a: "The Radial Nerve (running in the radial/spiral groove). Injury produces 'Wrist Drop' due to denervation of the forearm extensors.",
       },
       {
-        q: "What classic CT appearance distinguishes an Epidural from a Subdural Hematoma?",
-        a: "Epidural: Biconvex (lenticular) hyperdense collection limited by cranial sutures.\nSubdural: Crescent-shaped collection crossing suture lines (rupture of bridging veins).",
+        q: "Why are scaphoid fractures at high risk of avascular necrosis (AVN) and nonunion?",
+        a: "The blood supply enters the scaphoid at its distal pole and flows in a retrograde direction to the proximal pole; a waist fracture interrupts blood flow to the proximal segment.",
       },
     ],
   },
   {
-    id: "brain",
-    label: "🧠 Brain (Cerebrum, Cerebellum & Stem)",
-    system: "Nervous",
-    region: "Head & Neck",
-    icon: "🧠",
-    structuresCount: "107 3D Brain Structures",
-    latin: "Encephalon, Cerebrum et Cerebellum",
-    fmaId: "FMA:50801",
+    id: "leg-bones",
+    label: "🦵 Lower Limb Bones (Femur, Tibia & Foot)",
+    system: "Skeletal",
+    region: "Lower Limb",
+    icon: "🦵",
+    structuresCount: "Femur, Patella, Tibia, Fibula & Foot",
+    latin: "Ossa Membri Inferioris",
+    fmaId: "FMA:71338",
     summary:
-      "Central processing center of the nervous system. Features cerebral cortex (frontal, parietal, temporal, occipital lobes, and insula), basal ganglia, thalamus, limbic structures, brainstem (midbrain, pons, medulla), and cerebellum.",
-    origin: "Telencephalon, Diencephalon, Mesencephalon, Metencephalon, and Myelencephalon embryonic vesicles.",
-    insertion: "Descending corticospinal and corticobulbar tracts synapsing on anterior horn motor neurons.",
-    action: "Higher cognitive executive functions, sensory processing, motor programming, memory, and autonomic life-support.",
-    innervation: "Origin of all 12 Cranial Nerves (CN I through CN XII)",
-    bloodSupply: "Circle of Willis formed by Anterior & Posterior Communicating, Anterior & Posterior Cerebral, and Internal Carotids",
+      "Bones of the lower limb engineered for weight-bearing and bipedal locomotion. Features Femur (strongest bone), Patella (largest sesamoid), Tibia (weight-bearing), Fibula (lateral stabilizer), 7 Tarsals, 5 Metatarsals, and 14 Phalanges.",
+    origin: "Origins for gluteal, quadriceps, hamstring, adductor, and calf muscle groups.",
+    insertion: "Insertions for iliopsoas (lesser trochanter), patellar ligament (tibial tuberosity), and Achilles tendon (calcaneus).",
+    action: "Upright posture, ground reaction force absorption, and bipedal running and walking locomotion.",
+    innervation: "Lumbar Plexus (Femoral L2-L4, Obturator L2-L4) & Sacral Plexus (Sciatic -> Tibial & Common Fibular)",
+    bloodSupply: "Femoral Artery -> Popliteal Artery -> Anterior & Posterior Tibial and Fibular Arteries",
+    venousDrainage: "Great Saphenous Vein, Small Saphenous Vein, and deep paired tibial, popliteal, and femoral veins with muscular pump valves.",
     clinicalHighYield:
-      "Berry aneurysm rupture in the Circle of Willis (most commonly at Anterior Communicating Artery junction) causes spontaneous Subarachnoid Hemorrhage (SAH: 'worst headache of my life', thunderclap onset, nuchal rigidity, xanthochromia on lumbar puncture).",
-    mnemonic: "Worst headache of life + thunderclap onset = Subarachnoid Hemorrhage (SAH) from ruptured Berry aneurysm.",
-    examTip: "MCA stroke: Contralateral motor/sensory deficits affecting face and upper extremity greater than lower extremity + aphasia if left hemisphere.",
+      "Common Fibular (Peroneal) Nerve injury: Courses superficially around the fibular neck; fracture or tight cast compresses it, paralyzing anterior and lateral compartment leg muscles, producing Foot Drop (steppage gait, inability to dorsiflex or evert foot).",
+    mnemonic: "PED = Peroneal Everts and Dorsiflexes (injury = foot drop). TIP = Tibial Inverts and Plantarflexes.",
+    examTip: "Femoral neck fracture in elderly disrupts Medial Circumflex Femoral Artery, resulting in avascular necrosis of the femoral head (leg presents shortened and externally rotated).",
     flashcards: [
       {
-        q: "Where is the most common site for a saccular (Berry) aneurysm to rupture in the Circle of Willis?",
-        a: "The junction of the Anterior Communicating Artery (ACom) and Anterior Cerebral Artery (ACA).",
+        q: "A patient presents with foot drop and inability to dorsiflex or evert the foot following a blow to the lateral knee. What nerve is injured?",
+        a: "The Common Fibular (Peroneal) Nerve as it winds around the neck of the fibula.",
       },
       {
-        q: "What symptoms characterize a stroke of the Middle Cerebral Artery (MCA)?",
-        a: "Contralateral hemiparesis and hemisensory loss predominantly of the face and arm (sparing the leg), with aphasia (Broca/Wernicke) if dominant hemisphere.",
+        q: "What vascular structure is torn in an intracapsular femoral neck fracture, causing avascular necrosis?",
+        a: "Retinacular branches of the Medial Circumflex Femoral Artery supplying the femoral head.",
       },
     ],
   },
@@ -1124,6 +1082,7 @@ const COGNI_PRESETS = [
     action: "Weight transmission, spinal cord protection, and multi-axial trunk flexion, extension, and rotation.",
     innervation: "Spinal nerves (C1-C8, T1-T12, L1-L5, S1-S5, Co1); Sinuvertebral nerves to outer annulus fibrosus",
     bloodSupply: "Anterior Spinal Artery (supplies anterior 2/3 of cord), paired Posterior Spinal Arteries, and Artery of Adamkiewicz",
+    venousDrainage: "Batson's Internal and External Vertebral Venous Plexuses (valveless veins explaining pelvic cancer metastasis to spine and brain).",
     clinicalHighYield:
       "L4-L5 and L5-S1 posterolateral disc herniations herniate the nucleus pulposus through the torn annulus fibrosus, compressing traversing nerve roots and producing classic Sciatica (radicular pain down posterior leg with positive straight leg raise).",
     mnemonic: "C3, 4, 5 keep the diaphragm alive (Phrenic nerve roots); S2, 3, 4 keep the sphincters tight.",
@@ -1139,8 +1098,6 @@ const COGNI_PRESETS = [
       },
     ],
   },
-
-  // --- 3. THORAX, CARDIOPULMONARY & BREATHING ---
   {
     id: "heart-detailed",
     label: "💓 Heart Internal Chambers & Valves",
@@ -1157,6 +1114,7 @@ const COGNI_PRESETS = [
     action: "Synchronized cyclic myocardial contraction (systole) and relaxation (diastole) to pump blood through pulmonary and systemic circuits.",
     innervation: "Cardiac Plexus: Sympathetics (T1-T5 via sympathetic trunk, increases HR/inotropy); Parasympathetics (Vagus nerve CN X, decreases HR)",
     bloodSupply: "Left Main Coronary (LAD + Circumflex) and Right Coronary Artery (RCA -> Posterior Descending Artery)",
+    venousDrainage: "Great, Middle, and Small Cardiac Veins draining into the Coronary Sinus into the Right Atrium.",
     clinicalHighYield:
       "Myocardial Infarction: LAD occlusion causes anterior wall MI (V1-V4; 'Widowmaker'); RCA occlusion causes inferior wall MI (leads II, III, aVF) often complicated by bradycardia and AV nodal blocks. Beck's triad of cardiac tamponade: Hypotension, Distant/muffled heart sounds, Elevated JVP.",
     mnemonic: "LAD = Anterior wall (V1-V4); RCA = Inferior wall (II, III, aVF); Circumflex = Lateral wall (I, aVL, V5-V6).",
@@ -1188,6 +1146,7 @@ const COGNI_PRESETS = [
     action: "Airway conduction, alveolar gas exchange (O2 uptake and CO2 elimination), surfactant production, and acid-base buffering.",
     innervation: "Pulmonary Plexus: Vagus CN X (bronchoconstrictor, secretomotor); Sympathetic T2-T5 (bronchodilator via beta-2 receptors)",
     bloodSupply: "Bronchial Arteries from descending aorta (nutritive supply); Pulmonary Arteries from right ventricle (gas exchange)",
+    venousDrainage: "4 Pulmonary Veins (oxygenated blood to left atrium) and Bronchial Veins (to azygos/hemiazygos).",
     clinicalHighYield:
       "Tension Pneumothorax: Air accumulates in pleural space without escape, shifting mediastinum and trachea to the contralateral side, kinking IVC and causing fatal shock. Treated with immediate needle thoracostomy in 2nd ICS midclavicular line or 5th ICS midaxillary line.",
     mnemonic: "Right lung has 3 lobes (R=3); Left lung has 2 lobes (L=2) to leave room for the Heart.",
@@ -1200,165 +1159,6 @@ const COGNI_PRESETS = [
       {
         q: "Where is emergency needle decompression performed for a tension pneumothorax?",
         a: "2nd intercostal space in the midclavicular line, or 5th intercostal space in the midaxillary line, inserting the needle directly OVER the superior border of the rib to avoid the subcostal neurovascular bundle.",
-      },
-    ],
-  },
-
-  // --- 4. ABDOMEN, PELVIS & VISCERA ---
-  {
-    id: "digestive-gi",
-    label: "🍏 Digestive Tract (Stomach, Liver & Intestines)",
-    system: "Digestive",
-    region: "Abdomen",
-    icon: "🍏",
-    structuresCount: "GI Organs & Mesentery",
-    latin: "Apparatus Digestorius",
-    fmaId: "FMA:7152",
-    summary:
-      "Gastrointestinal tract extending from esophagus to rectum. Divided into Foregut (celiac trunk), Midgut (superior mesenteric artery), and Hindgut (inferior mesenteric artery). Features liver, gallbladder, pancreas, stomach, small bowel, and colon.",
-    origin: "Embryonic endodermal gut tube (Foregut, Midgut, Hindgut) suspended by dorsal and ventral mesenteries.",
-    insertion: "Anocutaneous line (pectinate line) in the anal canal.",
-    action: "Mechanical ingestion, enzymatic digestion, nutrient absorption, endocrine incretin release, and waste elimination.",
-    innervation: "Enteric Nervous System (Auerbach/myenteric and Meissner/submucosal plexuses) modulated by Vagus CN X and Sympathetics (T5-L2)",
-    bloodSupply: "Foregut: Celiac Trunk; Midgut: Superior Mesenteric Artery (SMA); Hindgut: Inferior Mesenteric Artery (IMA)",
-    clinicalHighYield:
-      "Appendicitis: Luminal obstruction (fecalith in adults, lymphoid hyperplasia in children) causes periumbilical visceral pain (T10 dermatome via sympathetics) that later migrates to McBurney's point (somatic peritoneal irritation, 1/3 distance from ASIS to umbilicus).",
-    mnemonic: "Foregut = Celiac (T12); Midgut = SMA (L1); Hindgut = IMA (L3).",
-    examTip: "Internal hemorrhoids (above pectinate line) are painless (visceral innervation via inferior hypogastric plexus); External hemorrhoids (below pectinate line) are excruciatingly painful (somatic innervation via inferior rectal nerve).",
-    flashcards: [
-      {
-        q: "What landmark defines McBurney's point, and what pathology does it indicate?",
-        a: "Located 1/3 of the distance from the Right Anterior Superior Iliac Spine (ASIS) to the umbilicus. Tenderness here indicates Acute Appendicitis.",
-      },
-      {
-        q: "What embryonic divisions of the gut correspond to the Celiac Trunk, SMA, and IMA?",
-        a: "Celiac Trunk: Foregut (esophagus to 2nd part of duodenum).\nSMA: Midgut (3rd part of duodenum to proximal 2/3 of transverse colon).\nIMA: Hindgut (distal 1/3 of transverse colon to upper anal canal).",
-      },
-    ],
-  },
-  {
-    id: "urinary-kidneys",
-    label: "💧 Kidneys & Urinary Tract",
-    system: "Urinary",
-    region: "Abdomen & Pelvis",
-    icon: "💧",
-    structuresCount: "Kidneys, Ureters & Bladder",
-    latin: "Organa Urinaria",
-    fmaId: "FMA:7159",
-    summary:
-      "Retroperitoneal filtration and urinary excretion system. Left kidney sits at T12-L3; Right kidney sits slightly lower due to the liver. Renal arteries arise directly from the abdominal aorta at L1-L2.",
-    origin: "Ureteric bud (collecting system) and metanephric blastema (glomeruli and nephrons).",
-    insertion: "Ureteric orifices inserting at the base of the bladder trigone.",
-    action: "Glomerular filtration, tubular reabsorption/secretion, blood pressure regulation via renin, and erythropoiesis.",
-    innervation: "Renal Plexus derived from celiac and least splanchnic sympathetic nerves (T10-L1)",
-    bloodSupply: "Renal Arteries originating from Abdominal Aorta; Renal Veins draining into Inferior Vena Cava (IVC)",
-    clinicalHighYield:
-      "Nutcracker Syndrome: Compression of the Left Renal Vein between the Superior Mesenteric Artery (SMA) and the abdominal aorta. Causes left flank pain, microscopic hematuria, and left-sided varicocele in males (left gonadal vein drains into left renal vein at 90°).",
-    mnemonic: "SAD PUCKER: Suprarenal, Aorta/IVC, Duodenum (2-4), Pancreas, Ureters, Colon (asc/desc), Kidneys, Esophagus, Rectum (Retroperitoneal).",
-    examTip: "Kidney stones (nephrolithiasis) lodge at 3 classic constrictions: 1. Ureteropelvic junction (UPJ), 2. Pelvic brim (crossing iliac vessels), 3. Ureterovesical junction (UVJ - narrowest point).",
-    flashcards: [
-      {
-        q: "Why is testicular varicocele significantly more common on the left side than the right?",
-        a: "The left testicular vein drains into the left renal vein at a 90° angle (subject to Nutcracker compression by SMA), whereas the right testicular vein drains obliquely directly into the IVC.",
-      },
-      {
-        q: "What are the 3 anatomical sites where ureteral calculi typically lodge?",
-        a: "1. Ureteropelvic Junction (UPJ)\n2. Pelvic Brim (where ureter crosses the iliac vessels)\n3. Ureterovesical Junction (UVJ) inside bladder wall.",
-      },
-    ],
-  },
-  {
-    id: "pelvis",
-    label: "🦴 Pelvis & Hip Girdle",
-    system: "Skeletal",
-    region: "Abdomen & Pelvis",
-    icon: "🦴",
-    structuresCount: "Ilium, Ischium, Pubis & Sacrum",
-    latin: "Pelvis Major et Pelvis Minor",
-    fmaId: "FMA:9578",
-    summary:
-      "Weight-bearing bony pelvis connecting the axial spine to the lower limbs. Composed of 2 hip bones (Os coxae: ilium, ischium, pubis) fused at the acetabulum, articulated with sacrum at sacroiliac joints and pubic symphysis.",
-    origin: "Origin for gluteal, hamstring, adductor, and abdominal wall muscles.",
-    insertion: "Insertion of latissimus dorsi, erector spinae, and psoas major tendons.",
-    action: "Transfers weight from upper body to lower limbs, protects pelvic viscera, and anchors pelvic floor.",
-    innervation: "Lumbosacral Plexus (L4-S4), Pudendal Nerve (S2-S4), Obturator Nerve (L2-L4)",
-    bloodSupply: "Internal Iliac Artery (anterior and posterior divisions supplying pelvic viscera and perineum)",
-    clinicalHighYield:
-      "High-energy open-book pelvic fractures disrupt the pelvic ring and lacerate the presacral venous plexus and internal iliac branches, causing life-threatening retroperitoneal exsanguination. Managed with emergency pelvic binder over greater trochanters.",
-    mnemonic: "S2, S3, S4 keeps the penis off the floor / keeps the sphincters tight (Pudendal & parasympathetics).",
-    examTip: "Femoral triangle contents from lateral to medial: NAVEL = Nerve, Artery, Vein, Empty space (femoral canal, site of femoral hernia), Lymphatics.",
-    flashcards: [
-      {
-        q: "What is the anatomical arrangement of neurovascular structures in the femoral triangle from lateral to medial?",
-        a: "N-A-V-E-L: Femoral Nerve, Femoral Artery, Femoral Vein, Empty space (Femoral Canal), Lymphatics.",
-      },
-      {
-        q: "Which division of the internal iliac artery is most prone to injury in open-book pelvic ring fractures?",
-        a: "The presacral venous plexus and branches of the internal iliac artery (superior gluteal artery).",
-      },
-    ],
-  },
-
-  // --- 5. LIMBS & EXTREMITIES ---
-  {
-    id: "arm-bones",
-    label: "🦾 Upper Limb (Humerus, Radius & Hand)",
-    system: "Skeletal",
-    region: "Upper Limb",
-    icon: "🦾",
-    structuresCount: "Clavicle, Scapula, Arm & Hand",
-    latin: "Ossa Membri Superioris",
-    fmaId: "FMA:71337",
-    summary:
-      "Upper extremity bones optimized for reach, grasping, and manipulation. Includes Clavicle, Scapula, Humerus, Radius, Ulna, 8 Carpal bones, 5 Metacarpals, and 14 Phalanges.",
-    origin: "Origins for rotator cuff, biceps, triceps, brachialis, and forearm flexor/extensor compartments.",
-    insertion: "Insertions for pectoralis major, latissimus dorsi, deltoid, and hand intrinsic muscles.",
-    action: "Reaching, throwing, delicate manual grasp, and precision tool manipulation.",
-    innervation: "Brachial Plexus (C5-T1 roots -> Musculocutaneous, Axillary, Median, Radial, Ulnar nerves)",
-    bloodSupply: "Subclavian -> Axillary -> Brachial -> Radial & Ulnar Arteries -> Deep & Superficial Palmar Arches",
-    clinicalHighYield:
-      "Humeral fracture nerve injuries: 1. Surgical neck fracture = Axillary nerve (deltoid paralysis). 2. Mid-shaft fracture = Radial nerve in spiral groove (wrist drop). 3. Supracondylar fracture = Median nerve / Brachial artery. 4. Medial epicondyle fracture = Ulnar nerve (claw hand).",
-    mnemonic: "ARM: Axillary (surgical neck), Radial (mid-shaft), Median (supracondylar), Ulnar (medial epicondyle).",
-    examTip: "Scaphoid fracture: Most commonly fractured carpal bone after fall on outstretched hand (FOOSH); tenderness in anatomical snuffbox; high risk of Avascular Necrosis (AVN) due to retrograde blood supply.",
-    flashcards: [
-      {
-        q: "Which nerve is injured in a mid-shaft fracture of the humerus, and what clinical deformity results?",
-        a: "The Radial Nerve (running in the radial/spiral groove). Injury produces 'Wrist Drop' due to denervation of the forearm extensors.",
-      },
-      {
-        q: "Why are scaphoid fractures at high risk of avascular necrosis (AVN) and nonunion?",
-        a: "The blood supply enters the scaphoid at its distal pole and flows in a retrograde direction to the proximal pole; a waist fracture interrupts blood flow to the proximal segment.",
-      },
-    ],
-  },
-  {
-    id: "leg-bones",
-    label: "🦵 Lower Limb (Femur, Knee, Tibia & Foot)",
-    system: "Skeletal",
-    region: "Lower Limb",
-    icon: "🦵",
-    structuresCount: "Femur, Patella, Tibia, Fibula & Foot",
-    latin: "Ossa Membri Inferioris",
-    fmaId: "FMA:71338",
-    summary:
-      "Bones of the lower limb engineered for weight-bearing and bipedal locomotion. Features Femur (strongest bone), Patella (largest sesamoid), Tibia (weight-bearing), Fibula (lateral stabilizer), 7 Tarsals, 5 Metatarsals, and 14 Phalanges.",
-    origin: "Origins for gluteal, quadriceps, hamstring, adductor, and calf muscle groups.",
-    insertion: "Insertions for iliopsoas (lesser trochanter), patellar ligament (tibial tuberosity), and Achilles tendon (calcaneus).",
-    action: "Upright posture, ground reaction force absorption, and bipedal running and walking locomotion.",
-    innervation: "Lumbar Plexus (Femoral L2-L4, Obturator L2-L4) & Sacral Plexus (Sciatic -> Tibial & Common Fibular)",
-    bloodSupply: "Femoral Artery -> Popliteal Artery -> Anterior & Posterior Tibial and Fibular Arteries",
-    clinicalHighYield:
-      "Common Fibular (Peroneal) Nerve injury: Courses superficially around the fibular neck; fracture or tight cast compresses it, paralyzing anterior and lateral compartment leg muscles, producing Foot Drop (steppage gait, inability to dorsiflex or evert foot).",
-    mnemonic: "PED = Peroneal Everts and Dorsiflexes (injury = foot drop). TIP = Tibial Inverts and Plantarflexes.",
-    examTip: "Femoral neck fracture in elderly disrupts Medial Circumflex Femoral Artery, resulting in avascular necrosis of the femoral head (leg presents shortened and externally rotated).",
-    flashcards: [
-      {
-        q: "A patient presents with foot drop and inability to dorsiflex or evert the foot following a blow to the lateral knee. What nerve is injured?",
-        a: "The Common Fibular (Peroneal) Nerve as it winds around the neck of the fibula.",
-      },
-      {
-        q: "What vascular structure is torn in an intracapsular femoral neck fracture, causing avascular necrosis?",
-        a: "Retinacular branches of the Medial Circumflex Femoral Artery supplying the femoral head.",
       },
     ],
   },
@@ -1712,7 +1512,7 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
 
                   {/* SYSTEMS LIST & CARDS */}
                   <div className="hud-panel-body">
-                    <div className="hud-section-label">Musculoskeletal system</div>
+                    <div className="hud-section-label">Musculoskeletal & Skeletal Structures</div>
                     <div className="hud-structure-cards-list">
                       {filteredParts.map((part) => {
                         const isSelected = selectedStructure.id === part.id;
@@ -1755,6 +1555,7 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                   FLOATING HUD INTERFACE 2: RIGHT STRUCTURE INFO & INSPECTOR
                   Matched directly to User Image 2 with MINIMIZE option
                   Auto-opens when user selects any structure!
+                  Includes Full V.A.N. (Vein · Artery · Nerve) Breakdown for Bones
                   ================================================================= */}
               {isRightPanelOpen ? (
                 <div className="hud-floating-panel right">
@@ -1807,6 +1608,58 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                       {selectedStructure.description}
                     </p>
 
+                    {/* V.A.N. (VEIN, ARTERY, NERVE) TRIAD FOR BONES & MUSCLES */}
+                    <div className="hud-van-box">
+                      <div className="van-header-strip">
+                        <span className="van-badge-title">🩸 V.A.N. NEUROVASCULAR TRIAD</span>
+                        <span className="van-subtitle">Vein · Artery · Nerve</span>
+                      </div>
+
+                      {/* 1. ARTERY (धमनी) */}
+                      <div className="van-row artery">
+                        <div className="van-label-pill artery">
+                          <span>🔴 ARTERY (धमनी / Arterial Supply)</span>
+                        </div>
+                        <p className="van-text">{selectedStructure.arteries || selectedStructure.bloodSupply}</p>
+                      </div>
+
+                      {/* 2. VEIN (शीर) */}
+                      <div className="van-row vein">
+                        <div className="van-label-pill vein">
+                          <span>🔵 VEIN (शीर / Venous Drainage)</span>
+                        </div>
+                        <p className="van-text">
+                          {selectedStructure.veins ||
+                            "Accompanied by deep venae comitantes with valves and superficial cutaneous networks draining into regional systemic veins."}
+                        </p>
+                      </div>
+
+                      {/* 3. NERVE (मज्जातंतू) */}
+                      <div className="van-row nerve">
+                        <div className="van-label-pill nerve">
+                          <span>⚡ NERVE (मज्जातंतू / Innervation)</span>
+                        </div>
+                        <p className="van-text">{selectedStructure.nerves || selectedStructure.innervation}</p>
+                      </div>
+
+                      {/* 4. FRACTURE DANGER ZONE (अस्थिभंग धोका) */}
+                      {selectedStructure.fractureDanger && (
+                        <div className="van-row danger">
+                          <div className="van-label-pill danger">
+                            <span>⚠️ FRACTURE VASCULAR & NERVE RISK (अस्थिभंग धोका)</span>
+                          </div>
+                          <p className="van-text danger-text">{selectedStructure.fractureDanger}</p>
+                        </div>
+                      )}
+
+                      {/* 5. NUTRIENT FORAMEN (पोषण छिद्र) */}
+                      {selectedStructure.nutrientForamen && (
+                        <div className="van-nutrient-line">
+                          <strong>🦴 Nutrient Foramen:</strong> {selectedStructure.nutrientForamen}
+                        </div>
+                      )}
+                    </div>
+
                     {/* SYSTEM OVERVIEW ACCORDION */}
                     <div className="hud-accordion-box">
                       <button
@@ -1814,7 +1667,7 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                         className="hud-accordion-toggle"
                         onClick={() => setIsOverviewOpen(!isOverviewOpen)}
                       >
-                        <span>System overview · structure identified from</span>
+                        <span>System overview · bony attachments</span>
                         <span>{isOverviewOpen ? "▴" : "▾"}</span>
                       </button>
 
@@ -1822,27 +1675,22 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                         <div className="hud-accordion-content">
                           {selectedStructure.origin && (
                             <div className="accordion-item">
-                              <strong>📍 Origin:</strong> {selectedStructure.origin}
+                              <strong>📍 Origin / Articulation:</strong> {selectedStructure.origin}
                             </div>
                           )}
                           {selectedStructure.insertion && (
                             <div className="accordion-item">
-                              <strong>📌 Insertion:</strong> {selectedStructure.insertion}
+                              <strong>📌 Insertion / Distal end:</strong> {selectedStructure.insertion}
                             </div>
                           )}
                           {selectedStructure.action && (
                             <div className="accordion-item">
-                              <strong>⚙️ Action:</strong> {selectedStructure.action}
-                            </div>
-                          )}
-                          {selectedStructure.innervation && (
-                            <div className="accordion-item">
-                              <strong>⚡ Nerve:</strong> {selectedStructure.innervation}
+                              <strong>⚙️ Action / Function:</strong> {selectedStructure.action}
                             </div>
                           )}
                           {selectedStructure.clinicalPearl && (
                             <div className="accordion-item" style={{ color: "#fca5a5" }}>
-                              <strong>🩺 Clinical:</strong> {selectedStructure.clinicalPearl}
+                              <strong>🩺 High-Yield Pearl:</strong> {selectedStructure.clinicalPearl}
                             </div>
                           )}
                         </div>
@@ -1995,17 +1843,17 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                   onClick={() => {
                     if (onSaveNote) {
                       const oiaiContent = activePreset.origin
-                        ? `\n\n#### 🦴 Muscle Origin, Insertion & Action (O.I.A.I.)\n- **Origin (Proximal)**: ${activePreset.origin}\n- **Insertion (Distal)**: ${activePreset.insertion}\n- **Action / Biomechanics**: ${activePreset.action}`
+                        ? `\n\n#### 🦴 Muscle / Bone Attachments & Action\n- **Origin / Proximal**: ${activePreset.origin}\n- **Insertion / Distal**: ${activePreset.insertion}\n- **Action / Biomechanics**: ${activePreset.action}`
                         : "";
                       onSaveNote(
-                        `Cogni Anatomy Comprehensive: ${activePreset.label}`,
-                        `### 🧬 Comprehensive 3D Anatomy Study Dossier: ${activePreset.label}\n\n**Latin**: *${activePreset.latin}* | **FMA ID**: \`${activePreset.fmaId}\` | **Region**: ${activePreset.region}\n\n#### 📖 Structural Architecture & Overview\n${activePreset.summary}${oiaiContent}\n\n#### ⚡ Innervation & Blood Supply\n- **Innervation**: ${activePreset.innervation}\n- **Blood Supply**: ${activePreset.bloodSupply}\n\n#### 🩺 High-Yield Clinical Pathology & Surgical Anatomy\n${activePreset.clinicalHighYield}\n\n#### 💡 Board Exam Mnemonic\n> "${activePreset.mnemonic}"\n\n#### 🎯 Board Exam Flashpoint\n${activePreset.examTip}`,
+                        `Cogni Anatomy Comprehensive V.A.N.: ${activePreset.label}`,
+                        `### 🧬 Comprehensive 3D Anatomy Study Dossier: ${activePreset.label}\n\n**Latin**: *${activePreset.latin}* | **FMA ID**: \`${activePreset.fmaId}\` | **Region**: ${activePreset.region}\n\n#### 📖 Structural Architecture & Overview\n${activePreset.summary}${oiaiContent}\n\n#### 🩸 V.A.N. Neurovascular Triad\n- **🔴 Arteries (धमन्या)**: ${activePreset.bloodSupply}\n- **🔵 Veins (शिरा)**: ${activePreset.venousDrainage || "Deep venae comitantes and regional systemic veins."}\n- **⚡ Nerves (मज्जातंतू)**: ${activePreset.innervation}\n\n#### 🩺 High-Yield Clinical Pathology & Fracture Risks\n${activePreset.clinicalHighYield}\n\n#### 💡 Board Exam Mnemonic\n> "${activePreset.mnemonic}"\n\n#### 🎯 Board Exam Flashpoint\n${activePreset.examTip}`,
                         "Medicine (MBBS)"
                       );
                     }
                   }}
                 >
-                  📝 Save Complete Textbook Notes (+35 XP)
+                  📝 Save Complete V.A.N. Notes (+35 XP)
                 </button>
               </div>
             </div>
@@ -2038,7 +1886,7 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                 className={`dossier-subnav-pill ${dossierTab === "neuro" ? "active" : ""}`}
                 onClick={() => setDossierTab("neuro")}
               >
-                ⚡ Neurovascular & Blood
+                ⚡ V.A.N. (Veins · Arteries · Nerves)
               </button>
               <button
                 type="button"
@@ -2055,7 +1903,7 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                 <div className="oiai-header">
                   <div className="oiai-title-badge">
                     <span className="oiai-icon">🎯</span>
-                    <strong>O.I.A.I. MEDICAL EXAM SPECIFICATION</strong>
+                    <strong>O.I.A.I. & BONE ATTACHMENT SPECIFICATION</strong>
                     <span className="oiai-subtitle">Origin · Insertion · Action · Biomechanics</span>
                   </div>
                   <span className="oiai-status-pill">High-Yield Medical Core</span>
@@ -2065,7 +1913,7 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                   {/* ORIGIN */}
                   <div className="oiai-cell origin">
                     <div className="oiai-label-pill origin">
-                      <span>📍</span> ORIGIN (Proximal Attachment)
+                      <span>📍</span> ORIGIN / PROXIMAL ATTACHMENT
                     </div>
                     <p className="oiai-description">{activePreset.origin}</p>
                   </div>
@@ -2073,7 +1921,7 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                   {/* INSERTION */}
                   <div className="oiai-cell insertion">
                     <div className="oiai-label-pill insertion">
-                      <span>📌</span> INSERTION (Distal Attachment)
+                      <span>📌</span> INSERTION / DISTAL ATTACHMENT
                     </div>
                     <p className="oiai-description">{activePreset.insertion}</p>
                   </div>
@@ -2112,21 +1960,39 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
               </div>
             )}
 
-            {/* SECTION 3: NEUROVASCULAR & BLOOD SUPPLY */}
+            {/* SECTION 3: V.A.N. (VEIN, ARTERY, NERVE) NEUROVASCULAR & BONE RELATIONS */}
             {(dossierTab === "all" || dossierTab === "neuro") && (
               <div className="dossier-expanded-section">
                 <div className="section-title-strip">
-                  <span className="section-icon">⚡</span>
-                  <h3>Neurovascular Innervation, Arterial & Venous Drainage</h3>
+                  <span className="section-icon">🩸</span>
+                  <h3>V.A.N. Neurovascular Triad: Arteries, Veins, Nerves & Bone Relations</h3>
                 </div>
-                <div className="neuro-breakdown-grid">
-                  <div className="neuro-card">
-                    <span className="neuro-label">⚡ Nerve Supply (Innervation)</span>
+                <div className="neuro-breakdown-grid four-col">
+                  {/* ARTERY */}
+                  <div className="neuro-card artery">
+                    <span className="neuro-label artery">🔴 Arterial Supply & Branches (धमन्या)</span>
+                    <p>{activePreset.bloodSupply}</p>
+                  </div>
+
+                  {/* VEIN */}
+                  <div className="neuro-card vein">
+                    <span className="neuro-label vein">🔵 Venous Drainage & Tributaries (शिरा)</span>
+                    <p>
+                      {activePreset.venousDrainage ||
+                        "Venous return via deep venae comitantes with bicuspid valves, superficial networks, and systemic caval drainage (SVC/IVC)."}
+                    </p>
+                  </div>
+
+                  {/* NERVE */}
+                  <div className="neuro-card nerve">
+                    <span className="neuro-label nerve">⚡ Nerve Supply & Roots (मज्जातंतू)</span>
                     <p>{activePreset.innervation}</p>
                   </div>
-                  <div className="neuro-card">
-                    <span className="neuro-label">🩸 Arterial Blood Supply</span>
-                    <p>{activePreset.bloodSupply}</p>
+
+                  {/* FRACTURE DANGER */}
+                  <div className="neuro-card danger">
+                    <span className="neuro-label danger">⚠️ Bone Fracture Danger Zone (अस्थिभंग धोका)</span>
+                    <p>{activePreset.examTip || activePreset.clinicalHighYield}</p>
                   </div>
                 </div>
               </div>
@@ -2207,8 +2073,9 @@ export default function Anatomy3DLab({ onAwardXp, onSaveNote }) {
                           origin: muscle.origin,
                           insertion: muscle.insertion,
                           action: muscle.action,
-                          innervation: muscle.innervation,
-                          bloodSupply: muscle.bloodSupply,
+                          arteries: muscle.bloodSupply,
+                          veins: "Regional muscular veins draining into deep venae comitantes.",
+                          nerves: muscle.innervation,
                           clinicalPearl: muscle.clinicalPearl,
                         };
                         setSelectedStructure(struct);
